@@ -24,6 +24,8 @@
 #include "arch/XArch.h"
 
 #include <malloc.h>
+#include <cctype>
+#include <cstdio>
 
 namespace inputleap {
 
@@ -31,6 +33,7 @@ static const int s_family[] = {
     PF_UNSPEC,
     PF_INET,
     PF_INET6,
+    AF_BTH,
 };
 static const int s_type[] = {
     SOCK_DGRAM,
@@ -67,6 +70,66 @@ static BOOL (PASCAL FAR *WSAResetEvent_winsock)(WSAEVENT);
 static int (PASCAL FAR *WSAEventSelect_winsock)(SOCKET, WSAEVENT, long);
 static DWORD (PASCAL FAR *WSAWaitForMultipleEvents_winsock)(DWORD, const WSAEVENT FAR*, BOOL, DWORD, BOOL);
 static int (PASCAL FAR *WSAEnumNetworkEvents_winsock)(SOCKET, WSAEVENT, LPWSANETWORKEVENTS);
+static int (PASCAL FAR *getsockname_winsock)(SOCKET s, struct sockaddr FAR *name, int FAR *namelen);
+static INT (WSAAPI *WSASetServiceW_winsock)(LPWSAQUERYSETW, WSAESETSERVICEOP, DWORD);
+
+// Bluetooth SDP service class under which the server publishes its RFCOMM
+// channel. Clients connect to this service on the server's Bluetooth address,
+// so the channel number never has to be configured.
+// {3bf44e11-0433-4f8f-a978-aaaa2c495c96}
+static const GUID s_bluetoothServiceClass =
+    { 0x3bf44e11, 0x0433, 0x4f8f, { 0xa9, 0x78, 0xaa, 0xaa, 0x2c, 0x49, 0x5c, 0x96 } };
+static wchar_t s_bluetoothServiceName[] = L"InputLeap";
+
+// Parses "bt" (any local adapter) or "bt:XX:XX:XX:XX:XX:XX" (a remote
+// device; ':' and '-' separators are optional). Returns false if name is
+// not a Bluetooth address.
+static bool parse_bluetooth_name(const std::string& name, BTH_ADDR& bt_addr)
+{
+    if (name.size() < 2 || tolower(name[0]) != 'b' || tolower(name[1]) != 't') {
+        return false;
+    }
+    if (name.size() == 2) {
+        bt_addr = 0;
+        return true;
+    }
+    if (name[2] != ':') {
+        return false;
+    }
+
+    BTH_ADDR value = 0;
+    int digits = 0;
+    for (size_t i = 3; i < name.size(); ++i) {
+        char c = name[i];
+        if (c == ':' || c == '-') {
+            continue;
+        }
+        if (!isxdigit(static_cast<unsigned char>(c)) || ++digits > 12) {
+            return false;
+        }
+        int nibble = isdigit(static_cast<unsigned char>(c)) ? c - '0' : tolower(c) - 'a' + 10;
+        value = (value << 4) | static_cast<BTH_ADDR>(nibble);
+    }
+    if (digits != 12) {
+        return false;
+    }
+    bt_addr = value;
+    return true;
+}
+
+static ArchNetAddressImpl* new_bluetooth_addr(BTH_ADDR bt_addr)
+{
+    ArchNetAddressImpl* addr = ArchNetAddressImpl::alloc(sizeof(SOCKADDR_BTH));
+    auto* btAddr = TYPED_ADDR(SOCKADDR_BTH, addr);
+    memset(btAddr, 0, sizeof(SOCKADDR_BTH));
+    btAddr->addressFamily  = AF_BTH;
+    btAddr->btAddr         = bt_addr;
+    btAddr->serviceClassId = s_bluetoothServiceClass;
+    // a listening socket picks any free channel; a connecting socket with
+    // port 0 looks the channel up through SDP using serviceClassId
+    btAddr->port           = bt_addr == 0 ? BT_PORT_ANY : 0;
+    return addr;
+}
 
 #undef FD_ISSET
 #define FD_ISSET(fd, set) WSAFDIsSet_winsock((SOCKET)(fd), (fd_set FAR *)(set))
@@ -194,6 +257,8 @@ ArchNetworkWinsock::initModule(HMODULE module)
     setfunc(WSAEventSelect_winsock, WSAEventSelect, int (PASCAL FAR *)(SOCKET, WSAEVENT, long));
     setfunc(WSAWaitForMultipleEvents_winsock, WSAWaitForMultipleEvents, DWORD (PASCAL FAR *)(DWORD, const WSAEVENT FAR*, BOOL, DWORD, BOOL));
     setfunc(WSAEnumNetworkEvents_winsock, WSAEnumNetworkEvents, int (PASCAL FAR *)(SOCKET, WSAEVENT, LPWSANETWORKEVENTS));
+    setfunc(getsockname_winsock, getsockname, int (PASCAL FAR *)(SOCKET s, struct sockaddr FAR *name, int FAR *namelen));
+    setfunc(WSASetServiceW_winsock, WSASetServiceW, INT (WSAAPI *)(LPWSAQUERYSETW, WSAESETSERVICEOP, DWORD));
 
     s_networkModule = module;
 }
@@ -202,7 +267,8 @@ ArchSocket
 ArchNetworkWinsock::newSocket(EAddressFamily family, ESocketType type)
 {
     // create socket
-    SOCKET fd = socket_winsock(s_family[family], s_type[type], 0);
+    int protocol = (family == kBLUETOOTH) ? BTHPROTO_RFCOMM : 0;
+    SOCKET fd = socket_winsock(s_family[family], s_type[type], protocol);
     if (fd == INVALID_SOCKET) {
         throwError(getsockerror_winsock());
     }
@@ -225,6 +291,7 @@ ArchNetworkWinsock::newSocket(EAddressFamily family, ESocketType type)
     socket->m_refCount      = 1;
     socket->m_event         = WSACreateEvent_winsock();
     socket->m_pollWrite     = true;
+    socket->m_bluetooth     = (family == kBLUETOOTH);
     return socket;
 }
 
@@ -253,6 +320,13 @@ ArchNetworkWinsock::closeSocket(ArchSocket s)
 
     // close the socket if necessary
     if (doClose) {
+        if (s->m_bluetoothServiceRegistered) {
+            try {
+                setBluetoothServiceRegistered(s, false);
+            } catch (XArchNetwork&) {
+                // the record goes away with the process anyway
+            }
+        }
         if (close_winsock(s->m_socket) == SOCKET_ERROR) {
             // close failed.  restore the last ref and throw.
             int err = getsockerror_winsock();
@@ -310,6 +384,44 @@ ArchNetworkWinsock::listenOnSocket(ArchSocket s)
     if (listen_winsock(s->m_socket, 3) == SOCKET_ERROR) {
         throwError(getsockerror_winsock());
     }
+
+    if (s->m_bluetooth) {
+        setBluetoothServiceRegistered(s, true);
+    }
+}
+
+void
+ArchNetworkWinsock::setBluetoothServiceRegistered(ArchSocket s, bool registered)
+{
+    if (registered) {
+        int len = sizeof(s->m_bluetoothLocalAddr);
+        if (getsockname_winsock(s->m_socket,
+                                reinterpret_cast<struct sockaddr*>(&s->m_bluetoothLocalAddr),
+                                &len) == SOCKET_ERROR) {
+            throwError(getsockerror_winsock());
+        }
+    }
+
+    CSADDR_INFO csAddr = {};
+    csAddr.LocalAddr.iSockaddrLength = sizeof(s->m_bluetoothLocalAddr);
+    csAddr.LocalAddr.lpSockaddr = reinterpret_cast<LPSOCKADDR>(&s->m_bluetoothLocalAddr);
+    csAddr.iSocketType = SOCK_STREAM;
+    csAddr.iProtocol = BTHPROTO_RFCOMM;
+
+    GUID serviceClass = s_bluetoothServiceClass;
+    WSAQUERYSETW querySet = {};
+    querySet.dwSize = sizeof(querySet);
+    querySet.lpszServiceInstanceName = s_bluetoothServiceName;
+    querySet.lpServiceClassId = &serviceClass;
+    querySet.dwNameSpace = NS_BTH;
+    querySet.dwNumberOfCsAddrs = 1;
+    querySet.lpcsaBuffer = &csAddr;
+
+    if (WSASetServiceW_winsock(&querySet, registered ? RNRSERVICE_REGISTER : RNRSERVICE_DELETE,
+                               0) == SOCKET_ERROR) {
+        throwError(getsockerror_winsock());
+    }
+    s->m_bluetoothServiceRegistered = registered;
 }
 
 ArchSocket
@@ -319,7 +431,7 @@ ArchNetworkWinsock::acceptSocket(ArchSocket s, ArchNetAddress* const addr)
 
     // create new socket and temporary address
     ArchSocketImpl* socket = new ArchSocketImpl;
-    ArchNetAddress tmp = ArchNetAddressImpl::alloc(sizeof(struct sockaddr_in6));
+    ArchNetAddress tmp = ArchNetAddressImpl::alloc(sizeof(struct sockaddr_storage));
 
     // accept on socket
     SOCKET fd = accept_winsock(s->m_socket, TYPED_ADDR(struct sockaddr, tmp), &tmp->m_len);
@@ -354,6 +466,7 @@ ArchNetworkWinsock::acceptSocket(ArchSocket s, ArchNetAddress* const addr)
     socket->m_refCount  = 1;
     socket->m_event     = WSACreateEvent_winsock();
     socket->m_pollWrite = true;
+    socket->m_bluetooth = s->m_bluetooth;
 
     // copy address if requested
     if (addr != nullptr) {
@@ -617,6 +730,11 @@ ArchNetworkWinsock::setNoDelayOnSocket(ArchSocket s, bool noDelay)
 {
     assert(s != nullptr);
 
+    if (s->m_bluetooth) {
+        // TCP options don't apply to RFCOMM
+        return false;
+    }
+
     // get old state
     BOOL oflag;
     int size = sizeof(oflag);
@@ -640,6 +758,10 @@ bool
 ArchNetworkWinsock::setReuseAddrOnSocket(ArchSocket s, bool reuse)
 {
     assert(s != nullptr);
+
+    if (s->m_bluetooth) {
+        return false;
+    }
 
     // get old state
     BOOL oflag;
@@ -696,6 +818,10 @@ ArchNetworkWinsock::newAnyAddr(EAddressFamily family)
         break;
     }
 
+    case kBLUETOOTH:
+        addr = new_bluetooth_addr(0);
+        break;
+
     default:
         assert(0 && "invalid family");
     }
@@ -715,6 +841,11 @@ ArchNetworkWinsock::copyAddr(ArchNetAddress addr)
 ArchNetAddress
 ArchNetworkWinsock::nameToAddr(const std::string& name)
 {
+    BTH_ADDR btAddr = 0;
+    if (parse_bluetooth_name(name, btAddr)) {
+        return new_bluetooth_addr(btAddr);
+    }
+
     // allocate address
 
     ArchNetAddressImpl* addr = new ArchNetAddressImpl;
@@ -755,6 +886,10 @@ ArchNetworkWinsock::addrToName(ArchNetAddress addr)
 {
     assert(addr != nullptr);
 
+    if (getAddrFamily(addr) == kBLUETOOTH) {
+        return addrToString(addr);
+    }
+
     char host[1024];
     char service[20];
     int ret = getnameinfo(TYPED_ADDR(struct sockaddr, addr), addr->m_len, host, sizeof(host), service, sizeof(service), 0);
@@ -786,6 +921,19 @@ ArchNetworkWinsock::addrToString(ArchNetAddress addr)
         return strAddr;
     }
 
+    case kBLUETOOTH: {
+        auto* btAddr = TYPED_ADDR(SOCKADDR_BTH, addr);
+        char strAddr[24];
+        snprintf(strAddr, sizeof(strAddr), "bt:%02X:%02X:%02X:%02X:%02X:%02X",
+                 static_cast<unsigned>((btAddr->btAddr >> 40) & 0xff),
+                 static_cast<unsigned>((btAddr->btAddr >> 32) & 0xff),
+                 static_cast<unsigned>((btAddr->btAddr >> 24) & 0xff),
+                 static_cast<unsigned>((btAddr->btAddr >> 16) & 0xff),
+                 static_cast<unsigned>((btAddr->btAddr >> 8) & 0xff),
+                 static_cast<unsigned>(btAddr->btAddr & 0xff));
+        return strAddr;
+    }
+
     default:
         assert(0 && "unknown address family");
         return "";
@@ -803,6 +951,9 @@ ArchNetworkWinsock::getAddrFamily(ArchNetAddress addr)
 
     case AF_INET6:
         return kINET6;
+
+    case AF_BTH:
+        return kBLUETOOTH;
 
     default:
         return kUNKNOWN;
@@ -827,6 +978,11 @@ ArchNetworkWinsock::setAddrPort(ArchNetAddress addr, int port)
         break;
     }
 
+    case kBLUETOOTH:
+        // RFCOMM channels are assigned by the system and found through SDP,
+        // so the TCP port number has no meaning here
+        break;
+
     default:
         assert(0 && "unknown address family");
         break;
@@ -848,6 +1004,9 @@ ArchNetworkWinsock::getAddrPort(ArchNetAddress addr)
         auto* ipAddr = TYPED_ADDR(struct sockaddr_in6, addr);
         return ntohs_winsock(ipAddr->sin6_port);
     }
+
+    case kBLUETOOTH:
+        return static_cast<int>(TYPED_ADDR(SOCKADDR_BTH, addr)->port);
 
     default:
         assert(0 && "unknown address family");
@@ -872,6 +1031,9 @@ ArchNetworkWinsock::isAnyAddr(ArchNetAddress addr)
         return (addr->m_len == sizeof(struct sockaddr_in) &&
                 memcmp(&ipAddr->sin6_addr, &in6addr_any, sizeof(in6addr_any))== 0);
     }
+
+    case kBLUETOOTH:
+        return TYPED_ADDR(SOCKADDR_BTH, addr)->btAddr == 0;
 
     default:
         assert(0 && "unknown address family");

@@ -176,7 +176,11 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="m_pLineEditHostname"/>
+        <widget class="QLineEdit" name="m_pLineEditHostname">
+         <property name="toolTip">
+          <string>Server IP address or hostname. To connect over Bluetooth (Windows only), enter bt: followed by the server's Bluetooth address, e.g. bt:00:1A:7D:DA:71:13</string>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
         <widget class="QCheckBox" name="m_pCheckBoxAutoConfig">

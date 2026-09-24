@@ -45,6 +45,7 @@ static const int s_family[] = {
     PF_UNSPEC,
     PF_INET,
     PF_INET6,
+    PF_UNSPEC, // Bluetooth is not supported on this platform
 };
 static const int s_type[] = {
     SOCK_DGRAM,

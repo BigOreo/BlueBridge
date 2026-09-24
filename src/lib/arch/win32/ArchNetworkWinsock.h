@@ -29,6 +29,7 @@
 #include "arch/IArchMultithread.h"
 
 #include <WinSock2.h>
+#include <ws2bth.h>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
@@ -47,6 +48,10 @@ public:
     int m_refCount;
     WSAEVENT m_event;
     bool m_pollWrite;
+    bool m_bluetooth = false;
+    // set while the socket's service is published in the Bluetooth SDP database
+    bool m_bluetoothServiceRegistered = false;
+    SOCKADDR_BTH m_bluetoothLocalAddr = {};
 };
 
 class ArchNetAddressImpl {
@@ -103,6 +108,7 @@ private:
     void initModule(HMODULE);
 
     void setBlockingOnSocket(SOCKET, bool blocking);
+    void setBluetoothServiceRegistered(ArchSocket, bool registered);
 
     void throwError(int);
     void throwNameError(int);

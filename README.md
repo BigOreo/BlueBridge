@@ -65,6 +65,25 @@ the same machine.
 Note that if the keyboard's Scroll Lock is active then this will prevent the
 mouse from switching screens.
 
+### Connecting over Bluetooth (Windows)
+
+On Windows, the client can connect to the server directly over Bluetooth
+(RFCOMM) instead of the network. This is useful when the network between the
+two machines is unavailable, for example when a VPN blocks local network access.
+Both machines need Bluetooth and must be paired in Windows' Bluetooth settings.
+
+1. On the server, open the settings and enter `bt` as the **Address**, then
+   restart the server.
+2. Find the server's Bluetooth address, e.g. in Device Manager under
+   *Bluetooth* > your adapter > *Properties* > *Advanced*, or with
+   `ipconfig /all` (*Physical Address* of the Bluetooth adapter).
+3. On the client, enter `bt:` followed by that address as the server, e.g.
+   `bt:00:1A:7D:DA:71:13`, and start the client.
+
+This uses a plain Bluetooth RFCOMM connection, not Bluetooth networking (PAN),
+so no network adapter or IP address is involved. Enable SSL on both machines to
+encrypt the connection.
+
 To find information about configuring Input Leap look at the
 [wiki](https://github.com/input-leap/input-leap/wiki)
 

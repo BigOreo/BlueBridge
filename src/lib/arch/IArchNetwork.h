@@ -66,6 +66,7 @@ public:
         kUNKNOWN,
         kINET,
         kINET6,
+        kBLUETOOTH, //!< Bluetooth RFCOMM (only supported on Windows)
     };
 
     //! Supported socket types

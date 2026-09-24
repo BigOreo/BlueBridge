@@ -186,6 +186,9 @@
         <property name="enabled">
          <bool>true</bool>
         </property>
+        <property name="toolTip">
+         <string>Address the server listens on. Leave empty for all network interfaces, or enter bt to accept clients over Bluetooth (Windows only).</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="2">

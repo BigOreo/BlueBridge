@@ -526,6 +526,8 @@ static const char* family_string(IArchNetwork::EAddressFamily family)
     if (family == IArchNetwork::kINET6)
         // assume IPv6 sockets are setup to support IPv4 traffic as well
         return "IPv4/IPv6";
+    if (family == IArchNetwork::kBLUETOOTH)
+        return "Bluetooth";
     return "Unknown";
 }
 
