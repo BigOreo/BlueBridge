@@ -1,0 +1,1 @@
+Clarified two confusing GUI texts: the settings checkbox that auto-starts the server/client when InputLeap opens was mislabeled "Show Tray Icon upon App Start", and the server layout grid now explains that each square is a whole computer and that clients must be placed directly next to the computer they border.

@@ -122,7 +122,9 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Drag new screens to the grid or move existing ones around.
+          <string>Each square is one computer, not one monitor: all monitors of a computer share a single square.
+Place each client directly next to the computer it borders, with no empty squares in between.
+Drag new screens to the grid or move existing ones around.
 Drag a screen to the trashcan to delete it.
 Double click on a screen to edit its settings.</string>
          </property>

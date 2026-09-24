@@ -129,7 +129,7 @@
       <item row="5" column="0" colspan="2">
        <widget class="QCheckBox" name="m_pCheckBoxAutoStart">
         <property name="text">
-         <string>Show Tray &amp;Icon upon App Start</string>
+         <string>A&amp;utomatically start server/client when InputLeap opens</string>
         </property>
        </widget>
       </item>
