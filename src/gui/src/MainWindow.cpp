@@ -25,11 +25,8 @@
 #include "ServerConfigDialog.h"
 #include "SettingsDialog.h"
 #include "ZeroconfService.h"
-#include "DataDownloader.h"
-#include "CommandProcess.h"
 #include "FingerprintAcceptDialog.h"
 #include "QUtility.h"
-#include "ProcessorArch.h"
 #include "SslCertificate.h"
 #include "base/String.h"
 #include "common/DataDirectories.h"
@@ -64,10 +61,9 @@ static const QString allFilesFilter(QObject::tr("All files (*.*)"));
 #if defined(Q_OS_WIN)
 static const char APP_CONFIG_NAME[] = "input-leap.sgc";
 static const QString APP_CONFIG_FILTER(QObject::tr("InputLeap Configurations (*.sgc)"));
-static QString bonjourBaseUrl = "http://binaries.symless.com/bonjour/";
-static const char bonjourFilename32[] = "Bonjour.msi";
-static const char bonjourFilename64[] = "Bonjour64.msi";
-static const char bonjourTargetFilename[] = "Bonjour.msi";
+// Bonjour used to be downloaded from binaries.symless.com, which no longer
+// serves it. Point users at Apple's official installer instead.
+static const char bonjourDownloadUrl[] = "https://support.apple.com/kb/DL999";
 #else
 static const char APP_CONFIG_NAME[] = "input-leap.conf";
 static const QString APP_CONFIG_FILTER(QObject::tr("InputLeap Configurations (*.conf)"));
@@ -125,11 +121,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     main_menu_(nullptr),
     m_pMenuHelp(nullptr),
     m_pZeroconfService(nullptr),
-    m_pDataDownloader(nullptr),
-    m_DownloadMessageBox(nullptr),
-    m_pCancelButton(nullptr),
     m_SuppressAutoConfigWarning(false),
-    m_BonjourInstall(nullptr),
     m_SuppressEmptyServerWarning(false),
     m_ExpectedRunningState(kStopped),
     m_pSslCertificate(nullptr),
@@ -207,8 +199,6 @@ MainWindow::~MainWindow()
     saveSettings();
 
     delete m_pZeroconfService;
-    delete m_DownloadMessageBox;
-    delete m_BonjourInstall;
     delete m_pSslCertificate;
 
     // LogWindow is created as a sibling of the MainWindow rather than a child
@@ -1286,119 +1276,33 @@ bool MainWindow::isBonjourRunning()
     return result;
 }
 
-void MainWindow::downloadBonjour()
+void MainWindow::showBonjourMissingMessage()
 {
 #if defined(Q_OS_WIN)
-    QUrl url;
-    int arch = getProcessorArch();
-    if (arch == kProcessorArchWin32) {
-        url.setUrl(bonjourBaseUrl + bonjourFilename32);
-        appendLogInfo("downloading 32-bit Bonjour");
+    int r = QMessageBox::information(
+        this, tr("InputLeap"),
+        tr("Auto config requires the Bonjour service, which is not running "
+           "on this computer.\n\n"
+           "Auto config is optional: you can instead type the server's IP "
+           "address or hostname on the client.\n\n"
+           "To use auto config, install \"Bonjour Print Services for "
+           "Windows\" from Apple, then restart InputLeap. "
+           "Open the download page now?"),
+        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+    if (r == QMessageBox::Yes) {
+        QDesktopServices::openUrl(QUrl(bonjourDownloadUrl));
     }
-    else if (arch == kProcessorArchWin64) {
-        url.setUrl(bonjourBaseUrl + bonjourFilename64);
-        appendLogInfo("downloading 64-bit Bonjour");
-    }
-    else {
-        QMessageBox::critical(
-            this, tr("InputLeap"),
-            tr("Failed to detect system architecture."));
-        return;
-    }
-
-    if (m_pDataDownloader == nullptr) {
-        m_pDataDownloader = new DataDownloader(this);
-        connect(m_pDataDownloader, &DataDownloader::isComplete, this, &MainWindow::installBonjour);
-    }
-
-    m_pDataDownloader->download(url);
-
-    if (m_DownloadMessageBox == nullptr) {
-        m_DownloadMessageBox = new QMessageBox(this);
-        m_DownloadMessageBox->setWindowTitle("InputLeap");
-        m_DownloadMessageBox->setIcon(QMessageBox::Information);
-        m_DownloadMessageBox->setText("Installing Bonjour, please wait...");
-#if QT_VERSION_MAJOR < 6
-        m_DownloadMessageBox->setStandardButtons(0);
-#else
-        m_DownloadMessageBox->setStandardButtons(QMessageBox::NoButton);
-#endif
-        m_pCancelButton = m_DownloadMessageBox->addButton(
-            tr("Cancel"), QMessageBox::RejectRole);
-    }
-    m_DownloadMessageBox->exec();
-
-    if (m_DownloadMessageBox->clickedButton() == m_pCancelButton) {
-        m_pDataDownloader->cancel();
-    }
-#endif
-}
-
-void MainWindow::installBonjour()
-{
-#if defined(Q_OS_WIN)
-#if QT_VERSION >= 0x050000
-    QString tempLocation = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-#else
-    QString tempLocation = QDesktopServices::storageLocation(
-                                QDesktopServices::TempLocation);
-#endif
-    QString filename = tempLocation;
-    filename.append("\\").append(bonjourTargetFilename);
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly)) {
-        m_DownloadMessageBox->hide();
-
-        QMessageBox::warning(
-            this, "InputLeap",
-            tr("Failed to download Bonjour installer to location: %1")
-            .arg(tempLocation));
-        return;
-    }
-
-    file.write(m_pDataDownloader->data());
-    file.close();
-
-    QStringList arguments;
-    arguments.append("/i");
-    QString winFilename = QDir::toNativeSeparators(filename);
-    arguments.append(winFilename);
-    arguments.append("/passive");
-    if (m_BonjourInstall == nullptr) {
-        m_BonjourInstall = new CommandProcess("msiexec", arguments);
-    }
-
-    QThread* thread = new QThread;
-    connect(m_BonjourInstall, &CommandProcess::finished, this, &MainWindow::bonjourInstallFinished);
-    connect(m_BonjourInstall, &CommandProcess::finished, thread, &QThread::quit);
-    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-
-    m_BonjourInstall->moveToThread(thread);
-    thread->start();
-
-    QMetaObject::invokeMethod(m_BonjourInstall, "run", Qt::QueuedConnection);
-
-    m_DownloadMessageBox->hide();
 #endif
 }
 
 void MainWindow::promptAutoConfig()
 {
+    // Auto config is optional. Don't nag on first start when Bonjour is
+    // missing; users can still enable it later from the checkbox.
     if (!isBonjourRunning()) {
-        int r = QMessageBox::question(
-            this, tr("InputLeap"),
-            tr("Do you want to enable auto config and install Bonjour?\n\n"
-               "This feature helps you establish the connection."),
-            QMessageBox::Yes | QMessageBox::No);
-
-        if (r == QMessageBox::Yes) {
-            m_AppConfig->setAutoConfig(true);
-            downloadBonjour();
-        }
-        else {
-            m_AppConfig->setAutoConfig(false);
-            ui_->m_pCheckBoxAutoConfig->setChecked(false);
-        }
+        m_AppConfig->setAutoConfig(false);
+        ui_->m_pCheckBoxAutoConfig->setChecked(false);
     }
 
     m_AppConfig->setAutoConfigPrompted(true);
@@ -1415,15 +1319,7 @@ void MainWindow::on_m_pCheckBoxAutoConfig_toggled(bool checked)
 {
     if (!isBonjourRunning() && checked) {
         if (!m_SuppressAutoConfigWarning) {
-            int r = QMessageBox::information(
-                this, tr("InputLeap"),
-                tr("Auto config feature requires Bonjour.\n\n"
-                   "Do you want to install Bonjour?"),
-                QMessageBox::Yes | QMessageBox::No);
-
-            if (r == QMessageBox::Yes) {
-                downloadBonjour();
-            }
+            showBonjourMissingMessage();
         }
 
         ui_->m_pCheckBoxAutoConfig->setChecked(false);
@@ -1438,13 +1334,6 @@ void MainWindow::on_m_pCheckBoxAutoConfig_toggled(bool checked)
         ui_->m_pComboServerList->clear();
         ui_->m_pComboServerList->hide();
     }
-}
-
-void MainWindow::bonjourInstallFinished()
-{
-    appendLogInfo("Bonjour install finished");
-
-    ui_->m_pCheckBoxAutoConfig->setChecked(true);
 }
 
 void MainWindow::windowStateChanged()

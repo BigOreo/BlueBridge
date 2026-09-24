@@ -1,0 +1,1 @@
+Windows: Bonjour is no longer required and InputLeap no longer tries to download it from the defunct binaries.symless.com. If Bonjour is missing, auto config stays off and the user is pointed to Apple's installer; manual server IP entry works without it.
