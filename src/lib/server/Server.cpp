@@ -98,6 +98,10 @@ Server::Server(
 {
     input_filter_.add_rules(config.get_input_filter_rules());
 
+    if (m_args.m_policy.clipboard_sharing_disabled()) {
+        m_enableClipboard = false;
+    }
+
 	// must have a primary client and it must have a canonical name
 	assert(m_primaryClient != nullptr);
 	assert(config.isScreen(primaryClient->getName()));
@@ -1117,7 +1121,8 @@ Server::processOptions()
 			newRelativeMoves = (value != 0);
 		}
 		else if (id == kOptionClipboardSharing) {
-			m_enableClipboard = (value != 0);
+			// the configuration cannot turn on what the machine policy turns off
+			m_enableClipboard = (value != 0) && !m_args.m_policy.clipboard_sharing_disabled();
 
 			if (m_enableClipboard == false) {
 				LOG_NOTE("clipboard sharing is disabled");

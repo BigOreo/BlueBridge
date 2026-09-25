@@ -106,6 +106,12 @@ ServerApp::parseArgs(int argc, const char* const* argv)
                 m_bye(kExitArgs);
             }
         }
+
+        std::string host = args().network_address.empty() ? std::string()
+                                                          : listen_address_->getHostname();
+        if (!apply_machine_policy(args(), host)) {
+            m_bye(kExitArgs);
+        }
     }
 }
 

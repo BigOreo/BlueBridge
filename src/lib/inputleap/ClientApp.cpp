@@ -106,6 +106,10 @@ ClientApp::parseArgs(int argc, const char* const* argv)
                 }
             }
         }
+
+        if (!apply_machine_policy(args(), m_serverAddress->getHostname())) {
+            m_bye(kExitArgs);
+        }
     }
 }
 

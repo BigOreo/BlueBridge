@@ -1,0 +1,1 @@
+Administrators can enforce clipboard sharing, file transfer, encryption, allowed connection modes and locked settings through Group Policy, Intune or other MDM tools (Windows registry policies with an ADMX template) or /etc/input-leap/policy.conf on Linux. See doc/admin-policies.md.

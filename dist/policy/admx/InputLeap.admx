@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Administrative template for InputLeap machine policies. See doc/admin-policies.md. -->
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+  <policyNamespaces>
+    <target prefix="inputleap" namespace="InputLeap.Policies" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="SUPPORTED_InputLeap" displayName="$(string.SUPPORTED_InputLeap)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="InputLeap" displayName="$(string.InputLeap)" />
+  </categories>
+  <policies>
+    <policy name="ClipboardSharing" class="Machine" displayName="$(string.ClipboardSharing)" explainText="$(string.ClipboardSharing_Explain)" key="Software\Policies\InputLeap" valueName="ClipboardSharing">
+      <parentCategory ref="InputLeap" />
+      <supportedOn ref="SUPPORTED_InputLeap" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="FileTransfer" class="Machine" displayName="$(string.FileTransfer)" explainText="$(string.FileTransfer_Explain)" key="Software\Policies\InputLeap" valueName="FileTransfer">
+      <parentCategory ref="InputLeap" />
+      <supportedOn ref="SUPPORTED_InputLeap" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="RequireEncryption" class="Machine" displayName="$(string.RequireEncryption)" explainText="$(string.RequireEncryption_Explain)" key="Software\Policies\InputLeap" valueName="RequireEncryption">
+      <parentCategory ref="InputLeap" />
+      <supportedOn ref="SUPPORTED_InputLeap" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="AllowedConnectionModes" class="Machine" displayName="$(string.AllowedConnectionModes)" explainText="$(string.AllowedConnectionModes_Explain)" key="Software\Policies\InputLeap" presentation="$(presentation.AllowedConnectionModes)">
+      <parentCategory ref="InputLeap" />
+      <supportedOn ref="SUPPORTED_InputLeap" />
+      <elements>
+        <enum id="AllowedConnectionModes_Enum" valueName="AllowedConnectionModes" required="true">
+          <item displayName="$(string.AllowedConnectionModes_Both)"><value><decimal value="3" /></value></item>
+          <item displayName="$(string.AllowedConnectionModes_Network)"><value><decimal value="1" /></value></item>
+          <item displayName="$(string.AllowedConnectionModes_Bluetooth)"><value><decimal value="2" /></value></item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LockSettings" class="Machine" displayName="$(string.LockSettings)" explainText="$(string.LockSettings_Explain)" key="Software\Policies\InputLeap" valueName="LockSettings">
+      <parentCategory ref="InputLeap" />
+      <supportedOn ref="SUPPORTED_InputLeap" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+  </policies>
+</policyDefinitions>
