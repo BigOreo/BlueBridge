@@ -80,8 +80,10 @@ Both machines need Bluetooth and must be paired in Windows' Bluetooth settings.
    (e.g. `00:1A:7D:DA:71:13`) and click **Start**.
 
 This uses a plain Bluetooth RFCOMM connection, not Bluetooth networking (PAN),
-so no network adapter or IP address is involved. Enable SSL on both machines to
-encrypt the connection.
+so no network adapter or IP address is involved. The Bluetooth link must be
+authenticated and encrypted, which is why the computers have to be paired;
+unpaired connections are refused. Keep SSL enabled on both machines so the
+data is also encrypted end to end with TLS.
 
 To find information about configuring Input Leap look at the
 [wiki](https://github.com/input-leap/input-leap/wiki)
