@@ -183,6 +183,8 @@ void MSWindowsWatchdog::main_loop()
 
             if (m_processRunning && getCommand().empty()) {
                 LOG_INFO("process started but command is empty, shutting down");
+                // stop the process this service started, then any strays
+                shutdownProcess(m_processInfo.hProcess, m_processInfo.dwProcessId, 20);
                 shutdownExistingProcesses();
                 m_processRunning = false;
                 continue;
@@ -511,11 +513,14 @@ MSWindowsWatchdog::shutdownExistingProcesses()
         // make sure we're not checking the system process
         if (entry.th32ProcessID != 0) {
 
-            if (_stricmp(entry.szExeFile, "InputLeapc.exe") == 0 ||
-                _stricmp(entry.szExeFile, "InputLeaps.exe") == 0) {
+            if (_stricmp(entry.szExeFile, "input-leapc.exe") == 0 ||
+                _stricmp(entry.szExeFile, "input-leaps.exe") == 0) {
 
                 HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, entry.th32ProcessID);
-                shutdownProcess(handle, entry.th32ProcessID, 10);
+                if (handle != nullptr) {
+                    shutdownProcess(handle, entry.th32ProcessID, 10);
+                    CloseHandle(handle);
+                }
             }
         }
 
