@@ -279,6 +279,18 @@ ArchNetworkWinsock::newSocket(EAddressFamily family, ESocketType type)
             if (setsockopt_winsock(fd, IPPROTO_IPV6, IPV6_V6ONLY, &flag, sizeof(flag)) == SOCKET_ERROR)
                 throwError(getsockerror_winsock());
         }
+        if (family == kBLUETOOTH) {
+            // Refuse links that are not authenticated (paired) and encrypted
+            // at the Bluetooth level rather than relying on system defaults.
+            // Set before connect/listen; accepted sockets inherit it.
+            ULONG enable = TRUE;
+            if (setsockopt_winsock(fd, SOL_RFCOMM, SO_BTH_AUTHENTICATE,
+                                   &enable, sizeof(enable)) == SOCKET_ERROR ||
+                setsockopt_winsock(fd, SOL_RFCOMM, SO_BTH_ENCRYPT,
+                                   &enable, sizeof(enable)) == SOCKET_ERROR) {
+                throwError(getsockerror_winsock());
+            }
+        }
     }
     catch (...) {
         close_winsock(fd);

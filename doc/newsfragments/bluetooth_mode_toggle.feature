@@ -1,0 +1,1 @@
+Windows: a "Connect over: Network / Bluetooth" toggle on the main window. In Bluetooth mode the server shows its own Bluetooth address with a Copy button, and the client asks for the server's Bluetooth address instead of an IP address.
