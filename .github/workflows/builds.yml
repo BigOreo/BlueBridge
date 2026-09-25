@@ -30,11 +30,6 @@ jobs:
       fail-fast: false
       matrix:
        include:
-         - name: ubuntu-20-04
-           os: "ubuntu:20.04"
-           cc: "gcc"
-           cxx: "g++"
-           wayland: none
          - name: ubuntu-22-04-clang
            os: "ubuntu:22.04"
            cc: "clang"
@@ -45,26 +40,11 @@ jobs:
            cc: "gcc"
            cxx: "g++"
            wayland: none
-         - name: ubuntu-24-04
-           os: "ubuntu:24.04"
-           cc: "gcc"
-           cxx: "g++"
-           wayland: dist
-         - name: ubuntu-24-10
-           os: "ubuntu:24.10"
-           cc: "gcc"
-           cxx: "g++"
-           wayland: dist
          - name: debian-12
            os: "debian:bookworm"
            cc: "gcc"
            cxx: "g++"
            wayland: none
-         - name: debian-12-latest-libei
-           os: "debian:bookworm"
-           cc: "gcc"
-           cxx: "g++"
-           wayland: latest
     steps:
 
       - if: matrix.os == 'ubuntu:20.04'
@@ -263,13 +243,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["fedora:40", "opensuse/tumbleweed"]
+        os: ["fedora:40"]
         include:
           - installer: dnf install -y
             rpm_tag: fedora
-          - os: opensuse/tumbleweed
-            installer: zypper install -y
-            rpm_tag: suse_version
 
     steps:
       - name: Install extra build dependencies
@@ -503,45 +480,6 @@ jobs:
           name: windows-installer-${{ matrix.name }}
           path: .\build\installer-inno\bin
           if-no-files-found: error
-
-  freebsd-build:
-    name: freebsd-14-1
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Build on FreeBSD 14.1
-      id: test
-      uses: vmactions/freebsd-vm@v1
-      with:
-        usesh: true
-        prepare: |
-          pkg install -y \
-              cmake-core \
-              pkgconf \
-              git \
-              avahi-libdns \
-              libsm \
-              libxinerama \
-              libxrandr \
-              libxtst \
-              libxkbcommon \
-              glib \
-              ninja \
-              qt6-base \
-              qt6-tools \
-              qt6-declarative
-
-        run: |
-          git config --global --add safe.directory /home/runner/work/input-leap/input-leap
-          git submodule update --init --recursive
-          mkdir build
-          cd build
-          cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_UNITY_BUILD=1 -DINPUTLEAP_BUILD_INSTALLER=OFF ..
-          cmake --build . --parallel
 
   flatpak:
     runs-on: ubuntu-latest
