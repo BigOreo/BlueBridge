@@ -47,18 +47,21 @@ If Scroll Lock is on, the mouse stays on the current screen.
 
 ## Connecting over Bluetooth (Windows)
 
-The client can connect to the server directly over Bluetooth instead of the
+A client can connect to the server directly over Bluetooth instead of the
 network. Both computers need Bluetooth and must first be paired in Windows'
 Bluetooth settings.
 
-1. On both computers, set **Connect over** at the top of the main window to
-   **Bluetooth**.
-2. On the server, click **Start**. The main window also shows this computer's
-   Bluetooth address, in case you need to enter it by hand.
-3. On the client, choose the server from the **Server** list of paired
-   computers (it shows "ready" once the server is running) and click
-   **Start**. If it isn't listed, choose **Enter address manually** and type
-   the address shown on the server, e.g. `00:1A:7D:DA:71:13`.
+The server accepts network and Bluetooth connections at the same time, so each
+client can connect whichever way works for it. For example, a laptop on a VPN
+can use Bluetooth while another computer uses the network.
+
+1. On the server, click **Start**. The main window shows both its IP address
+   and its Bluetooth address.
+2. On the client, set **Connect over** to **Bluetooth**, choose the server from
+   the **Server** list of paired computers (it shows "ready" once the server is
+   running) and click **Start**. If it isn't listed, choose **Enter address
+   manually** and type the address shown on the server, e.g.
+   `00:1A:7D:DA:71:13`.
 
 This is a direct Bluetooth connection (RFCOMM), not Bluetooth networking, so no
 network adapter or IP address is involved. The link must be authenticated and
