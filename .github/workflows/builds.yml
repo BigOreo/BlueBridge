@@ -405,10 +405,6 @@ jobs:
       fail-fast: false
       matrix:
        include:
-         - name: Windows Qt5
-           os: windows-2019
-           qt-version: 5.15
-           qt-major: 5
          - name: Windows Qt6
            os: windows-2022
            qt-version: 6.6
