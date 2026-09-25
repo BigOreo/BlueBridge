@@ -46,6 +46,9 @@
 #include <QRegularExpression>
 #include <QButtonGroup>
 #include <QClipboard>
+#include <QComboBox>
+#include <QPointer>
+#include <QThread>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -1514,7 +1517,9 @@ void MainWindow::setupConnectionModeUi()
     ui_->formLayout->addRow(m_pLabelBluetoothAddressTitle, m_pBluetoothAddressField);
 
     m_pLabelServerBluetoothHint = new QLabel(
-        tr("Enter this address on the other computer.") + " " + pairingHint, ui_->m_pGroupServer);
+        tr("Pair the two computers in <a href=\"ms-settings:bluetooth\">Bluetooth settings</a>, "
+           "then choose this computer on the other one. If it isn't listed there, enter this "
+           "address instead."), ui_->m_pGroupServer);
     m_pLabelServerBluetoothHint->setWordWrap(true);
     m_pLabelServerBluetoothHint->setOpenExternalLinks(true);
     ui_->formLayout->addRow(m_pLabelServerBluetoothHint);
@@ -1529,15 +1534,34 @@ void MainWindow::setupConnectionModeUi()
     connect(m_pButtonRefreshBluetoothAddress, &QToolButton::clicked,
             this, &MainWindow::updateLocalBluetoothAddress);
 
-    // client: the server's Bluetooth address
-    m_pLabelServerBluetoothTitle = new QLabel(tr("Server's Bluetooth address:"), ui_->m_pGroupClient);
+    // client: pick the server from the paired computers, or type its address
+    m_pLabelServerBluetoothTitle = new QLabel(tr("Server:"), ui_->m_pGroupClient);
+    m_pBluetoothServerField = new QWidget(ui_->m_pGroupClient);
+    auto* serverLayout = new QHBoxLayout(m_pBluetoothServerField);
+    serverLayout->setContentsMargins(0, 0, 0, 0);
+    m_pComboBluetoothServer = new QComboBox(m_pBluetoothServerField);
+    m_pComboBluetoothServer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_pButtonRefreshBluetoothServers = new QToolButton(m_pBluetoothServerField);
+    m_pButtonRefreshBluetoothServers->setText(tr("Refresh"));
+    m_pButtonRefreshBluetoothServers->setToolTip(tr("Look for paired computers again"));
+    serverLayout->addWidget(m_pComboBluetoothServer);
+    serverLayout->addWidget(m_pButtonRefreshBluetoothServers);
+    m_pLabelServerBluetoothTitle->setBuddy(m_pComboBluetoothServer);
+    ui_->formLayout_3->addRow(m_pLabelServerBluetoothTitle, m_pBluetoothServerField);
+
+    m_pLabelServerBluetoothManualTitle = new QLabel(tr("Server's address:"), ui_->m_pGroupClient);
     m_pLineEditServerBluetooth = new QLineEdit(ui_->m_pGroupClient);
     m_pLineEditServerBluetooth->setPlaceholderText(tr("e.g. 00:28:F8:8F:56:C3"));
-    m_pLabelServerBluetoothTitle->setBuddy(m_pLineEditServerBluetooth);
-    ui_->formLayout_3->addRow(m_pLabelServerBluetoothTitle, m_pLineEditServerBluetooth);
+    m_pLabelServerBluetoothManualTitle->setBuddy(m_pLineEditServerBluetooth);
+    ui_->formLayout_3->addRow(m_pLabelServerBluetoothManualTitle, m_pLineEditServerBluetooth);
+
+    connect(m_pComboBluetoothServer, QOverload<int>::of(&QComboBox::activated),
+            this, &MainWindow::selectBluetoothServer);
+    connect(m_pButtonRefreshBluetoothServers, &QToolButton::clicked,
+            this, &MainWindow::refreshPairedBluetoothServers);
 
     m_pLabelClientBluetoothHint = new QLabel(
-        tr("Shown on the server's window when it is set to Bluetooth.") + " " + pairingHint,
+        tr("Choose the computer that shares its keyboard and mouse.") + " " + pairingHint,
         ui_->m_pGroupClient);
     m_pLabelClientBluetoothHint->setWordWrap(true);
     m_pLabelClientBluetoothHint->setOpenExternalLinks(true);
@@ -1585,11 +1609,103 @@ void MainWindow::updateConnectionModeUi()
     ui_->m_pCheckBoxAutoConfig->setVisible(!bluetooth);
     ui_->m_pComboServerList->setVisible(!bluetooth && ui_->m_pComboServerList->count() > 1);
     m_pLabelServerBluetoothTitle->setVisible(bluetooth);
-    m_pLineEditServerBluetooth->setVisible(bluetooth);
+    m_pBluetoothServerField->setVisible(bluetooth);
+    m_pLabelServerBluetoothManualTitle->setVisible(false);
+    m_pLineEditServerBluetooth->setVisible(false);
     m_pLabelClientBluetoothHint->setVisible(bluetooth);
 
     if (bluetooth) {
         updateLocalBluetoothAddress();
+        refreshPairedBluetoothServers();
+    }
+}
+
+namespace {
+const char BLUETOOTH_MANUAL_ENTRY[] = "manual";
+}
+
+void MainWindow::refreshPairedBluetoothServers()
+{
+    const QString current =
+            inputleap::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+    const auto devices = inputleap::paired_bluetooth_computers();
+
+    m_pComboBluetoothServer->clear();
+    for (const auto& device : devices) {
+        m_pComboBluetoothServer->addItem(device.name, device.address);
+        m_pComboBluetoothServer->setItemData(m_pComboBluetoothServer->count() - 1,
+                                             device.address, Qt::ToolTipRole);
+    }
+    m_pComboBluetoothServer->addItem(tr("Enter address manually..."),
+                                     QString(BLUETOOTH_MANUAL_ENTRY));
+
+    // keep the saved server selected; an address that is not paired (or no
+    // paired computers at all) falls back to typing it in
+    int index = current.isEmpty() ? -1 : m_pComboBluetoothServer->findData(current);
+    if (index < 0 && (devices.isEmpty() || !current.isEmpty())) {
+        index = m_pComboBluetoothServer->count() - 1;
+    }
+    if (index < 0) {
+        index = 0;
+    }
+    m_pComboBluetoothServer->setCurrentIndex(index);
+    selectBluetoothServer(index);
+
+    if (devices.isEmpty()) {
+        return;
+    }
+
+    // ask each paired computer in the background whether the server is running
+    const int generation = ++m_BluetoothServerScan;
+    QStringList addresses;
+    for (const auto& device : devices) {
+        addresses << device.address;
+    }
+    QPointer<MainWindow> self(this);
+    QThread* thread = QThread::create([self, generation, addresses]() {
+        QMap<QString, bool> running;
+        for (const auto& address : addresses) {
+            running[address] = inputleap::is_server_running_on(address);
+        }
+        QMetaObject::invokeMethod(qApp, [self, generation, running]() {
+            if (self) {
+                self->applyBluetoothServerStatus(generation, running);
+            }
+        }, Qt::QueuedConnection);
+    });
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+    thread->start();
+}
+
+void MainWindow::applyBluetoothServerStatus(int generation, const QMap<QString, bool>& running)
+{
+    if (generation != m_BluetoothServerScan) {
+        return; // the list was refreshed since this check started
+    }
+    for (int i = 0; i < m_pComboBluetoothServer->count(); ++i) {
+        const QString address = m_pComboBluetoothServer->itemData(i).toString();
+        if (!running.contains(address)) {
+            continue;
+        }
+        QString name = m_pComboBluetoothServer->itemText(i);
+        name = running[address] ? tr("%1 (ready)").arg(name) : tr("%1 (not running)").arg(name);
+        m_pComboBluetoothServer->setItemText(i, name);
+    }
+}
+
+void MainWindow::selectBluetoothServer(int index)
+{
+    const QString data = m_pComboBluetoothServer->itemData(index).toString();
+    const bool manual = data == BLUETOOTH_MANUAL_ENTRY;
+    const bool bluetooth = m_ConnectionMode == ConnectionMode::Bluetooth;
+
+    if (!manual) {
+        m_pLineEditServerBluetooth->setText(data);
+    }
+    m_pLabelServerBluetoothManualTitle->setVisible(bluetooth && manual);
+    m_pLineEditServerBluetooth->setVisible(bluetooth && manual);
+    if (manual && bluetooth && isVisible()) {
+        m_pLineEditServerBluetooth->setFocus();
     }
 }
 

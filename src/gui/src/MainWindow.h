@@ -35,6 +35,7 @@
 #include "Ipc.h"
 #include "LogWindow.h"
 
+#include <QMap>
 #include <QMutex>
 #include <memory>
 
@@ -56,6 +57,7 @@ class LogDialog;
 class QInputLeapApplication;
 class SetupWizard;
 class ZeroconfService;
+class QComboBox;
 class QLabel;
 class QLineEdit;
 class QToolButton;
@@ -173,6 +175,9 @@ public slots:
         void setConnectionMode(ConnectionMode mode);
         void updateConnectionModeUi();
         void updateLocalBluetoothAddress();
+        void refreshPairedBluetoothServers();
+        void selectBluetoothServer(int index);
+        void applyBluetoothServerStatus(int generation, const QMap<QString, bool>& running);
         ConnectionMode connection_mode() const { return m_ConnectionMode; }
 
     private:
@@ -213,7 +218,12 @@ public slots:
         QToolButton* m_pButtonRefreshBluetoothAddress = nullptr;
         QLabel* m_pLabelServerBluetoothHint = nullptr;
         QLabel* m_pLabelServerBluetoothTitle = nullptr;
+        QWidget* m_pBluetoothServerField = nullptr;
+        QComboBox* m_pComboBluetoothServer = nullptr;
+        QToolButton* m_pButtonRefreshBluetoothServers = nullptr;
+        QLabel* m_pLabelServerBluetoothManualTitle = nullptr;
         QLineEdit* m_pLineEditServerBluetooth = nullptr;
+        int m_BluetoothServerScan = 0;
         QLabel* m_pLabelClientBluetoothHint = nullptr;
 
 private slots:

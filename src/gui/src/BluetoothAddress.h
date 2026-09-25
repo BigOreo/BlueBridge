@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <QList>
 #include <QString>
 
 namespace inputleap {
@@ -31,5 +32,19 @@ QString local_bluetooth_address();
 
 // Whether connecting over Bluetooth is supported on this platform.
 bool is_bluetooth_supported();
+
+struct PairedBluetoothDevice {
+    QString name;
+    QString address; // canonical "XX:XX:XX:XX:XX:XX"
+};
+
+// Computers this one is paired with over Bluetooth, as Windows remembers
+// them. Does not use the radio, so it returns immediately.
+QList<PairedBluetoothDevice> paired_bluetooth_computers();
+
+// Asks the device at address whether it is running the server, by looking up
+// the server's Bluetooth service record. Blocks for up to several seconds
+// (longer if the device is out of range), so call it off the GUI thread.
+bool is_server_running_on(const QString& address);
 
 } // namespace inputleap

@@ -74,10 +74,12 @@ Both machines need Bluetooth and must be paired in Windows' Bluetooth settings.
 
 1. On both computers, set **Connect over** at the top of the main window to
    **Bluetooth**.
-2. On the server, the main window shows this computer's Bluetooth address.
-   Click **Copy** (or note it down).
-3. On the client, enter that address as the **Server's Bluetooth address**
-   (e.g. `00:1A:7D:DA:71:13`) and click **Start**.
+2. On the server, click **Start**. The main window also shows this
+   computer's Bluetooth address, in case you need to enter it by hand.
+3. On the client, choose the server from the **Server** list of paired
+   computers (it shows "ready" once the server is running) and click
+   **Start**. If it isn't listed, choose **Enter address manually** and type
+   the address shown on the server, e.g. `00:1A:7D:DA:71:13`.
 
 This uses a plain Bluetooth RFCOMM connection, not Bluetooth networking (PAN),
 so no network adapter or IP address is involved. The Bluetooth link must be

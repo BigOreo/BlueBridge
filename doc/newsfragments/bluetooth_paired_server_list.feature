@@ -1,0 +1,1 @@
+Windows: in Bluetooth mode the client lists the computers it is paired with, marks the ones running the server as ready, and connects to the chosen one; typing the address remains available as a fallback.
