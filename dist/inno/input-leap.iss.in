@@ -7,6 +7,8 @@
 #define MyAppExeName "input-leap.exe"
 #define MyAppServiceName "InputLeap"
 #define MyAppServiceExe "input-leapd.exe"
+#define MyAppServerExe "input-leaps.exe"
+#define MyAppClientExe "input-leapc.exe"
 #define MyAppServiceDesc "Manages the InputLeap background processes."
 #define MyAppListenerDesc "InputLeap Listener"
 
@@ -65,6 +67,8 @@ Type: filesandordirs; Name: "{commonappdata}\InputLeap"
 [UninstallRun]
 Filename: {sys}\taskkill; Parameters: "/im {#MyAppExeName} /f /t"; Flags: runhidden
 Filename: {sys}\net.exe; Parameters: "stop {#MyAppServiceName}"; Flags: runhidden
+; the service leaves the server/client process it started running
+Filename: {sys}\taskkill; Parameters: "/im {#MyAppServerExe} /im {#MyAppClientExe} /f"; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "delete {#MyAppServiceName}"; Flags: runhidden
 Filename: {sys}\netsh.exe; Parameters: "advfirewall firewall delete rule name=""{#MyAppListenerDesc}"""; Flags: runhidden
 
@@ -87,4 +91,16 @@ begin
 	vcredist2017('14'); // min allowed version is 14.0
 
 	Result := true;
+end;
+
+// Restart Manager can't close the service or the server/client processes it
+// starts, so stop them before files are replaced on an upgrade or reinstall.
+<event('PrepareToInstall')>
+function StopInputLeap(var NeedsRestart: Boolean): String;
+var
+	ResultCode: Integer;
+begin
+	Exec(ExpandConstant('{sys}\net.exe'), 'stop {#MyAppServiceName}', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+	Exec(ExpandConstant('{sys}\taskkill.exe'), '/f /t /im {#MyAppExeName} /im {#MyAppServerExe} /im {#MyAppClientExe} /im {#MyAppServiceExe}', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+	Result := '';
 end;
