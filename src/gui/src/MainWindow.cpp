@@ -193,6 +193,10 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     ui_->setupUi(this);
     setWindowIcon(QIcon(APP_LARGE_ICON));
     createMenuBar();
+    m_policy = inputleap::read_machine_policy();
+    if (m_policy.encryption_required() && !m_AppConfig->getCryptoEnabled()) {
+        m_AppConfig->setCryptoEnabled(true);
+    }
     setupConnectionModeUi();
     loadSettings();
     initConnections();
@@ -384,8 +388,10 @@ void MainWindow::loadSettings()
 
     auto mode = static_cast<ConnectionMode>(
                 settings().value("connectionMode", static_cast<int>(ConnectionMode::Network)).toInt());
-    if (!inputleap::is_bluetooth_supported()) {
+    if (!inputleap::is_bluetooth_supported() || !m_policy.bluetooth_allowed()) {
         mode = ConnectionMode::Network;
+    } else if (!m_policy.network_allowed()) {
+        mode = ConnectionMode::Bluetooth;
     }
     m_ConnectionMode = mode;
     m_pButtonModeBluetooth->setChecked(mode == ConnectionMode::Bluetooth);
@@ -1481,6 +1487,45 @@ void MainWindow::setupConnectionModeUi()
     modeLayout->addWidget(m_pButtonModeNetwork);
     modeLayout->addWidget(m_pButtonModeBluetooth);
     modeLayout->addStretch();
+
+    // tells the user why some choices are locked
+    m_pLabelManaged = new QLabel(tr("Managed by your organization"), m_pConnectionModeRow);
+    QFont managedFont = m_pLabelManaged->font();
+    managedFont.setItalic(true);
+    m_pLabelManaged->setFont(managedFont);
+    QStringList managed;
+    if (m_policy.encryption_required()) {
+        managed << tr("Encryption is always on.");
+    }
+    if (m_policy.clipboard_sharing_disabled()) {
+        managed << tr("Clipboard sharing is turned off.");
+    }
+    if (m_policy.file_transfer_disabled()) {
+        managed << tr("File transfer is turned off.");
+    }
+    if (!m_policy.network_allowed()) {
+        managed << tr("Connecting over the network is turned off.");
+    }
+    if (!m_policy.bluetooth_allowed()) {
+        managed << tr("Connecting over Bluetooth is turned off.");
+    }
+    if (m_policy.lock_settings) {
+        managed << tr("Settings can't be changed.");
+    }
+    m_pLabelManaged->setToolTip(tr("Your organization manages some settings on this computer:") +
+                                "\n" + managed.join("\n"));
+    m_pLabelManaged->setVisible(m_policy.any());
+    modeLayout->addWidget(m_pLabelManaged);
+
+    const QString lockedByPolicy = tr("Turned off by your organization");
+    if (!m_policy.network_allowed()) {
+        m_pButtonModeNetwork->setEnabled(false);
+        m_pButtonModeNetwork->setToolTip(lockedByPolicy);
+    }
+    if (!m_policy.bluetooth_allowed()) {
+        m_pButtonModeBluetooth->setEnabled(false);
+        m_pButtonModeBluetooth->setToolTip(lockedByPolicy);
+    }
     ui_->verticalLayout_2->insertWidget(0, m_pConnectionModeRow);
 
     connect(m_pButtonModeNetwork, &QToolButton::toggled, this, [this](bool checked) {
@@ -1574,7 +1619,12 @@ void MainWindow::setupConnectionModeUi()
         }
     });
 
-    m_pConnectionModeRow->setVisible(inputleap::is_bluetooth_supported());
+    // the row also carries the "managed" note on systems without Bluetooth
+    const bool bluetoothSupported = inputleap::is_bluetooth_supported();
+    modeLabel->setVisible(bluetoothSupported);
+    m_pButtonModeNetwork->setVisible(bluetoothSupported);
+    m_pButtonModeBluetooth->setVisible(bluetoothSupported);
+    m_pConnectionModeRow->setVisible(bluetoothSupported || m_policy.any());
 }
 
 void MainWindow::setConnectionMode(ConnectionMode mode)

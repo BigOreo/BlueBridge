@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitionResources xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+  <displayName>InputLeap</displayName>
+  <description>Policies for InputLeap keyboard and mouse sharing.</description>
+  <resources>
+    <stringTable>
+      <string id="InputLeap">InputLeap</string>
+      <string id="SUPPORTED_InputLeap">Versions of InputLeap that support policies</string>
+
+      <string id="ClipboardSharing">Allow clipboard sharing</string>
+      <string id="ClipboardSharing_Explain">Controls whether text and images copied on one computer can be pasted on the other.
+
+If you disable this policy, clipboard contents are never sent or received, whatever the user or the server configuration chooses.
+
+If you enable this policy or do not configure it, users decide.</string>
+
+      <string id="FileTransfer">Allow file transfer</string>
+      <string id="FileTransfer_Explain">Controls whether files can be transferred between computers by dragging and dropping them across screens.
+
+If you disable this policy, file transfer is turned off and cannot be turned on.
+
+If you enable this policy or do not configure it, users decide.</string>
+
+      <string id="RequireEncryption">Require encryption</string>
+      <string id="RequireEncryption_Explain">Requires TLS encryption for all connections, so that keystrokes, mouse movement and clipboard contents are never sent unencrypted.
+
+If you enable this policy, encryption is always on and users cannot turn it off.
+
+If you disable this policy or do not configure it, users decide. Encryption is on by default.</string>
+
+      <string id="AllowedConnectionModes">Allowed connection modes</string>
+      <string id="AllowedConnectionModes_Explain">Controls how computers may connect to each other: over the network (Wi-Fi or Ethernet), over Bluetooth, or both.
+
+If you enable this policy, only the selected modes can be used. Connections using another mode are refused.
+
+If you disable this policy or do not configure it, both modes are allowed.</string>
+      <string id="AllowedConnectionModes_Both">Network and Bluetooth</string>
+      <string id="AllowedConnectionModes_Network">Network only</string>
+      <string id="AllowedConnectionModes_Bluetooth">Bluetooth only</string>
+
+      <string id="LockSettings">Prevent changes to settings</string>
+      <string id="LockSettings_Explain">Prevents users from changing InputLeap's settings (screen name, port, network interface, encryption, logging and similar).
+
+If you enable this policy, the settings window is read-only.
+
+If you disable this policy or do not configure it, users can change settings.</string>
+    </stringTable>
+    <presentationTable>
+      <presentation id="AllowedConnectionModes">
+        <dropdownList refId="AllowedConnectionModes_Enum" defaultItem="0">Allowed modes:</dropdownList>
+      </presentation>
+    </presentationTable>
+  </resources>
+</policyDefinitionResources>

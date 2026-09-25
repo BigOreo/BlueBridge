@@ -18,7 +18,10 @@
 
 #pragma once
 
+#include "common/Policy.h"
 #include "io/filesystem.h"
+
+#include <string>
 
 namespace inputleap {
 
@@ -54,6 +57,18 @@ public:
     bool use_x11 = false;
     bool use_ei = false;
     bool use_portal = true; // use the XDG portals for ei
+    // what this computer's administrator enforces, see apply_machine_policy()
+    MachinePolicy m_policy;
 };
+
+// Whether host (as given in an address, without the port) names a
+// Bluetooth address rather than a network one.
+bool is_bluetooth_host(const std::string& host);
+
+// Reads this computer's policy into args.m_policy and applies what it
+// enforces to the arguments (encryption, file transfer). host is the server
+// or listen address' host, empty for all network interfaces. Returns false,
+// after logging why, when the policy does not allow connecting that way.
+bool apply_machine_policy(ArgsBase& args, const std::string& host);
 
 } // namespace inputleap

@@ -30,6 +30,8 @@
 #include <QFileDialog>
 #include <QDir>
 
+#include "common/Policy.h"
+
 SettingsDialog::SettingsDialog(QWidget* parent, AppConfig& config) :
     QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
     ui_{std::make_unique<Ui::SettingsDialog>()},
@@ -55,6 +57,20 @@ SettingsDialog::SettingsDialog(QWidget* parent, AppConfig& config) :
     ui_->m_pCheckBoxMinimizeToTray->setChecked(app_config_.getMinimizeToTray());
     ui_->m_pCheckBoxEnableCrypto->setChecked(app_config_.getCryptoEnabled());
     ui_->checkbox_require_client_certificate->setChecked(app_config_.getRequireClientCertificate());
+
+    const auto policy = inputleap::read_machine_policy();
+    const QString managed = tr("Managed by your organization");
+    if (policy.encryption_required()) {
+        ui_->m_pCheckBoxEnableCrypto->setChecked(true);
+        ui_->m_pCheckBoxEnableCrypto->setEnabled(false);
+        ui_->m_pCheckBoxEnableCrypto->setToolTip(managed);
+    }
+    if (policy.lock_settings) {
+        ui_->m_pGroupGeneral->setEnabled(false);
+        ui_->m_pGroupNetworking->setEnabled(false);
+        ui_->m_pGroupLog->setEnabled(false);
+        setWindowTitle(windowTitle() + " (" + managed + ")");
+    }
 
 #if defined(Q_OS_WIN)
     ui_->m_pComboElevate->setCurrentIndex(static_cast<int>(app_config_.elevateMode()));

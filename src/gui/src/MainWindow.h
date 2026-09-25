@@ -34,6 +34,7 @@
 #include "IpcClient.h"
 #include "Ipc.h"
 #include "LogWindow.h"
+#include "common/Policy.h"
 
 #include <QMap>
 #include <QMutex>
@@ -208,6 +209,8 @@ public slots:
         bool m_fingerprint_expanded = false;
 
         ConnectionMode m_ConnectionMode = ConnectionMode::Network;
+        inputleap::MachinePolicy m_policy;
+        QLabel* m_pLabelManaged = nullptr;
         QWidget* m_pConnectionModeRow = nullptr;
         QToolButton* m_pButtonModeNetwork = nullptr;
         QToolButton* m_pButtonModeBluetooth = nullptr;

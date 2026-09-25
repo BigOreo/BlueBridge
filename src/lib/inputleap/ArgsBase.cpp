@@ -17,6 +17,9 @@
  */
 
 #include "inputleap/ArgsBase.h"
+#include "base/Log.h"
+
+#include <cctype>
 
 namespace inputleap {
 
@@ -49,6 +52,47 @@ m_pluginDirectory("")
 
 ArgsBase::~ArgsBase()
 {
+}
+
+bool is_bluetooth_host(const std::string& host)
+{
+    return host.size() >= 2 &&
+           std::tolower(static_cast<unsigned char>(host[0])) == 'b' &&
+           std::tolower(static_cast<unsigned char>(host[1])) == 't' &&
+           (host.size() == 2 || host[2] == ':');
+}
+
+bool apply_machine_policy(ArgsBase& args, const std::string& host)
+{
+    args.m_policy = read_machine_policy();
+    const MachinePolicy& policy = args.m_policy;
+    if (!policy.any()) {
+        return true;
+    }
+    LOG_NOTE("this computer is managed by your organization; applying its policy");
+
+    if (policy.encryption_required() && !args.m_enableCrypto) {
+        LOG_WARN("encryption is required by your organization's policy, ignoring --disable-crypto");
+        args.m_enableCrypto = true;
+    }
+    if (policy.file_transfer_disabled() && args.m_enableDragDrop) {
+        LOG_NOTE("file transfer is disabled by your organization's policy");
+        args.m_enableDragDrop = false;
+    }
+    if (policy.clipboard_sharing_disabled()) {
+        LOG_NOTE("clipboard sharing is disabled by your organization's policy");
+    }
+
+    bool bluetooth = is_bluetooth_host(host);
+    if (bluetooth && !policy.bluetooth_allowed()) {
+        LOG_ERR("connecting over Bluetooth is disabled by your organization's policy");
+        return false;
+    }
+    if (!bluetooth && !policy.network_allowed()) {
+        LOG_ERR("connecting over the network is disabled by your organization's policy");
+        return false;
+    }
+    return true;
 }
 
 } // namespace inputleap

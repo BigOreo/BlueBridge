@@ -26,6 +26,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QMessageBox>
+#include "common/Policy.h"
 
 ServerConfigDialog::ServerConfigDialog(QWidget* parent, ServerConfig& config, const QString& defaultScreenName) :
     QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
@@ -63,6 +64,20 @@ ServerConfigDialog::ServerConfigDialog(QWidget* parent, ServerConfig& config, co
     ui_->m_pCheckBoxEnableClipboard->setChecked(serverConfig().clipboardSharing());
     ui_->m_pSpinBoxClipboardSizeLimit->setValue(serverConfig().clipboardSharingSize());
     ui_->m_pSpinBoxClipboardSizeLimit->setEnabled(serverConfig().clipboardSharing());
+
+    const auto policy = inputleap::read_machine_policy();
+    const QString managed = tr("Turned off by your organization");
+    if (policy.file_transfer_disabled()) {
+        ui_->m_pCheckBoxEnableDragAndDrop->setChecked(false);
+        ui_->m_pCheckBoxEnableDragAndDrop->setEnabled(false);
+        ui_->m_pCheckBoxEnableDragAndDrop->setToolTip(managed);
+    }
+    if (policy.clipboard_sharing_disabled()) {
+        ui_->m_pCheckBoxEnableClipboard->setChecked(false);
+        ui_->m_pCheckBoxEnableClipboard->setEnabled(false);
+        ui_->m_pCheckBoxEnableClipboard->setToolTip(managed);
+        ui_->m_pSpinBoxClipboardSizeLimit->setEnabled(false);
+    }
 
     for (const Hotkey& hotkey : serverConfig().hotkeys()) {
         ui_->m_pListHotkeys->addItem(hotkey.text());

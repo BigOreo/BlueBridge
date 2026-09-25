@@ -76,6 +76,10 @@ Client::Client(IEventQueue* events, const std::string& name, const NetworkAddres
     assert(m_socketFactory != nullptr);
     assert(m_screen != nullptr);
 
+    if (m_args.m_policy.clipboard_sharing_disabled()) {
+        m_enableClipboard = false;
+    }
+
     // register suspend/resume event handlers
     m_events->add_handler(EventType::SCREEN_SUSPEND, get_event_target(),
                           [this](const auto& e){ handle_suspend(); });
@@ -345,7 +349,8 @@ Client::setOptions(const OptionsList& options)
             if (*index == static_cast<OptionValue>(false)) {
                 LOG_NOTE("clipboard sharing is disabled");
             }
-            m_enableClipboard = *index;
+            // the server cannot turn on what the machine policy turns off
+            m_enableClipboard = *index && !m_args.m_policy.clipboard_sharing_disabled();
 
             break;
         } else if (id == kOptionClipboardSharingSize) {
