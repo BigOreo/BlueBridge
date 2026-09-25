@@ -56,6 +56,9 @@ class LogDialog;
 class QInputLeapApplication;
 class SetupWizard;
 class ZeroconfService;
+class QLabel;
+class QLineEdit;
+class QToolButton;
 class SslCertificate;
 
 namespace Ui
@@ -78,6 +81,11 @@ class MainWindow : public QMainWindow
         enum qRuningState {
             kStarted,
             kStopped
+        };
+
+        enum class ConnectionMode {
+            Network,
+            Bluetooth
         };
 
     public:
@@ -161,6 +169,11 @@ public slots:
         void proofreadInfo();
         void windowStateChanged();
         void updateSSLFingerprint();
+        void setupConnectionModeUi();
+        void setConnectionMode(ConnectionMode mode);
+        void updateConnectionModeUi();
+        void updateLocalBluetoothAddress();
+        ConnectionMode connection_mode() const { return m_ConnectionMode; }
 
     private:
         std::unique_ptr<Ui::MainWindow> ui_;
@@ -188,6 +201,20 @@ public slots:
         LogWindow *m_pLogWindow;
 
         bool m_fingerprint_expanded = false;
+
+        ConnectionMode m_ConnectionMode = ConnectionMode::Network;
+        QWidget* m_pConnectionModeRow = nullptr;
+        QToolButton* m_pButtonModeNetwork = nullptr;
+        QToolButton* m_pButtonModeBluetooth = nullptr;
+        QLabel* m_pLabelBluetoothAddressTitle = nullptr;
+        QWidget* m_pBluetoothAddressField = nullptr;
+        QLabel* m_pLabelBluetoothAddress = nullptr;
+        QToolButton* m_pButtonCopyBluetoothAddress = nullptr;
+        QToolButton* m_pButtonRefreshBluetoothAddress = nullptr;
+        QLabel* m_pLabelServerBluetoothHint = nullptr;
+        QLabel* m_pLabelServerBluetoothTitle = nullptr;
+        QLineEdit* m_pLineEditServerBluetooth = nullptr;
+        QLabel* m_pLabelClientBluetoothHint = nullptr;
 
 private slots:
     void on_m_pCheckBoxAutoConfig_toggled(bool checked);

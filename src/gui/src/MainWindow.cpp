@@ -22,6 +22,7 @@
 #include "ui_MainWindow.h"
 
 #include "AboutDialog.h"
+#include "BluetoothAddress.h"
 #include "ServerConfigDialog.h"
 #include "SettingsDialog.h"
 #include "ZeroconfService.h"
@@ -43,6 +44,14 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QRegularExpression>
+#include <QButtonGroup>
+#include <QClipboard>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPainter>
+#include <QPainterPath>
+#include <QToolButton>
 
 #if defined(Q_OS_MAC)
 #include <ApplicationServices/ApplicationServices.h>
@@ -105,6 +114,50 @@ const char* icon_name_for_connection_state(AppConnectionState state)
 
 static const char* APP_LARGE_ICON = ":/res/icons/256x256/input-leap.png";
 
+// Draws the icons for the connection mode toggle. They are painted rather
+// than loaded so they stay sharp at any scale and follow the palette.
+QPixmap paint_mode_icon(bool bluetooth, const QColor& color)
+{
+    const qreal ratio = 2.0;
+    QPixmap pixmap(QSize(32, 32) * ratio);
+    pixmap.setDevicePixelRatio(ratio);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    QPen pen(color, 2.4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    painter.setPen(pen);
+    painter.setBrush(Qt::NoBrush);
+
+    if (bluetooth) {
+        QPainterPath rune;
+        rune.moveTo(9, 10);
+        rune.lineTo(22, 22);
+        rune.lineTo(16, 28);
+        rune.lineTo(16, 4);
+        rune.lineTo(22, 10);
+        rune.lineTo(9, 22);
+        painter.drawPath(rune);
+    } else {
+        painter.drawEllipse(QRectF(4, 4, 24, 24));
+        painter.drawEllipse(QRectF(10.5, 4, 11, 24));
+        painter.drawLine(QPointF(4, 16), QPointF(28, 16));
+        painter.drawLine(QPointF(6.5, 10), QPointF(25.5, 10));
+        painter.drawLine(QPointF(6.5, 22), QPointF(25.5, 22));
+    }
+    return pixmap;
+}
+
+QIcon mode_icon(bool bluetooth, const QPalette& palette)
+{
+    QIcon icon;
+    icon.addPixmap(paint_mode_icon(bluetooth, palette.color(QPalette::ButtonText)),
+                   QIcon::Normal, QIcon::Off);
+    icon.addPixmap(paint_mode_icon(bluetooth, palette.color(QPalette::HighlightedText)),
+                   QIcon::Normal, QIcon::On);
+    return icon;
+}
+
 } // namespace
 
 MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
@@ -137,6 +190,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     ui_->setupUi(this);
     setWindowIcon(QIcon(APP_LARGE_ICON));
     createMenuBar();
+    setupConnectionModeUi();
     loadSettings();
     initConnections();
 
@@ -165,6 +219,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     m_SuppressAutoConfigWarning = false;
 
     ui_->m_pComboServerList->hide();
+    updateConnectionModeUi();
     ui_->m_pLabelPadlock->hide();
     ui_->m_pLabelPadlock->setPixmap(QPixmap(":/res/icons/64x64/padlock.png").scaledToHeight(fontMetrics().height() * 1.5, Qt::SmoothTransformation));
     ui_->frame_fingerprint_details->hide();
@@ -322,6 +377,16 @@ void MainWindow::loadSettings()
                                                     QDir::homePath() + "/" + APP_CONFIG_NAME).toString());
     ui_->m_pGroupClient->setChecked(settings().value("groupClientChecked", true).toBool());
     ui_->m_pLineEditHostname->setText(settings().value("serverHostname").toString());
+    m_pLineEditServerBluetooth->setText(settings().value("serverBluetoothAddress").toString());
+
+    auto mode = static_cast<ConnectionMode>(
+                settings().value("connectionMode", static_cast<int>(ConnectionMode::Network)).toInt());
+    if (!inputleap::is_bluetooth_supported()) {
+        mode = ConnectionMode::Network;
+    }
+    m_ConnectionMode = mode;
+    m_pButtonModeBluetooth->setChecked(mode == ConnectionMode::Bluetooth);
+    m_pButtonModeNetwork->setChecked(mode == ConnectionMode::Network);
 }
 
 void MainWindow::initConnections()
@@ -345,6 +410,8 @@ void MainWindow::saveSettings()
     settings().setValue("useInternalConfig", ui_->m_pRadioInternalConfig->isChecked());
     settings().setValue("groupClientChecked", ui_->m_pGroupClient->isChecked());
     settings().setValue("serverHostname", ui_->m_pLineEditHostname->text());
+    settings().setValue("serverBluetoothAddress", m_pLineEditServerBluetooth->text());
+    settings().setValue("connectionMode", static_cast<int>(m_ConnectionMode));
 
     settings().sync();
 }
@@ -689,6 +756,22 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
         args << "--log" << appConfig().logFilenameCmd();
     }
 
+    if (connection_mode() == ConnectionMode::Bluetooth) {
+        QString serverAddress = inputleap::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+        if (serverAddress.isEmpty()) {
+            show();
+            if (!m_SuppressEmptyServerWarning) {
+                QMessageBox::warning(this, tr("Server Bluetooth address missing"),
+                    tr("Enter the server's Bluetooth address, for example 00:28:F8:8F:56:C3.\n\n"
+                       "To find it, switch the server computer to Bluetooth mode: "
+                       "its address is shown on its main window."));
+            }
+            return false;
+        }
+        args << "[bt:" + serverAddress + "]:" + QString::number(appConfig().port());
+        return true;
+    }
+
     // check auto config first, if it is disabled or no server detected,
     // use line edit host name if it is not empty
     if (ui_->m_pCheckBoxAutoConfig->isChecked()) {
@@ -759,6 +842,10 @@ QString MainWindow::hostname() const
 
 QString MainWindow::address()
 {
+    if (connection_mode() == ConnectionMode::Bluetooth) {
+        return "[bt]:" + QString::number(appConfig().port());
+    }
+
     QString address = appConfig().networkInterface();
     if (!address.isEmpty())
         address = "[" + address + "]";
@@ -1068,7 +1155,7 @@ void MainWindow::serverDetected(const QString name)
         ui_->m_pComboServerList->addItem(name);
     }
 
-    if (ui_->m_pComboServerList->count() > 1) {
+    if (ui_->m_pComboServerList->count() > 1 && connection_mode() == ConnectionMode::Network) {
         ui_->m_pComboServerList->show();
     }
 }
@@ -1340,6 +1427,188 @@ void MainWindow::windowStateChanged()
 {
     if (windowState() == Qt::WindowMinimized && appConfig().getMinimizeToTray())
         hide();
+}
+
+void MainWindow::setupConnectionModeUi()
+{
+    // connection mode toggle at the top of the window
+    m_pConnectionModeRow = new QWidget(this);
+    auto* modeLayout = new QHBoxLayout(m_pConnectionModeRow);
+    modeLayout->setContentsMargins(0, 0, 0, 0);
+    modeLayout->setSpacing(0);
+
+    auto* modeLabel = new QLabel(tr("Connect over:"), m_pConnectionModeRow);
+    modeLayout->addWidget(modeLabel);
+    modeLayout->addSpacing(8);
+
+    auto makeModeButton = [this](const QString& text, const QString& toolTip, bool bluetooth) {
+        auto* button = new QToolButton(m_pConnectionModeRow);
+        button->setText(text);
+        button->setToolTip(toolTip);
+        button->setCheckable(true);
+        button->setIcon(mode_icon(bluetooth, palette()));
+        button->setIconSize(QSize(18, 18));
+        button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        button->setObjectName(bluetooth ? "modeBluetooth" : "modeNetwork");
+        return button;
+    };
+    m_pButtonModeNetwork = makeModeButton(tr("Network"),
+        tr("Connect over your local network (Wi-Fi or Ethernet)."), false);
+    m_pButtonModeBluetooth = makeModeButton(tr("Bluetooth"),
+        tr("Connect directly over Bluetooth. Works even when a VPN blocks the local network."),
+        true);
+    m_pButtonModeNetwork->setChecked(true);
+
+    // make the two buttons look like one segmented control
+    m_pConnectionModeRow->setStyleSheet(
+        "QToolButton { padding: 5px 14px; border: 1px solid palette(mid);"
+        "  background: palette(button); }"
+        "QToolButton:hover:!checked { background: palette(midlight); }"
+        "QToolButton:checked { background: palette(highlight); color: palette(highlighted-text);"
+        "  border-color: palette(highlight); }"
+        "QToolButton#modeNetwork { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }"
+        "QToolButton#modeBluetooth { border-left: none; border-top-right-radius: 6px;"
+        "  border-bottom-right-radius: 6px; }");
+
+    auto* group = new QButtonGroup(this);
+    group->setExclusive(true);
+    group->addButton(m_pButtonModeNetwork);
+    group->addButton(m_pButtonModeBluetooth);
+
+    modeLayout->addWidget(m_pButtonModeNetwork);
+    modeLayout->addWidget(m_pButtonModeBluetooth);
+    modeLayout->addStretch();
+    ui_->verticalLayout_2->insertWidget(0, m_pConnectionModeRow);
+
+    connect(m_pButtonModeNetwork, &QToolButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            setConnectionMode(ConnectionMode::Network);
+        }
+    });
+    connect(m_pButtonModeBluetooth, &QToolButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            setConnectionMode(ConnectionMode::Bluetooth);
+        }
+    });
+
+    const QString pairingHint = tr("Both computers must be paired first in "
+                                   "<a href=\"ms-settings:bluetooth\">Bluetooth settings</a>.");
+
+    // server: this computer's Bluetooth address, ready to copy
+    m_pLabelBluetoothAddressTitle = new QLabel(tr("Bluetooth address:"), ui_->m_pGroupServer);
+    m_pBluetoothAddressField = new QWidget(ui_->m_pGroupServer);
+    auto* addressLayout = new QHBoxLayout(m_pBluetoothAddressField);
+    addressLayout->setContentsMargins(0, 0, 0, 0);
+    m_pLabelBluetoothAddress = new QLabel(m_pBluetoothAddressField);
+    m_pLabelBluetoothAddress->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_pButtonCopyBluetoothAddress = new QToolButton(m_pBluetoothAddressField);
+    m_pButtonCopyBluetoothAddress->setText(tr("Copy"));
+    m_pButtonCopyBluetoothAddress->setToolTip(tr("Copy this address to the clipboard"));
+    m_pButtonRefreshBluetoothAddress = new QToolButton(m_pBluetoothAddressField);
+    m_pButtonRefreshBluetoothAddress->setText(tr("Refresh"));
+    m_pButtonRefreshBluetoothAddress->setToolTip(tr("Look for a Bluetooth adapter again"));
+    addressLayout->addWidget(m_pLabelBluetoothAddress);
+    addressLayout->addWidget(m_pButtonCopyBluetoothAddress);
+    addressLayout->addWidget(m_pButtonRefreshBluetoothAddress);
+    addressLayout->addStretch();
+    ui_->formLayout->addRow(m_pLabelBluetoothAddressTitle, m_pBluetoothAddressField);
+
+    m_pLabelServerBluetoothHint = new QLabel(
+        tr("Enter this address on the other computer.") + " " + pairingHint, ui_->m_pGroupServer);
+    m_pLabelServerBluetoothHint->setWordWrap(true);
+    m_pLabelServerBluetoothHint->setOpenExternalLinks(true);
+    ui_->formLayout->addRow(m_pLabelServerBluetoothHint);
+
+    connect(m_pButtonCopyBluetoothAddress, &QToolButton::clicked, this, [this]() {
+        QGuiApplication::clipboard()->setText(m_pLabelBluetoothAddress->text());
+        m_pButtonCopyBluetoothAddress->setText(tr("Copied"));
+        QTimer::singleShot(1500, m_pButtonCopyBluetoothAddress, [this]() {
+            m_pButtonCopyBluetoothAddress->setText(tr("Copy"));
+        });
+    });
+    connect(m_pButtonRefreshBluetoothAddress, &QToolButton::clicked,
+            this, &MainWindow::updateLocalBluetoothAddress);
+
+    // client: the server's Bluetooth address
+    m_pLabelServerBluetoothTitle = new QLabel(tr("Server's Bluetooth address:"), ui_->m_pGroupClient);
+    m_pLineEditServerBluetooth = new QLineEdit(ui_->m_pGroupClient);
+    m_pLineEditServerBluetooth->setPlaceholderText(tr("e.g. 00:28:F8:8F:56:C3"));
+    m_pLabelServerBluetoothTitle->setBuddy(m_pLineEditServerBluetooth);
+    ui_->formLayout_3->addRow(m_pLabelServerBluetoothTitle, m_pLineEditServerBluetooth);
+
+    m_pLabelClientBluetoothHint = new QLabel(
+        tr("Shown on the server's window when it is set to Bluetooth.") + " " + pairingHint,
+        ui_->m_pGroupClient);
+    m_pLabelClientBluetoothHint->setWordWrap(true);
+    m_pLabelClientBluetoothHint->setOpenExternalLinks(true);
+    ui_->formLayout_3->addRow(m_pLabelClientBluetoothHint);
+
+    connect(m_pLineEditServerBluetooth, &QLineEdit::editingFinished, this, [this]() {
+        QString normalized = inputleap::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+        if (!normalized.isEmpty()) {
+            m_pLineEditServerBluetooth->setText(normalized);
+        }
+    });
+
+    m_pConnectionModeRow->setVisible(inputleap::is_bluetooth_supported());
+}
+
+void MainWindow::setConnectionMode(ConnectionMode mode)
+{
+    if (mode == m_ConnectionMode) {
+        return;
+    }
+    m_ConnectionMode = mode;
+    updateConnectionModeUi();
+    saveSettings();
+
+    // the server and client must be restarted to switch transport
+    if (m_ExpectedRunningState == kStarted) {
+        restart_cmd_app();
+    }
+}
+
+void MainWindow::updateConnectionModeUi()
+{
+    bool bluetooth = m_ConnectionMode == ConnectionMode::Bluetooth;
+
+    // server
+    ui_->label_2->setVisible(!bluetooth);
+    ui_->m_pLabelIpAddresses->setVisible(!bluetooth);
+    m_pLabelBluetoothAddressTitle->setVisible(bluetooth);
+    m_pBluetoothAddressField->setVisible(bluetooth);
+    m_pLabelServerBluetoothHint->setVisible(bluetooth);
+
+    // client
+    ui_->m_pLabelServerName->setVisible(!bluetooth);
+    ui_->m_pLineEditHostname->setVisible(!bluetooth);
+    ui_->m_pCheckBoxAutoConfig->setVisible(!bluetooth);
+    ui_->m_pComboServerList->setVisible(!bluetooth && ui_->m_pComboServerList->count() > 1);
+    m_pLabelServerBluetoothTitle->setVisible(bluetooth);
+    m_pLineEditServerBluetooth->setVisible(bluetooth);
+    m_pLabelClientBluetoothHint->setVisible(bluetooth);
+
+    if (bluetooth) {
+        updateLocalBluetoothAddress();
+    }
+}
+
+void MainWindow::updateLocalBluetoothAddress()
+{
+    QString address = inputleap::local_bluetooth_address();
+    bool found = !address.isEmpty();
+
+    if (found) {
+        m_pLabelBluetoothAddress->setText(address);
+        QFont font = m_pLabelBluetoothAddress->font();
+        font.setBold(true);
+        m_pLabelBluetoothAddress->setFont(font);
+    } else {
+        m_pLabelBluetoothAddress->setText(tr("Not found. Is Bluetooth turned on?"));
+        m_pLabelBluetoothAddress->setFont(QFont());
+    }
+    m_pButtonCopyBluetoothAddress->setVisible(found);
+    m_pButtonRefreshBluetoothAddress->setVisible(!found);
 }
 
 void MainWindow::showLogWindow()

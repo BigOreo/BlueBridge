@@ -11,12 +11,14 @@ set (CMAKE_INCLUDE_CURRENT_DIR ON)
 # files that are used both in tests and the app
 set(GUI_COMMON_SOURCE_FILES
     src/Action.cpp
+    src/BluetoothAddress.cpp
     src/Hotkey.cpp
     src/KeySequence.cpp
 )
 
 set(GUI_COMMON_HEADER_FILES
     src/Action.h
+    src/BluetoothAddress.h
     src/Hotkey.h
     src/KeySequence.h
 )
@@ -28,6 +30,7 @@ set(GUI_SOURCE_FILES
     src/AppConfig.cpp
     src/AppLocale.cpp
     src/BaseConfig.cpp
+    src/BluetoothAdapter.cpp
     src/CommandProcess.cpp
     src/DataDownloader.cpp
     src/FingerprintAcceptDialog.cpp
@@ -211,7 +214,7 @@ if (BUILD_MSWINDOWS)
                   HINTS ENV BONJOUR_SDK_HOME
                   PATH_SUFFIXES "Lib/x64")
     set_target_properties (input-leap PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCMT")
-    target_link_libraries (input-leap ${DNSSD_LIB})
+    target_link_libraries (input-leap ${DNSSD_LIB} Bthprops)
 endif()
 if (BUILD_CARBON)
     find_library(APPSERVICES_LIB ApplicationServices)
@@ -250,6 +253,7 @@ endif()
 
 if(INPUTLEAP_BUILD_TESTS)
     set(GUI_TEST_SOURCE_FILES
+        test/BluetoothAddressTests.cpp
         test/KeySequenceTests.cpp
         test/HotkeyTests.cpp
         test/main.cpp

@@ -72,13 +72,12 @@ On Windows, the client can connect to the server directly over Bluetooth
 two machines is unavailable, for example when a VPN blocks local network access.
 Both machines need Bluetooth and must be paired in Windows' Bluetooth settings.
 
-1. On the server, open the settings and enter `bt` as the **Address**, then
-   restart the server.
-2. Find the server's Bluetooth address, e.g. in Device Manager under
-   *Bluetooth* > your adapter > *Properties* > *Advanced*, or with
-   `ipconfig /all` (*Physical Address* of the Bluetooth adapter).
-3. On the client, enter `bt:` followed by that address as the server, e.g.
-   `bt:00:1A:7D:DA:71:13`, and start the client.
+1. On both computers, set **Connect over** at the top of the main window to
+   **Bluetooth**.
+2. On the server, the main window shows this computer's Bluetooth address.
+   Click **Copy** (or note it down).
+3. On the client, enter that address as the **Server's Bluetooth address**
+   (e.g. `00:1A:7D:DA:71:13`) and click **Start**.
 
 This uses a plain Bluetooth RFCOMM connection, not Bluetooth networking (PAN),
 so no network adapter or IP address is involved. Enable SSL on both machines to
