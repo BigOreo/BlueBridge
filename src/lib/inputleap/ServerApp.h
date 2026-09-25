@@ -90,6 +90,7 @@ public:
     void handle_suspend();
     void handle_resume();
     ClientListener* openClientListener(const NetworkAddress& address);
+    ClientListener* open_bluetooth_listener(int port);
     std::unique_ptr<Server> open_server(Config& config, PrimaryClient* primaryClient);
     void handle_no_clients();
     bool startServer();
@@ -108,6 +109,7 @@ public:
     std::unique_ptr<Screen> server_screen_;
     PrimaryClient* m_primaryClient;
     ClientListener* m_listener;
+    ClientListener* bluetooth_listener_ = nullptr;
     EventQueueTimer* m_timer;
     NetworkAddress* listen_address_;
 

@@ -109,7 +109,7 @@ ServerApp::parseArgs(int argc, const char* const* argv)
 
         std::string host = args().network_address.empty() ? std::string()
                                                           : listen_address_->getHostname();
-        if (!apply_machine_policy(args(), host)) {
+        if (!apply_machine_policy(args(), host, args().listen_bluetooth)) {
             m_bye(kExitArgs);
         }
     }
@@ -135,6 +135,7 @@ ServerApp::help()
            << "\n"
            << "Usage: " << args().m_exename
            << " [--address <address>]"
+           << " [--bluetooth]"
            << " [--config <pathname>]"
 #ifdef WINAPI_XWINDOWS
            << " [--use-x11] [--display <display>]"
@@ -148,6 +149,7 @@ ServerApp::help()
            << "\n"
            << "Options:\n"
            << "  -a, --address <address>  listen for clients on the given address.\n"
+           << "      --bluetooth          also listen for clients over Bluetooth (Windows).\n"
            << "  -c, --config <pathname>  use the named configuration file instead.\n"
            << HELP_COMMON_INFO_1
            << "      --disable-client-cert-checking disable client SSL certificate \n"
@@ -372,8 +374,10 @@ ServerApp::stopServer()
     if (m_serverState == kStarted) {
         closeServer(server_.get());
         closeClientListener(m_listener);
+        closeClientListener(bluetooth_listener_);
         server_.reset();
         m_listener = nullptr;
+        bluetooth_listener_ = nullptr;
         m_serverState = kInitialized;
     }
     else if (m_serverState == kStarting) {
@@ -382,6 +386,7 @@ ServerApp::stopServer()
     }
     assert(!server_);
     assert(m_listener == nullptr);
+    assert(bluetooth_listener_ == nullptr);
 }
 
 void
@@ -561,31 +566,65 @@ ServerApp::startServer()
 
     double retryTime;
     ClientListener* listener = nullptr;
+    ClientListener* bluetooth_listener = nullptr;
     try {
         auto listenAddress = args().m_config->get_listen_address();
-        auto family = family_string(ARCH->getAddrFamily(listenAddress.getAddress()));
-        listener   = openClientListener(listenAddress);
-        server_ = open_server(*args().m_config, m_primaryClient);
-        listener->setServer(server_.get());
-        server_->setListener(listener);
-        m_listener = listener;
-        updateStatus();
+        auto listen_family = ARCH->getAddrFamily(listenAddress.getAddress());
+        const MachinePolicy& policy = args().m_policy;
 
-        // using CLOG_PRINT here allows the GUI to see that the server is started
-        // regardless of which log level is set
-        LOG_PRINT("started server (%s), waiting for clients", family);
-        m_serverState = kStarted;
-        return true;
+        // the policy may leave only the Bluetooth listener next to the network one
+        bool open_network = listen_family == IArchNetwork::kBLUETOOTH || policy.network_allowed();
+        bool open_bluetooth = args().listen_bluetooth &&
+                              listen_family != IArchNetwork::kBLUETOOTH &&
+                              policy.bluetooth_allowed();
+
+        std::string families;
+        if (open_network) {
+            listener = openClientListener(listenAddress);
+            families = family_string(listen_family);
+        }
+        if (open_bluetooth) {
+            bluetooth_listener = open_bluetooth_listener(listenAddress.getPort());
+            if (bluetooth_listener != nullptr) {
+                families += families.empty() ? "Bluetooth" : ", Bluetooth";
+            }
+        }
+
+        if (listener == nullptr && bluetooth_listener == nullptr) {
+            LOG_ERR("cannot listen for clients: Bluetooth is not available");
+            updateStatus("cannot listen for clients: Bluetooth is not available");
+            retryTime = 5.0;
+        }
+        else {
+            server_ = open_server(*args().m_config, m_primaryClient);
+            for (ClientListener* l : {listener, bluetooth_listener}) {
+                if (l != nullptr) {
+                    l->setServer(server_.get());
+                }
+            }
+            server_->setListener(listener != nullptr ? listener : bluetooth_listener);
+            m_listener = listener;
+            bluetooth_listener_ = bluetooth_listener;
+            updateStatus();
+
+            // using CLOG_PRINT here allows the GUI to see that the server is started
+            // regardless of which log level is set
+            LOG_PRINT("started server (%s), waiting for clients", families.c_str());
+            m_serverState = kStarted;
+            return true;
+        }
     }
     catch (XSocketAddressInUse& e) {
         LOG_ERR("cannot listen for clients: %s", e.what());
         closeClientListener(listener);
+        closeClientListener(bluetooth_listener);
         updateStatus(std::string("cannot listen for clients: ") + e.what());
         retryTime = 1.0;
     }
     catch (XBase& e) {
         LOG_CRIT("failed to start server: %s", e.what());
         closeClientListener(listener);
+        closeClientListener(bluetooth_listener);
         return false;
     }
 
@@ -665,6 +704,20 @@ ServerApp::openClientListener(const NetworkAddress& address)
                           [this, listen](const auto& e){ handle_client_connected(e, listen); });
 
     return listen;
+}
+
+ClientListener* ServerApp::open_bluetooth_listener(int port)
+{
+    try {
+        NetworkAddress address("bt", port);
+        address.resolve();
+        return openClientListener(address);
+    }
+    catch (std::exception& e) {
+        // no adapter or no Bluetooth support: keep serving the network
+        LOG_WARN("cannot listen for clients over Bluetooth: %s", e.what());
+        return nullptr;
+    }
 }
 
 std::unique_ptr<Server> ServerApp::open_server(Config& config, PrimaryClient* primaryClient)

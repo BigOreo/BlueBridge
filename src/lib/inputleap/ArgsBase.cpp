@@ -62,7 +62,7 @@ bool is_bluetooth_host(const std::string& host)
            (host.size() == 2 || host[2] == ':');
 }
 
-bool apply_machine_policy(ArgsBase& args, const std::string& host)
+bool apply_machine_policy(ArgsBase& args, const std::string& host, bool also_bluetooth)
 {
     args.m_policy = read_machine_policy();
     const MachinePolicy& policy = args.m_policy;
@@ -89,6 +89,11 @@ bool apply_machine_policy(ArgsBase& args, const std::string& host)
         return false;
     }
     if (!bluetooth && !policy.network_allowed()) {
+        if (also_bluetooth && policy.bluetooth_allowed()) {
+            LOG_NOTE("connecting over the network is disabled by your organization's policy, "
+                     "accepting Bluetooth connections only");
+            return true;
+        }
         LOG_ERR("connecting over the network is disabled by your organization's policy");
         return false;
     }

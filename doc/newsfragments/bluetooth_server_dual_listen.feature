@@ -1,0 +1,1 @@
+Windows: the server accepts clients over the network and over Bluetooth at the same time (new `--bluetooth` server option), so each client chooses how it connects. The Connect over toggle moved to the client section, and the server shows both its IP and Bluetooth addresses.
