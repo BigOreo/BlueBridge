@@ -16,9 +16,11 @@ on:
         required: false
         type: boolean
 
-# Set the build type here
+# Set the build type here. Merges to master build release installers so the
+# latest master can be installed and tested; pull requests build Debug and
+# run the tests.
 env:
-  B_BUILD_TYPE: ${{ (inputs.build_release || github.event_name == 'release') && 'Release' || 'Debug' }}
+  B_BUILD_TYPE: ${{ (inputs.build_release || github.event_name == 'release' || github.event_name == 'push') && 'Release' || 'Debug' }}
   DEBIAN_FRONTEND: noninteractive
 
 jobs:
