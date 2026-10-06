@@ -1,0 +1,1 @@
+Clearer first-run setup: the wizard asks "Whose keyboard and mouse?", can turn on starting automatically, and ends with the next steps for the other computer. The Windows installer explains each step in plain words.

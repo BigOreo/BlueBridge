@@ -41,6 +41,7 @@ public:
     SetupWizard(MainWindow& mainWindow, bool startMain);
     virtual ~SetupWizard() override;
     bool validateCurrentPage() override;
+    void initializePage(int id) override;
 
 protected:
     void changeEvent(QEvent* event) override;
