@@ -63,6 +63,9 @@ function Run-Silent($exe, $logName) {
 # Creates a profile with a TLS certificate and returns its fingerprint in
 # the trusted fingerprint file format.
 function New-Profile($path) {
+    # openssl prints progress on stderr, which Windows PowerShell would turn
+    # into a terminating error; the exit code is checked instead
+    $ErrorActionPreference = "Continue"
     $ssl = Join-Path $path "SSL"
     New-Item -ItemType Directory -Path (Join-Path $ssl "Fingerprints") -Force | Out-Null
     $pem = Join-Path $ssl "InputLeap.pem"
