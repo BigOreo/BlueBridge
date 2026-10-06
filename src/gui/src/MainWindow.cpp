@@ -23,6 +23,7 @@
 
 #include "AboutDialog.h"
 #include "BluetoothAddress.h"
+#include "Theme.h"
 #include "ServerConfigDialog.h"
 #include "SettingsDialog.h"
 #include "ZeroconfService.h"
@@ -198,6 +199,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
         m_AppConfig->setCryptoEnabled(true);
     }
     setupConnectionModeUi();
+    inputleap::theme::set_primary(ui_->m_pButtonToggleStart);
     loadSettings();
     initConnections();
 
@@ -986,6 +988,7 @@ void MainWindow::set_connection_state(AppConnectionState state)
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
         ui_->m_pButtonToggleStart->setText(tr("&Stop"));
+        inputleap::theme::set_primary(ui_->m_pButtonToggleStart, false);
         ui_->m_pButtonReload->setEnabled(true);
     }
     else if (state == AppConnectionState::DISCONNECTED)
@@ -993,6 +996,7 @@ void MainWindow::set_connection_state(AppConnectionState state)
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
         ui_->m_pButtonToggleStart->setText(tr("&Start"));
+        inputleap::theme::set_primary(ui_->m_pButtonToggleStart);
         ui_->m_pButtonReload->setEnabled(false);
     }
 

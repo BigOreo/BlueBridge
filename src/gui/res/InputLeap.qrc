@@ -55,5 +55,10 @@
         <file>icons/128x128/input-leap-connected-mask.png</file>
         <file>icons/128x128/input-leap-disconnected-mask.png</file>
         <file>icons/128x128/input-leap-transfering-mask.png</file>
+        <file>fonts/IBMPlexSans-Regular.ttf</file>
+        <file>fonts/IBMPlexSans-Medium.ttf</file>
+        <file>fonts/IBMPlexSans-SemiBold.ttf</file>
+        <file>fonts/Sora-SemiBold.ttf</file>
+        <file>fonts/Sora-Bold.ttf</file>
     </qresource>
 </RCC>

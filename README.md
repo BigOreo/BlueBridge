@@ -90,3 +90,6 @@ Report problems and request features in the
 BlueBridge is free software released under the GNU General Public License,
 version 2. See [LICENSE](LICENSE). It is built on the open source InputLeap
 project; the original copyright notices are kept in the source files.
+
+The app bundles the IBM Plex Sans and Sora fonts, both under the SIL Open
+Font License 1.1 (see `src/gui/res/fonts`).
