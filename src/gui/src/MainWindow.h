@@ -47,6 +47,7 @@ class QGroupBox;
 class QPushButton;
 class QTextEdit;
 class QComboBox;
+class QListWidget;
 class QTabWidget;
 class QCheckBox;
 class QRadioButton;
@@ -59,6 +60,7 @@ class QInputLeapApplication;
 class SetupWizard;
 class ZeroconfService;
 class QComboBox;
+class QListWidget;
 class QLabel;
 class QLineEdit;
 class QToolButton;
@@ -179,6 +181,7 @@ public slots:
         void refreshPairedBluetoothServers();
         void selectBluetoothServer(int index);
         void applyBluetoothServerStatus(int generation, const QMap<QString, bool>& running);
+        void updateStartButton();
         ConnectionMode connection_mode() const { return m_ConnectionMode; }
         bool server_accepts_bluetooth() const;
 
@@ -225,7 +228,7 @@ public slots:
         QLabel* m_pLabelServerBluetoothHint = nullptr;
         QLabel* m_pLabelServerBluetoothTitle = nullptr;
         QWidget* m_pBluetoothServerField = nullptr;
-        QComboBox* m_pComboBluetoothServer = nullptr;
+        QListWidget* m_pListBluetoothServers = nullptr;
         QToolButton* m_pButtonRefreshBluetoothServers = nullptr;
         QLabel* m_pLabelServerBluetoothManualTitle = nullptr;
         QLineEdit* m_pLineEditServerBluetooth = nullptr;

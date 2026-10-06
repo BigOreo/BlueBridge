@@ -109,6 +109,19 @@ def main():
                                  dashed=style.get("dashed", False)), 128),
                  "src", "gui", "res", "icons", "128x128", f"input-leap-{name}-mask.png")
 
+    # interface icons (24-unit grid, drawn at 48 px)
+    os.makedirs(path("src", "gui", "res", "icons", "48x48"), exist_ok=True)
+    ui_icons = {
+        "computer": '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+        "manual": '<rect x="2.5" y="6" width="19" height="12" rx="2"/>'
+                  '<path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+    }
+    for name, shape in ui_icons.items():
+        svg = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" '
+               f'stroke="{SLATE}" stroke-width="1.75" stroke-linecap="round" '
+               f'stroke-linejoin="round">{shape}</svg>')
+        save_png(render(svg, 48), "src", "gui", "res", "icons", "48x48", f"{name}.png")
+
     # Windows icon: every size Explorer and the taskbar ask for
     sizes = [16, 20, 24, 32, 40, 48, 64, 128, 256]
     largest = app_icon(256)
