@@ -113,8 +113,10 @@ Step "PASS: the app starts and keeps running"
 Step "connecting a client to a server on this computer"
 $serverProfile = Join-Path $Work "server-profile"
 $clientProfile = Join-Path $Work "client-profile"
-Set-Trusted $serverProfile "TrustedClients.txt" (New-Profile $clientProfile)
-Set-Trusted $clientProfile "TrustedServers.txt" (New-Profile $serverProfile)
+$serverFingerprint = New-Profile $serverProfile
+$clientFingerprint = New-Profile $clientProfile
+Set-Trusted $serverProfile "TrustedClients.txt" $clientFingerprint
+Set-Trusted $clientProfile "TrustedServers.txt" $serverFingerprint
 $config = Join-Path $Work "server.conf"
 Set-Content -Path $config -Value @"
 section: screens
