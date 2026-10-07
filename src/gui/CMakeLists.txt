@@ -54,6 +54,7 @@ set(GUI_SOURCE_FILES
     src/SettingsDialog.cpp
     src/SetupWizard.cpp
     src/SslCertificate.cpp
+    src/Theme.cpp
     src/TrashScreenWidget.cpp
     src/ZeroconfBrowser.cpp
     src/ZeroconfRegister.cpp
@@ -88,6 +89,7 @@ set(GUI_HEADER_FILES
     src/ScreenSettingsDialog.h
     src/ScreenSetupModel.h
     src/ScreenSetupView.h
+    src/Theme.h
     src/ServerConfigDialog.h
     src/ServerConfig.h
     src/SettingsDialog.h
