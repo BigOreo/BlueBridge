@@ -13,11 +13,11 @@
 
     <!-- the cable: tablet, under and up through the screen, over to the mouse -->
     <path id="cableA" d="M72 322C72 404 214 404 290 300C350 214 404 96 476 92C540 88 520 150 512 184"/>
-    <!-- and back from the mouse, under and into the middle of the screen -->
-    <path id="cableB" d="M512 300C520 384 432 398 372 342C340 312 318 290 300 270"/>
+    <!-- and back from the mouse, curving up into the cursor, which is its head -->
+    <path id="cableB" d="M512 300C516 370 470 392 430 368C410 356 392.5 319 364.3 285.3"/>
     <!-- Bluetooth symbol, in front of its Wi-Fi waves -->
     <path id="rune" d="M278 74L318 110L298 128V46L318 64L278 100"/>
-    <path id="arrow" d="M0 0V104L27 79L46 120L63 112L44 72L80 72Z" transform="translate(286 208)"/>
+    <path id="arrow" d="M0 0V104L27 79L46 120L63 112L44 72L80 72Z" transform="translate(286 192) rotate(-14.83) scale(0.95)"/>
 
     <!-- each device leaves a gap where the cable crosses it -->
     <mask id="monitorMask" maskUnits="userSpaceOnUse" x="0" y="0" width="580" height="420">
@@ -60,10 +60,14 @@
   <rect x="504" y="208" width="14" height="30" rx="7" fill="none" stroke="url(#g)" stroke-width="7"/>
 
   <!-- the glowing cable: a gradient tube with a bright core -->
+  <!-- the cable from the mouse runs into the cursor; the other one passes
+       underneath with a gap all around the cursor -->
   <g mask="url(#cableMask)" fill="none" stroke-linecap="round">
     <use href="#cableA" stroke="url(#g)" stroke-width="15"/>
-    <use href="#cableB" stroke="url(#g)" stroke-width="15"/>
     <use href="#cableA" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
+  </g>
+  <g fill="none" stroke-linecap="round">
+    <use href="#cableB" stroke="url(#g)" stroke-width="15"/>
     <use href="#cableB" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
   </g>
 
