@@ -21,8 +21,8 @@
       <use href="#cableA" fill="none" stroke="#000" stroke-width="34"/>
       <use href="#cableB" fill="none" stroke="#000" stroke-width="34"/>
     </mask>
-    <clipPath id="cursorGap" clipPathUnits="userSpaceOnUse">
-      <path clip-rule="evenodd" d="M0 0H580V420H0ZM291.0 182.2L288.4 181.3L285.6 181.0L282.8 181.5L280.3 182.6L278.1 184.4L276.4 186.6L275.4 189.2L275.0 192.0L275.4 194.8L300.7 290.3L301.7 292.9L303.4 295.2L305.7 296.9L308.2 298.1L311.0 298.5L313.8 298.2L316.5 297.2L318.8 295.6L320.6 293.4L331.2 276.7L348.9 298.0L351.1 300.0L353.6 301.3L356.4 302.0L359.3 301.8L362.0 301.0L364.5 299.4L378.2 287.9L380.1 285.8L381.4 283.2L382.1 280.4L381.9 277.6L381.1 274.8L379.5 272.4L363.6 253.6L379.8 249.3L382.5 248.2L384.8 246.4L386.6 244.1L387.7 241.3L388.0 238.4L387.5 235.5L386.3 232.8L384.4 230.6L382.0 228.9Z"/>
+    <clipPath id="cableGap" clipPathUnits="userSpaceOnUse">
+      <path clip-rule="evenodd" d="M0 0H580V420H0ZM291.0 182.2L288.4 181.3L285.6 181.0L282.8 181.5L280.3 182.6L278.1 184.4L276.4 186.6L275.4 189.2L275.0 192.0L275.4 194.8L300.7 290.3L301.7 292.9L303.4 295.2L305.7 296.9L308.2 298.1L311.0 298.5L313.8 298.2L316.5 297.2L318.8 295.6L320.6 293.4L331.2 276.7L348.9 298.0L351.1 300.0L353.6 301.3L356.4 302.0L359.3 301.8L362.0 301.0L364.5 299.4L378.2 287.9L380.1 285.8L381.4 283.2L382.1 280.4L381.9 277.6L381.1 274.8L379.5 272.4L363.6 253.6L379.8 249.3L382.5 248.2L384.8 246.4L386.6 244.1L387.7 241.3L388.0 238.4L387.5 235.5L386.3 232.8L384.4 230.6L382.0 228.9ZM455.0 258.0L455.5 265.3L456.9 272.5L459.3 279.4L462.5 286.0L466.6 292.1L471.4 297.6L476.9 302.4L483.0 306.5L489.6 309.7L496.5 312.1L503.7 313.5L511.0 314.0L518.3 313.5L525.5 312.1L532.4 309.7L539.0 306.5L545.1 302.4L550.6 297.6L555.4 292.1L559.5 286.0L562.7 279.4L565.1 272.5L566.5 265.3L567.0 258.0L567.0 226.0L566.5 218.7L565.1 211.5L562.7 204.6L559.5 198.0L555.4 191.9L550.6 186.4L545.1 181.6L539.0 177.5L532.4 174.3L525.5 171.9L518.3 170.5L511.0 170.0L503.7 170.5L496.5 171.9L489.6 174.3L483.0 177.5L476.9 181.6L471.4 186.4L466.6 191.9L462.5 198.0L459.3 204.6L456.9 211.5L455.5 218.7L455.0 226.0Z"/>
     </clipPath>
   </defs>
 
@@ -55,14 +55,12 @@
   <rect x="504" y="208" width="14" height="30" rx="7" fill="none" stroke="url(#g)" stroke-width="7"/>
 
   <!-- the glowing cable: a gradient tube with a bright core -->
-  <!-- the cable from the mouse runs into the cursor; the other one passes
-       underneath with a gap all around the cursor -->
-  <g clip-path="url(#cursorGap)" fill="none" stroke-linecap="round">
+  <!-- the cables stop just short of the mouse and the cursor, and the one
+       from the tablet passes under the cursor with a gap all around it -->
+  <g clip-path="url(#cableGap)" fill="none" stroke-linecap="round">
     <use href="#cableA" stroke="url(#g)" stroke-width="15"/>
-    <use href="#cableA" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
-  </g>
-  <g fill="none" stroke-linecap="round">
     <use href="#cableB" stroke="url(#g)" stroke-width="15"/>
+    <use href="#cableA" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
     <use href="#cableB" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
   </g>
 
