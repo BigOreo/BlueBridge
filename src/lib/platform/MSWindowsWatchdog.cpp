@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2009 Chris Schoeneman
  *
@@ -22,8 +22,8 @@
 #include "ipc/IpcServer.h"
 #include "ipc/IpcMessage.h"
 #include "ipc/Ipc.h"
-#include "inputleap/App.h"
-#include "inputleap/ArgsBase.h"
+#include "bluebridge/App.h"
+#include "bluebridge/ArgsBase.h"
 #include "mt/Thread.h"
 #include "arch/win32/ArchDaemonWindows.h"
 #include "arch/win32/XArchWindows.h"
@@ -37,7 +37,7 @@
 #include <UserEnv.h>
 #include <Shellapi.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 #define MAXIMUM_WAIT_TIME 3
 enum {
@@ -138,7 +138,7 @@ MSWindowsWatchdog::getUserToken(LPSECURITY_ATTRIBUTES security)
 {
     // always elevate if we are at the vista/7 login screen. we could also
     // elevate for the uac dialog (consent.exe) but this would be pointless,
-    // since InputLeap would re-launch as non-elevated after the desk switch,
+    // since BlueBridge would re-launch as non-elevated after the desk switch,
     // and so would be unusable with the new elevated process taking focus.
     if (m_elevateProcess || m_autoElevated) {
         LOG_DEBUG("getting elevated token, %s",
@@ -194,7 +194,7 @@ void MSWindowsWatchdog::main_loop()
                 // increasing backoff period, maximum of 10 seconds.
                 int timeout = (m_processFailures * 2) < 10 ? (m_processFailures * 2) : 10;
                 LOG_INFO("backing off, wait=%ds, failures=%d", timeout, m_processFailures);
-                inputleap::this_thread_sleep(timeout);
+                bluebridge::this_thread_sleep(timeout);
             }
 
             if (!getCommand().empty() && ((m_processFailures != 0) || m_session.hasChanged() || m_commandChanged)) {
@@ -227,7 +227,7 @@ void MSWindowsWatchdog::main_loop()
             }
 
             // if the sas event failed, wait by sleeping.
-            inputleap::this_thread_sleep(1);
+            bluebridge::this_thread_sleep(1);
 
         }
         catch (std::exception& e) {
@@ -312,7 +312,7 @@ MSWindowsWatchdog::startProcess()
     }
     else {
         // wait for program to fail.
-        inputleap::this_thread_sleep(1);
+        bluebridge::this_thread_sleep(1);
         if (!isProcessActive()) {
             throw XMSWindowsWatchdogError("process immediately stopped");
         }
@@ -433,7 +433,7 @@ void MSWindowsWatchdog::output_loop()
         // assume the process has gone away? slow down
         // the reads until another one turns up.
         if (!success || bytesRead == 0) {
-            inputleap::this_thread_sleep(1);
+            bluebridge::this_thread_sleep(1);
         }
         else {
             buffer[bytesRead] = '\0';
@@ -458,7 +458,7 @@ MSWindowsWatchdog::shutdownProcess(HANDLE handle, DWORD pid, int timeout)
     m_ipcServer.send(shutdown, kIpcClientNode);
 
     // wait for process to exit gracefully.
-    double start = inputleap::current_time_seconds();
+    double start = bluebridge::current_time_seconds();
     while (true) {
 
         GetExitCodeProcess(handle, &exitCode);
@@ -469,18 +469,18 @@ MSWindowsWatchdog::shutdownProcess(HANDLE handle, DWORD pid, int timeout)
         }
         else {
 
-            double elapsed = (inputleap::current_time_seconds() - start);
+            double elapsed = (bluebridge::current_time_seconds() - start);
             if (elapsed > timeout) {
                 // if timeout reached, kill forcefully.
-                // calling TerminateProcess on InputLeap is very bad!
+                // calling TerminateProcess on BlueBridge is very bad!
                 // it causes the hook DLL to stay loaded in some apps,
-                // making it impossible to start InputLeap again.
+                // making it impossible to start BlueBridge again.
                 LOG_WARN("shutdown timed out after %d secs, forcefully terminating", (int)elapsed);
                 TerminateProcess(handle, kExitSuccess);
                 break;
             }
 
-            inputleap::this_thread_sleep(1);
+            bluebridge::this_thread_sleep(1);
         }
     }
 }
@@ -513,8 +513,8 @@ MSWindowsWatchdog::shutdownExistingProcesses()
         // make sure we're not checking the system process
         if (entry.th32ProcessID != 0) {
 
-            if (_stricmp(entry.szExeFile, "input-leapc.exe") == 0 ||
-                _stricmp(entry.szExeFile, "input-leaps.exe") == 0) {
+            if (_stricmp(entry.szExeFile, "bluebridge-client.exe") == 0 ||
+                _stricmp(entry.szExeFile, "bluebridge-server.exe") == 0) {
 
                 HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, entry.th32ProcessID);
                 if (handle != nullptr) {
@@ -542,4 +542,4 @@ MSWindowsWatchdog::shutdownExistingProcesses()
     m_processRunning = false;
 }
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,10 +19,10 @@
 #pragma once
 
 #include "base/EventTarget.h"
-#include "inputleap/Fwd.h"
-#include "inputleap/IClient.h"
+#include "bluebridge/Fwd.h"
+#include "bluebridge/IClient.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 class IClientConnection;
 class IStream;
@@ -74,4 +74,4 @@ private:
     std::int32_t m_x, m_y;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

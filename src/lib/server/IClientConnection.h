@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -17,14 +17,14 @@
 #pragma once
 
 #include "base/Fwd.h"
-#include "inputleap/Fwd.h"
-#include "inputleap/clipboard_types.h"
-#include "inputleap/key_types.h"
-#include "inputleap/mouse_types.h"
-#include "inputleap/option_types.h"
+#include "bluebridge/Fwd.h"
+#include "bluebridge/clipboard_types.h"
+#include "bluebridge/key_types.h"
+#include "bluebridge/mouse_types.h"
+#include "bluebridge/option_types.h"
 #include <string>
 
-namespace inputleap {
+namespace bluebridge {
 
 class IStream;
 
@@ -66,4 +66,4 @@ public:
     virtual void close() = 0;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

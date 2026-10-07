@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2023-2024 InputLeap Developers
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
@@ -58,7 +58,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, AppConfig& config) :
     ui_->m_pCheckBoxEnableCrypto->setChecked(app_config_.getCryptoEnabled());
     ui_->checkbox_require_client_certificate->setChecked(app_config_.getRequireClientCertificate());
 
-    const auto policy = inputleap::read_machine_policy();
+    const auto policy = bluebridge::read_machine_policy();
     const QString managed = tr("Managed by your organization");
     if (policy.encryption_required()) {
         ui_->m_pCheckBoxEnableCrypto->setChecked(true);

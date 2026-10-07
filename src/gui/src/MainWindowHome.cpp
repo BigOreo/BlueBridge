@@ -1,6 +1,6 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
-    Copyright (C) InputLeap contributors
+    BlueBridge -- mouse and keyboard sharing utility
+    Copyright (C) BlueBridge contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ QIcon nav_icon(NavIcon kind)
     };
     QIcon icon;
     icon.addPixmap(paint(QColor("#3A4A61")), QIcon::Normal, QIcon::Off);
-    icon.addPixmap(paint(QColor(inputleap::theme::kBlue)), QIcon::Normal, QIcon::On);
+    icon.addPixmap(paint(QColor(bluebridge::theme::kBlue)), QIcon::Normal, QIcon::On);
     return icon;
 }
 
@@ -208,7 +208,7 @@ void MainWindow::buildHomeLayout()
     brandLayout->setContentsMargins(8, 0, 0, 16);
     brandLayout->setSpacing(10);
     auto* logo = new QLabel(brand);
-    logo->setPixmap(QIcon(":/res/icons/app/input-leap-64.png").pixmap(30, 30));
+    logo->setPixmap(QIcon(":/res/icons/app/bluebridge-64.png").pixmap(30, 30));
     auto* wordmark = new QLabel(tr("BlueBridge"), brand);
     wordmark->setProperty("role", "wordmark");
     brandLayout->addWidget(logo);
@@ -324,7 +324,7 @@ void MainWindow::buildHomeLayout()
     heroLayout->setContentsMargins(26, 22, 26, 22);
     heroLayout->setSpacing(18);
     auto* heroIcon = new QLabel(m_pHero);
-    heroIcon->setPixmap(QIcon(":/res/icons/256x256/input-leap.png").pixmap(52, 52));
+    heroIcon->setPixmap(QIcon(":/res/icons/256x256/bluebridge.png").pixmap(52, 52));
     heroIcon->setFixedSize(52, 52);
     auto* heroText = new QVBoxLayout();
     heroText->setSpacing(4);

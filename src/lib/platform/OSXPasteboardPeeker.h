@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -21,8 +21,8 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 CFStringRef getDraggedFileURL();
 
-} // namespace inputleap
+} // namespace bluebridge

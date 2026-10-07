@@ -1,5 +1,5 @@
 /*
-* InputLeap -- mouse and keyboard sharing utility
+* BlueBridge -- mouse and keyboard sharing utility
 * Copyright (C) 2018 Debauchee Open Source Group
 *
 * This package is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ LogWindow::LogWindow(QWidget *parent) :
     ui_{std::make_unique<Ui::LogWindow>()}
 {
     // explicitly unset DeleteOnClose so the log window can be show and hidden
-    // repeatedly until InputLeap is finished
+    // repeatedly until BlueBridge is finished
     setAttribute(Qt::WA_DeleteOnClose, false);
     ui_->setupUi(this);
 

@@ -1,4 +1,4 @@
-# InputLeap -- mouse and keyboard sharing utility
+# BlueBridge -- mouse and keyboard sharing utility
 # Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2012 Nick Bolton
 #
@@ -15,21 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-set(sources input-leapd.cpp)
+set(sources bluebridge-service.cpp)
 if (WIN32)
-    list(APPEND sources input-leapd.rc)
-    set_property(SOURCE input-leapd.rc PROPERTY COMPILE_FLAGS /nologo)
+    list(APPEND sources bluebridge-service.rc)
+    set_property(SOURCE bluebridge-service.rc PROPERTY COMPILE_FLAGS /nologo)
 endif()
 
-add_executable (input-leapd WIN32 ${sources})
+add_executable (bluebridge-service WIN32 ${sources})
 
-target_link_libraries (input-leapd
+target_link_libraries (bluebridge-service
     arch base common io ipc mt net platform synlib ${libs} ${OPENSSL_LIBS})
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    install(TARGETS input-leapd DESTINATION ${INPUTLEAP_BUNDLE_BINARY_DIR})
+    install(TARGETS bluebridge-service DESTINATION ${BLUEBRIDGE_BUNDLE_BINARY_DIR})
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    install (TARGETS input-leapd DESTINATION bin)
+    install (TARGETS bluebridge-service DESTINATION bin)
 else()
-    install (TARGETS input-leapd DESTINATION .)
+    install (TARGETS bluebridge-service DESTINATION .)
 endif()

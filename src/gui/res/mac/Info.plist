@@ -7,11 +7,11 @@
     <key>CFBundleDisplayName</key>
     <string>BlueBridge</string>
     <key>CFBundleExecutable</key>
-    <string>InputLeap</string>
+    <string>BlueBridge</string>
     <key>CFBundleIconFile</key>
-    <string>InputLeap.icns</string>
+    <string>BlueBridge.icns</string>
     <key>CFBundleIdentifier</key>
-    <string>inputleap</string>
+    <string>bluebridge</string>
     <!-- TODO: Fix this in v2.0 //-->
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>

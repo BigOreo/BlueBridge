@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #include "IClientConnection.h"
 #include <memory>
 
-namespace inputleap {
+namespace bluebridge {
 
 class IStream;
 
@@ -65,4 +65,4 @@ private:
     std::unique_ptr<IStream> stream_;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

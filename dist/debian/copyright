@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: InputLeap
-Source: https://github.com/input-leap/input-leap
+Upstream-Name: BlueBridge
+Source: https://github.com/BigOreo/BlueBridge
 
 Files: *
 Copyright: Copyright (C) 2021-2023 The InputLeap Developers

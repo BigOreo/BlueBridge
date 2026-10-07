@@ -5,8 +5,8 @@
     <name>AboutDialog</name>
     <message>
         <location filename="res/AboutDialog.ui" line="38"/>
-        <source>About InputLeap</source>
-        <translation>Om InputLeap</translation>
+        <source>About BlueBridge</source>
+        <translation>Om BlueBridge</translation>
     </message>
     <message>
         <location filename="res/AboutDialog.ui" line="53"/>
@@ -14,8 +14,8 @@
 Keyboard and mouse sharing application. Cross platform and open source.&lt;br /&gt;&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-InputLeap is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
-InputLeap is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
+BlueBridge is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
+BlueBridge is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
 The InputLeap GUI is based on QSynergy by Volker Lanz.&lt;br /&gt;&lt;br /&gt;
 Visit our website for help and info (symless.com).
 &lt;/p&gt;</source>
@@ -23,8 +23,8 @@ Visit our website for help and info (symless.com).
 Keyboard and mouse sharing application. Cross platform and open source.&lt;br /&gt;&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-InputLeap is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
-InputLeap is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
+BlueBridge is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
+BlueBridge is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
 The InputLeap GUI is based on QSynergy by Volker Lanz.&lt;br /&gt;&lt;br /&gt;
 Visit our website for help and info (symless.com).
 &lt;/p&gt;</oldsource>
@@ -32,9 +32,9 @@ Visit our website for help and info (symless.com).
 Program för att dela tangentbord och mus. Plattformsöverskridande och öppen källkod.&lt;br /&gt;&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-InputLeap är släppt under GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
-InputLeap baseras på CosmoSynergy av Richard Lee and Adam Feder.&lt;br /&gt;
-InputLeap GUI baseras på QSynergy av Volker Lanz.&lt;br /&gt;&lt;br /&gt;
+BlueBridge är släppt under GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
+BlueBridge baseras på CosmoSynergy av Richard Lee and Adam Feder.&lt;br /&gt;
+BlueBridge GUI baseras på QSynergy av Volker Lanz.&lt;br /&gt;&lt;br /&gt;
 Besök vår webbplats för hjälp och information (symless.com).
 &lt;/p&gt;</translation>
     </message>
@@ -212,9 +212,9 @@ Besök vår webbplats för hjälp och information (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="364"/>
-        <source>&lt;p&gt;Your version of InputLeap is out of date. Version &lt;b&gt;%1&lt;/b&gt; is now available to &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</source>
+        <source>&lt;p&gt;Your version of BlueBridge is out of date. Version &lt;b&gt;%1&lt;/b&gt; is now available to &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</source>
         <oldsource>&lt;p&gt;Version %1 is now available, &lt;a href=&quot;%2&quot;&gt;visit website&lt;/a&gt;.&lt;/p&gt;</oldsource>
-        <translation>&lt;p&gt;Din version av InputLeap är utdaterad. Version &lt;b&gt;%1&lt;/b&gt; finns nu tillgänglig för &lt;a href=&quot;%2&quot;&gt;nerladdning&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Din version av BlueBridge är utdaterad. Version &lt;b&gt;%1&lt;/b&gt; finns nu tillgänglig för &lt;a href=&quot;%2&quot;&gt;nerladdning&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="577"/>
@@ -228,13 +228,13 @@ Besök vår webbplats för hjälp och information (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="596"/>
-        <source>InputLeap client not found</source>
-        <translation>InputLeap-klienten hittades inte</translation>
+        <source>BlueBridge client not found</source>
+        <translation>BlueBridge-klienten hittades inte</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="597"/>
-        <source>The executable for the InputLeap client does not exist.</source>
-        <translation>InputLeap-klientens körbara fil saknas.</translation>
+        <source>The executable for the BlueBridge client does not exist.</source>
+        <translation>BlueBridge-klientens körbara fil saknas.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="625"/>
@@ -243,8 +243,8 @@ Besök vår webbplats för hjälp och information (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="626"/>
-        <source>Please fill in a hostname for the InputLeap client to connect to.</source>
-        <translation>Fyll i det värdnamn som InputLeap-klienten skall ansluta till.</translation>
+        <source>Please fill in a hostname for the BlueBridge client to connect to.</source>
+        <translation>Fyll i det värdnamn som BlueBridge-klienten skall ansluta till.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="646"/>
@@ -253,8 +253,8 @@ Besök vår webbplats för hjälp och information (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="646"/>
-        <source>The temporary configuration file required to start InputLeap can not be written.</source>
-        <translation>Den tillfälliga konfigurationsfil som krävs för att starta InputLeap, kan inte skrivas.</translation>
+        <source>The temporary configuration file required to start BlueBridge can not be written.</source>
+        <translation>Den tillfälliga konfigurationsfil som krävs för att starta BlueBridge, kan inte skrivas.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="659"/>
@@ -263,28 +263,28 @@ Besök vår webbplats för hjälp och information (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="660"/>
-        <source>You have not filled in a valid configuration file for the InputLeap server. Do you want to browse for the configuration file now?</source>
-        <translation>Du har inte fyllt i en giltig konfigurationsfil för InputLeap-servern. Vill du bläddra efter konfigurationsfilen nu?</translation>
+        <source>You have not filled in a valid configuration file for the BlueBridge server. Do you want to browse for the configuration file now?</source>
+        <translation>Du har inte fyllt i en giltig konfigurationsfil för BlueBridge-servern. Vill du bläddra efter konfigurationsfilen nu?</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="688"/>
-        <source>InputLeap server not found</source>
-        <translation>InputLeap-servern hittades inte</translation>
+        <source>BlueBridge server not found</source>
+        <translation>BlueBridge-servern hittades inte</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="689"/>
-        <source>The executable for the InputLeap server does not exist.</source>
-        <translation>InputLeap-serverns körbara fil finns inte.</translation>
+        <source>The executable for the BlueBridge server does not exist.</source>
+        <translation>BlueBridge-serverns körbara fil finns inte.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="764"/>
-        <source>InputLeap terminated with an error</source>
-        <translation>InputLeap avslutades med ett fel</translation>
+        <source>BlueBridge terminated with an error</source>
+        <translation>BlueBridge avslutades med ett fel</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="764"/>
-        <source>InputLeap terminated unexpectedly with an exit code of %1.&lt;br&gt;&lt;br&gt;Please see the log output for details.</source>
-        <translation>InputLeap avslutades oväntat med avbrottskoden %1.&lt;br&gt;&lt;br&gt;Se loggdata för detaljerad info.</translation>
+        <source>BlueBridge terminated unexpectedly with an exit code of %1.&lt;br&gt;&lt;br&gt;Please see the log output for details.</source>
+        <translation>BlueBridge avslutades oväntat med avbrottskoden %1.&lt;br&gt;&lt;br&gt;Se loggdata för detaljerad info.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="783"/>
@@ -336,18 +336,18 @@ Vill du installera Bonjour?</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="815"/>
-        <source>InputLeap is starting.</source>
-        <translation>InputLeap startar.</translation>
+        <source>BlueBridge is starting.</source>
+        <translation>BlueBridge startar.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="809"/>
-        <source>InputLeap is running.</source>
-        <translation>InputLeap körs.</translation>
+        <source>BlueBridge is running.</source>
+        <translation>BlueBridge körs.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="819"/>
-        <source>InputLeap is not running.</source>
-        <translation>InputLeap körs inte.</translation>
+        <source>BlueBridge is not running.</source>
+        <translation>BlueBridge körs inte.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="870"/>
@@ -358,18 +358,18 @@ Vill du installera Bonjour?</translation>
         <location filename="src/MainWindow.cpp" line="1146"/>
         <location filename="src/MainWindow.cpp" line="1225"/>
         <location filename="src/MainWindow.cpp" line="1269"/>
-        <source>InputLeap</source>
-        <translation>InputLeap</translation>
+        <source>BlueBridge</source>
+        <translation>BlueBridge</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="987"/>
-        <source>Browse for a InputLeap config file</source>
-        <translation>Bläddra efter InputLeaps konfigurationsfil</translation>
+        <source>Browse for a BlueBridge config file</source>
+        <translation>Bläddra efter BlueBridges konfigurationsfil</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="408"/>
-        <source>InputLeap is now connected, You can close the config window. InputLeap will remain connected in the background.</source>
-        <translation>InputLeap är nu ansluten, du kan stänga konfigurationsfönstret. InputLeap kommer att fortsätta vara ansluten i bakgrunden.</translation>
+        <source>BlueBridge is now connected, You can close the config window. BlueBridge will remain connected in the background.</source>
+        <translation>BlueBridge är nu ansluten, du kan stänga konfigurationsfönstret. BlueBridge kommer att fortsätta vara ansluten i bakgrunden.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="434"/>
@@ -413,8 +413,8 @@ Klicka &quot;Ja&quot; för att automatiskt lita på fingeravtrycket i framtida a
     <name>MainWindow</name>
     <message>
         <location filename="res/MainWindow.ui" line="26"/>
-        <source>InputLeap</source>
-        <translation>InputLeap</translation>
+        <source>BlueBridge</source>
+        <translation>BlueBridge</translation>
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="90"/>
@@ -499,8 +499,8 @@ Klicka &quot;Ja&quot; för att automatiskt lita på fingeravtrycket i framtida a
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="390"/>
-        <source>&amp;About InputLeap...</source>
-        <translation>&amp;Om InputLeap...</translation>
+        <source>&amp;About BlueBridge...</source>
+        <translation>&amp;Om BlueBridge...</translation>
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="398"/>
@@ -620,8 +620,8 @@ Klicka &quot;Ja&quot; för att automatiskt lita på fingeravtrycket i framtida a
     <name>PluginWizardPage</name>
     <message>
         <location filename="res/PluginWizardPage.ui" line="14"/>
-        <source>Setup InputLeap</source>
-        <translation>Ställ in InputLeap</translation>
+        <source>Setup BlueBridge</source>
+        <translation>Ställ in BlueBridge</translation>
     </message>
     <message>
         <location filename="res/PluginWizardPage.ui" line="101"/>
@@ -674,13 +674,13 @@ Klicka &quot;Ja&quot; för att automatiskt lita på fingeravtrycket i framtida a
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="60"/>
-        <source>InputLeap Configurations (*.sgc)</source>
-        <translation>InputLeap-konfigurationer (*.sgc)</translation>
+        <source>BlueBridge Configurations (*.sgc)</source>
+        <translation>BlueBridge-konfigurationer (*.sgc)</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="67"/>
-        <source>InputLeap Configurations (*.conf)</source>
-        <translation>InputLeap-konfigurationer (*.conf)</translation>
+        <source>BlueBridge Configurations (*.conf)</source>
+        <translation>BlueBridge-konfigurationer (*.conf)</translation>
     </message>
     <message>
         <location filename="src/main.cpp" line="119"/>
@@ -913,8 +913,8 @@ Klicka &quot;Ja&quot; för att automatiskt lita på fingeravtrycket i framtida a
     </message>
     <message>
         <location filename="res/ServerConfigDialog.ui" line="60"/>
-        <source>Configure the layout of your InputLeap server configuration.</source>
-        <translation>Konfigurera layouten på din InputLeap serverkonfiguration.</translation>
+        <source>Configure the layout of your BlueBridge server configuration.</source>
+        <translation>Konfigurera layouten på din BlueBridge serverkonfiguration.</translation>
     </message>
     <message>
         <location filename="res/ServerConfigDialog.ui" line="73"/>
@@ -1072,16 +1072,16 @@ Dubbelklicka på en skärm för att ändra dess inställningar.</translation>
     </message>
     <message>
         <location filename="src/SettingsDialog.cpp" line="151"/>
-        <source>Elevate InputLeap</source>
-        <translation>Höj InputLeaps behörighet</translation>
+        <source>Elevate BlueBridge</source>
+        <translation>Höj BlueBridges behörighet</translation>
     </message>
     <message>
         <location filename="src/SettingsDialog.cpp" line="152"/>
-        <source>Are you sure you want to Elevate InputLeap?
+        <source>Are you sure you want to Elevate BlueBridge?
 
-This allows InputLeap to interact with elevated processes and the UAC dialog, but can cause problems with non-elevated processes. Elevate InputLeap only if you really need to.</source>
-        <translation>Vill du verkligen höja InputLeaps behörighet?
-Detta låter InputLeap interagera med förhöjda processer och UAC-dialogen, men kan skapa program med processer som inte är förhöjda. Höj InputLeaps behörighet enbart om du verkligen måste.</translation>
+This allows BlueBridge to interact with elevated processes and the UAC dialog, but can cause problems with non-elevated processes. Elevate BlueBridge only if you really need to.</source>
+        <translation>Vill du verkligen höja BlueBridges behörighet?
+Detta låter BlueBridge interagera med förhöjda processer och UAC-dialogen, men kan skapa program med processer som inte är förhöjda. Höj BlueBridges behörighet enbart om du verkligen måste.</translation>
     </message>
 </context>
 <context>
@@ -1196,8 +1196,8 @@ Detta låter InputLeap interagera med förhöjda processer och UAC-dialogen, men
     <name>SetupWizard</name>
     <message>
         <location filename="src/SetupWizard.cpp" line="72"/>
-        <source>Setup InputLeap</source>
-        <translation>Ställ in InputLeap</translation>
+        <source>Setup BlueBridge</source>
+        <translation>Ställ in BlueBridge</translation>
     </message>
     <message>
         <location filename="src/SetupWizard.cpp" line="113"/>
@@ -1214,8 +1214,8 @@ Detta låter InputLeap interagera med förhöjda processer och UAC-dialogen, men
     <name>SetupWizard</name>
     <message>
         <location filename="res/SetupWizard.ui" line="26"/>
-        <source>Setup InputLeap</source>
-        <translation>Installera InputLeap</translation>
+        <source>Setup BlueBridge</source>
+        <translation>Installera BlueBridge</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="30"/>
@@ -1224,13 +1224,13 @@ Detta låter InputLeap interagera med förhöjda processer och UAC-dialogen, men
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="39"/>
-        <source>Thanks for installing InputLeap!</source>
-        <translation>Tack för att du installerar InputLeap!</translation>
+        <source>Thanks for installing BlueBridge!</source>
+        <translation>Tack för att du installerar BlueBridge!</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="114"/>
-        <source>InputLeap lets you easily share your mouse and keyboard between multiple computers on your desk, and it&apos;s Free and Open Source. Just move your mouse off the edge of one computer&apos;s screen on to another. You can even share all of your clipboards. All you need is a network connection. InputLeap is cross-platform (works on Windows, Mac OS X and Linux).</source>
-        <translation>Med InputLeap kan du enkelt dela din mus och ditt tangentbord mellan flera datorer på ditt skrivbord, och det är fri och öppen källkod. För bara muspekaren över kanten på en datorskärm till en annan. Du kan till och med dela urklipp. Allt du behöver är en nätverksanslutning. InputLeap är multiplattform (fungerar på både Windows, OSX och Linux).</translation>
+        <source>BlueBridge lets you easily share your mouse and keyboard between multiple computers on your desk, and it&apos;s Free and Open Source. Just move your mouse off the edge of one computer&apos;s screen on to another. You can even share all of your clipboards. All you need is a network connection. BlueBridge is cross-platform (works on Windows, Mac OS X and Linux).</source>
+        <translation>Med BlueBridge kan du enkelt dela din mus och ditt tangentbord mellan flera datorer på ditt skrivbord, och det är fri och öppen källkod. För bara muspekaren över kanten på en datorskärm till en annan. Du kan till och med dela urklipp. Allt du behöver är en nätverksanslutning. BlueBridge är multiplattform (fungerar på både Windows, OSX och Linux).</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="125"/>
@@ -1432,8 +1432,8 @@ Serversvar:
     </message>
     <message>
         <location filename="src/ZeroconfService.cpp" line="140"/>
-        <source>InputLeap</source>
-        <translation>InputLeap</translation>
+        <source>BlueBridge</source>
+        <translation>BlueBridge</translation>
     </message>
     <message>
         <location filename="src/ZeroconfService.cpp" line="141"/>

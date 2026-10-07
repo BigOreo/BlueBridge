@@ -81,10 +81,10 @@ try {
         "-DCMAKE_PREFIX_PATH=$qt_root" `
         "-DQT_DEFAULT_MAJOR_VERSION=$qt_major_version" `
         -DDNSSD_LIB="$bonjour_path\Lib\x64\dnssd.lib" `
-        -DCMAKE_INSTALL_PREFIX=input-leap-install
+        -DCMAKE_INSTALL_PREFIX=bluebridge-install
 
     cmake --build . --parallel --config $build_type --target install
-    ISCC /Qp installer-inno\input-leap.iss
+    ISCC /Qp installer-inno\bluebridge.iss
 } finally {
     popd
 }

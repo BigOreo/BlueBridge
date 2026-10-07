@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2016 Symless
  *
  * This package is free software; you can redistribute it and/or
@@ -18,11 +18,11 @@
 #pragma once
 
 // The elevate mode tristate determines two behaviours on Windows.
-// The first, switch-on-desk-switch (SodS), passed through input-leapd as a
-// command line argument to InputLeap core, determines if the server restarts
+// The first, switch-on-desk-switch (SodS), passed through bluebridge-service as a
+// command line argument to BlueBridge core, determines if the server restarts
 // when switching Windows desktops (e.g. when Windows UAC dialog pops up).
-// The second, passed as a boolean flag to input-leapd over the IPC inside
-// kIpcCommandMessage, determines whether InputLeap should be started with
+// The second, passed as a boolean flag to bluebridge-service over the IPC inside
+// kIpcCommandMessage, determines whether BlueBridge should be started with
 // elevated privileges.
 //
 // The matrix for these two behaviours is as follows:

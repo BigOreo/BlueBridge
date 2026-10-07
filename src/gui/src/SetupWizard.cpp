@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 #include "SetupWizard.h"
 #include "ui_SetupWizard.h"
 #include "MainWindow.h"
-#include "QInputLeapApplication.h"
+#include "QBlueBridgeApplication.h"
 #include "QUtility.h"
 #include "Theme.h"
 
@@ -52,14 +52,14 @@ SetupWizard::SetupWizard(MainWindow& mainWindow, bool startMain) :
 
     // the same look on every platform, with the app icon in the header
     setWizardStyle(QWizard::ModernStyle);
-    setPixmap(QWizard::LogoPixmap, QPixmap(":/res/icons/256x256/input-leap.png")
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/res/icons/256x256/bluebridge.png")
                                        .scaled(56, 56, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QFont choiceFont = ui_->m_pServerRadioButton->font();
     choiceFont.setWeight(QFont::DemiBold);
     ui_->m_pServerRadioButton->setFont(choiceFont);
     ui_->m_pClientRadioButton->setFont(choiceFont);
-    const QString secondary = QStringLiteral("color: %1;").arg(inputleap::theme::kSlate);
+    const QString secondary = QStringLiteral("color: %1;").arg(bluebridge::theme::kSlate);
     ui_->m_pLabelServerDescription->setStyleSheet(secondary);
     ui_->m_pLabelClientDescription->setStyleSheet(secondary);
     ui_->m_pLabelWelcomeNote->setStyleSheet(secondary);
@@ -181,7 +181,7 @@ void SetupWizard::accept()
 
 void SetupWizard::reject()
 {
-    QInputLeapApplication::getInstance()->switchTranslator(m_MainWindow.appConfig().language());
+    QBlueBridgeApplication::getInstance()->switchTranslator(m_MainWindow.appConfig().language());
 
     if (m_StartMain)
     {
@@ -194,5 +194,5 @@ void SetupWizard::reject()
 void SetupWizard::on_m_pComboLanguage_currentIndexChanged(int index)
 {
     QString ietfCode = ui_->m_pComboLanguage->itemData(index).toString();
-    QInputLeapApplication::getInstance()->switchTranslator(ietfCode);
+    QBlueBridgeApplication::getInstance()->switchTranslator(ietfCode);
 }

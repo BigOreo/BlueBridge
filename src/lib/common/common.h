@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -38,15 +38,15 @@ enum {
 };
 
 #if defined(__GNUC__)
-    #define INPUTLEAP_DEFINE_ATTRIBUTE_PRINTF 1
+    #define BLUEBRIDGE_DEFINE_ATTRIBUTE_PRINTF 1
 #elif defined(__has_attribute)
     #if __has_attribute(__format__)
-        #define INPUTLEAP_DEFINE_ATTRIBUTE_PRINTF 1
+        #define BLUEBRIDGE_DEFINE_ATTRIBUTE_PRINTF 1
     #endif
 #endif
 
-#ifdef INPUTLEAP_DEFINE_ATTRIBUTE_PRINTF
-    #define INPUTLEAP_ATTRIBUTE_PRINTF(x,y) __attribute__((__format__(__printf__,x,y)))
+#ifdef BLUEBRIDGE_DEFINE_ATTRIBUTE_PRINTF
+    #define BLUEBRIDGE_ATTRIBUTE_PRINTF(x,y) __attribute__((__format__(__printf__,x,y)))
 #else
-    #define INPUTLEAP_ATTRIBUTE_PRINTF(x,y)
+    #define BLUEBRIDGE_ATTRIBUTE_PRINTF(x,y)
 #endif

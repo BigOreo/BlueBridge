@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -19,7 +19,7 @@
 #define TRAY_RETRY_COUNT 5
 #define TRAY_RETRY_WAIT 2000
 
-#include "QInputLeapApplication.h"
+#include "QBlueBridgeApplication.h"
 #include "MainWindow.h"
 #include "AppConfig.h"
 #include "SetupWizard.h"
@@ -83,22 +83,22 @@ int main(int argc, char* argv[])
     /* Workaround for QTBUG-40332 - "High ping when QNetworkAccessManager is instantiated" */
     ::setenv ("QT_BEARER_POLL_TIMEOUT", "-1", 1);
 #endif
-    QCoreApplication::setOrganizationName("InputLeap");
+    QCoreApplication::setOrganizationName("BlueBridge");
 	QCoreApplication::setOrganizationDomain("github.com");
-    QCoreApplication::setApplicationName("InputLeap");
+    QCoreApplication::setApplicationName("BlueBridge");
 
-    QInputLeapApplication app(argc, argv);
-    inputleap::theme::apply(app);
+    QBlueBridgeApplication app(argc, argv);
+    bluebridge::theme::apply(app);
 
     // every window, the setup wizard and dialogs included, shows the app icon
-    QIcon app_icon(QStringLiteral(":/res/icons/256x256/input-leap.png"));
+    QIcon app_icon(QStringLiteral(":/res/icons/256x256/bluebridge.png"));
     for (int size : {16, 24, 32, 48, 64, 128}) {
-        app_icon.addFile(QStringLiteral(":/res/icons/app/input-leap-%1.png").arg(size), QSize(size, size));
+        app_icon.addFile(QStringLiteral(":/res/icons/app/bluebridge-%1.png").arg(size), QSize(size, size));
     }
     app.setWindowIcon(app_icon);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    app.setDesktopFileName(QStringLiteral("io.github.input_leap.input-leap"));
+    app.setDesktopFileName(QStringLiteral("io.github.bigoreo.bluebridge"));
 #endif
 
 #if defined(Q_OS_MAC)
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
         // Unfortunately, there's no user-friendly way to allow assistive access
         // to applications that are not in default paths (/Applications),
         // especially if an identically named application already exists in
-        // /Applications). Thus we require InputLeap to reside in the /Applications
+        // /Applications). Thus we require BlueBridge to reside in the /Applications
         // folder
         QMessageBox::information(nullptr, "BlueBridge",
                                  "Please drag BlueBridge to the Applications folder, "
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 	{
 		mainWindow.open();
 	}
-    QObject::connect(&mainWindow, &MainWindow::requestLanguageChange, &app, &QInputLeapApplication::switchTranslator);
+    QObject::connect(&mainWindow, &MainWindow::requestLanguageChange, &app, &QBlueBridgeApplication::switchTranslator);
 	return app.exec();
 }
 
@@ -189,7 +189,7 @@ bool checkMacAssistiveDevices()
 	// new in mavericks, applications are trusted individually
 	// with use of the accessibility api. this call will show a
 	// prompt which can show the security/privacy/accessibility
-    // tab, with a list of allowed applications. InputLeap should
+    // tab, with a list of allowed applications. BlueBridge should
 	// show up there automatically, but will be unchecked.
 
 	if (AXIsProcessTrusted()) {

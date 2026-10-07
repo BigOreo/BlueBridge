@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "platform/MSWindowsClipboardAnyTextConverter.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 //! Convert to/from locale text encoding
 class MSWindowsClipboardTextConverter :
@@ -38,4 +38,4 @@ protected:
     virtual std::string doToIClipboard(const std::string&) const;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

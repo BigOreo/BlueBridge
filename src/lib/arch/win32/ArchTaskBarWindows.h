@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -30,7 +30,7 @@
 
 #define ARCH_TASKBAR ArchTaskBarWindows
 
-namespace inputleap {
+namespace bluebridge {
 
 //! Win32 implementation of IArchTaskBar
 class ArchTaskBarWindows : public IArchTaskBar {
@@ -111,4 +111,4 @@ private:
     UINT m_nextID;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

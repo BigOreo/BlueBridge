@@ -1,8 +1,8 @@
 Creating a release
 ==================
 
-This document is documentation intended for maintainers of InputLeap.
-It documents the release process of InputLeap.
+This document is documentation intended for maintainers of BlueBridge.
+It documents the release process of BlueBridge.
 
 Step 1: Setup environment variables
 -----------------------------------
@@ -35,12 +35,12 @@ Pull the merge commit created on the `master` branch during the step 2.
 Edit the following files and update the version numbers:
 
  - `cmake/Version.cmake`
- - `doc/input-leapc.1`
- - `doc/input-leaps.1`
+ - `doc/bluebridge-client.1`
+ - `doc/bluebridge-server.1`
  - `.github/ISSUE_TEMPLATE/bug_report.yml`
  - `dist/debian/changelog`
 
-Commit to the release branch with the following message `InputLeap x.y.z`.
+Commit to the release branch with the following message `BlueBridge x.y.z`.
 
 Create a tag:
 
@@ -53,7 +53,7 @@ Push the commit:
 Step 5: Draft a new release on Github
 -------------------------------------
 
-Go to https://github.com/input-leap/input-leap/releases and draft a new release.
+Go to https://github.com/BigOreo/BlueBridge/releases and draft a new release.
 
 Use git tag as the title of the release: `vX.Y.Z`.
 

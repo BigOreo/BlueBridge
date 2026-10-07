@@ -5,7 +5,7 @@
 
 #include <X11/Xlib.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 class XDisplayOpenUtil {
 public:
@@ -48,4 +48,4 @@ private:
     Display* display_ = nullptr;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

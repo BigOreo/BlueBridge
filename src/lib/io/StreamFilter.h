@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -23,7 +23,7 @@
 #include "base/EventTarget.h"
 #include <memory>
 
-namespace inputleap {
+namespace bluebridge {
 
 //! A stream filter
 /*!
@@ -57,7 +57,7 @@ public:
     /*!
     Returns the stream passed to the c'tor.
     */
-    inputleap::IStream* getStream() const { return stream_.get(); }
+    bluebridge::IStream* getStream() const { return stream_.get(); }
 
 protected:
     //! Handle events from source stream
@@ -75,4 +75,4 @@ private:
     IEventQueue* m_events;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2018 Debauchee Open Source Group
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
@@ -21,8 +21,8 @@
 
 #include "base/Fwd.h"
 #include "platform/MSWindowsHook.h"
-#include "inputleap/PlatformScreen.h"
-#include "inputleap/DragInformation.h"
+#include "bluebridge/PlatformScreen.h"
+#include "bluebridge/DragInformation.h"
 #include "platform/synwinhk.h"
 #include <map>
 #include <string>
@@ -30,7 +30,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 class MSWindowsDesks;
 class MSWindowsKeyState;
@@ -345,4 +345,4 @@ private:
     PrimaryKeyDownList m_primaryKeyDownList;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

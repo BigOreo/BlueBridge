@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -75,13 +75,13 @@ namespace {
 
 static const QString allFilesFilter(QObject::tr("All files (*.*)"));
 #if defined(Q_OS_WIN)
-static const char APP_CONFIG_NAME[] = "input-leap.sgc";
+static const char APP_CONFIG_NAME[] = "bluebridge.sgc";
 static const QString APP_CONFIG_FILTER(QObject::tr("BlueBridge Configurations (*.sgc)"));
 // Bonjour used to be downloaded from binaries.symless.com, which no longer
 // serves it. Point users at Apple's official installer instead.
 static const char bonjourDownloadUrl[] = "https://support.apple.com/kb/DL999";
 #else
-static const char APP_CONFIG_NAME[] = "input-leap.conf";
+static const char APP_CONFIG_NAME[] = "bluebridge.conf";
 static const QString APP_CONFIG_FILTER(QObject::tr("BlueBridge Configurations (*.conf)"));
 #endif
 static const QString APP_CONFIG_OPEN_FILTER(APP_CONFIG_FILTER + ";;" + allFilesFilter);
@@ -92,18 +92,18 @@ const char* icon_file_for_connection_state(AppConnectionState state)
 #if defined(Q_OS_MAC)
     switch (state) {
         default:
-        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/input-leap-disconnected-mask.png";
-        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/input-leap-disconnected-mask.png";
-        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/input-leap-connected-mask.png";
-        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/input-leap-transfering-mask.png";
+        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/bluebridge-disconnected-mask.png";
+        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/bluebridge-disconnected-mask.png";
+        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/bluebridge-connected-mask.png";
+        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/bluebridge-transfering-mask.png";
     }
 #else
     switch (state) {
         default:
-        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/input-leap-disconnected.png";
-        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/input-leap-disconnected.png";
-        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/input-leap-connected.png";
-        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/input-leap-transfering.png";
+        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/bluebridge-disconnected.png";
+        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/bluebridge-disconnected.png";
+        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/bluebridge-connected.png";
+        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/bluebridge-transfering.png";
     }
 #endif
 }
@@ -112,14 +112,14 @@ const char* icon_name_for_connection_state(AppConnectionState state)
 {
     switch (state) {
         default:
-        case AppConnectionState::DISCONNECTED: return "input-leap-disconnected";
-        case AppConnectionState::CONNECTING: return "input-leap-disconnected";
-        case AppConnectionState::CONNECTED: return "input-leap-connected";
-        case AppConnectionState::TRANSFERRING: return "input-leap-transfering";
+        case AppConnectionState::DISCONNECTED: return "bluebridge-disconnected";
+        case AppConnectionState::CONNECTING: return "bluebridge-disconnected";
+        case AppConnectionState::CONNECTED: return "bluebridge-connected";
+        case AppConnectionState::TRANSFERRING: return "bluebridge-transfering";
     }
 }
 
-static const char* APP_LARGE_ICON = ":/res/icons/256x256/input-leap.png";
+static const char* APP_LARGE_ICON = ":/res/icons/256x256/bluebridge.png";
 
 // Draws the icons for the connection mode toggle. They are painted rather
 // than loaded so they stay sharp at any scale and follow the palette.
@@ -188,7 +188,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     m_pLogWindow(new LogWindow(nullptr))
 {
     // explicitly unset DeleteOnClose so the window can be show and hidden
-    // repeatedly until InputLeap is finished
+    // repeatedly until BlueBridge is finished
     setAttribute(Qt::WA_DeleteOnClose, false);
     // mark the windows as sort of "dialog" window so that tiling window
     // managers will float it by default (X11)
@@ -197,12 +197,12 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     ui_->setupUi(this);
     setWindowIcon(QIcon(APP_LARGE_ICON));
     createMenuBar();
-    m_policy = inputleap::read_machine_policy();
+    m_policy = bluebridge::read_machine_policy();
     if (m_policy.encryption_required() && !m_AppConfig->getCryptoEnabled()) {
         m_AppConfig->setCryptoEnabled(true);
     }
     setupConnectionModeUi();
-    inputleap::theme::set_primary(ui_->m_pButtonToggleStart);
+    bluebridge::theme::set_primary(ui_->m_pButtonToggleStart);
     loadSettings();
     updateStartButton();
     initConnections();
@@ -288,8 +288,8 @@ void MainWindow::open()
     }
 
     // only start if user has previously started. this stops the gui from
-    // auto hiding before the user has configured InputLeap (which of course
-    // confuses first time users, who think InputLeap has crashed).
+    // auto hiding before the user has configured BlueBridge (which of course
+    // confuses first time users, who think BlueBridge has crashed).
     if (appConfig().startedBefore() && appConfig().getAutoStart()) {
         m_SuppressEmptyServerWarning = true;
         start_cmd_app();
@@ -390,7 +390,7 @@ void MainWindow::loadSettings()
 
     auto mode = static_cast<ConnectionMode>(
                 settings().value("connectionMode", static_cast<int>(ConnectionMode::Network)).toInt());
-    if (!inputleap::is_bluetooth_supported() || !m_policy.bluetooth_allowed()) {
+    if (!bluebridge::is_bluetooth_supported() || !m_policy.bluetooth_allowed()) {
         mode = ConnectionMode::Network;
     } else if (!m_policy.network_allowed()) {
         mode = ConnectionMode::Bluetooth;
@@ -566,31 +566,31 @@ void MainWindow::checkFingerprint(const QString& line)
     auto match2 = fingerprintRegex.cap(2).toStdString();
 #endif
 
-    inputleap::FingerprintData fingerprint_sha1 = {
-        inputleap::fingerprint_type_to_string(inputleap::FingerprintType::SHA1),
-        inputleap::string::from_hex(match1)
+    bluebridge::FingerprintData fingerprint_sha1 = {
+        bluebridge::fingerprint_type_to_string(bluebridge::FingerprintType::SHA1),
+        bluebridge::string::from_hex(match1)
     };
 
-    inputleap::FingerprintData fingerprint_sha256 = {
-        inputleap::fingerprint_type_to_string(inputleap::FingerprintType::SHA256),
-        inputleap::string::from_hex(match2)
+    bluebridge::FingerprintData fingerprint_sha256 = {
+        bluebridge::fingerprint_type_to_string(bluebridge::FingerprintType::SHA256),
+        bluebridge::string::from_hex(match2)
     };
 
     bool is_client = app_role() == AppRole::Client;
 
     auto db_path = is_client
-            ? inputleap::DataDirectories::trusted_servers_ssl_fingerprints_path()
-            : inputleap::DataDirectories::trusted_clients_ssl_fingerprints_path();
+            ? bluebridge::DataDirectories::trusted_servers_ssl_fingerprints_path()
+            : bluebridge::DataDirectories::trusted_clients_ssl_fingerprints_path();
 
     auto db_dir = db_path.parent_path();
-    if (!inputleap::fs::exists(db_dir)) {
-        inputleap::fs::create_directories(db_dir);
+    if (!bluebridge::fs::exists(db_dir)) {
+        bluebridge::fs::create_directories(db_dir);
     }
 
     // We compare only SHA256 fingerprints, but show both SHA1 and SHA256 so that the users can
-    // still verify fingerprints on old InputLeap servers. This way the only time when we are
+    // still verify fingerprints on old BlueBridge servers. This way the only time when we are
     // exposed to SHA1 vulnerabilities is when the user is reconnecting again.
-    inputleap::FingerprintDatabase db;
+    bluebridge::FingerprintDatabase db;
     db.read(db_path);
     if (db.is_trusted(fingerprint_sha256)) {
         return;
@@ -662,9 +662,9 @@ void MainWindow::start_cmd_app()
         // is switched; this is because we may need to elevate or not
         // based on which desk the user is in (login always needs
         // elevation, where as default desk does not).
-        // Note that this is only enabled when InputLeap is set to elevate
+        // Note that this is only enabled when BlueBridge is set to elevate
         // 'as needed' (e.g. on a UAC dialog popup) in order to prevent
-        // unnecessary restarts when InputLeap was started elevated or
+        // unnecessary restarts when BlueBridge was started elevated or
         // when it is not allowed to elevate. In these cases restarting
         // the server is fruitless.
         if (appConfig().elevateMode() == ElevateAsNeeded) {
@@ -690,7 +690,7 @@ void MainWindow::start_cmd_app()
     // launched the process (e.g. when launched with elevation). setting the
     // profile dir on launch ensures it uses the same profile dir is used
     // no matter how its relaunched.
-    args << "--profile-dir" << QString::fromStdString("\"" + inputleap::DataDirectories::profile().u8string() + "\"");
+    args << "--profile-dir" << QString::fromStdString("\"" + bluebridge::DataDirectories::profile().u8string() + "\"");
 #endif
 
     if ((app_role() == AppRole::Client && !clientArgs(args, app))
@@ -769,7 +769,7 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
     }
 
     if (connection_mode() == ConnectionMode::Bluetooth) {
-        QString serverAddress = inputleap::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+        QString serverAddress = bluebridge::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
         if (serverAddress.isEmpty()) {
             show();
             if (!m_SuppressEmptyServerWarning) {
@@ -951,7 +951,7 @@ void MainWindow::stopDesktop()
         return;
     }
 
-    appendLogInfo("stopping InputLeap desktop process");
+    appendLogInfo("stopping BlueBridge desktop process");
 
     if (cmd_app_process_->isOpen()) {
 #if SYSAPI_UNIX
@@ -992,14 +992,14 @@ void MainWindow::set_connection_state(AppConnectionState state)
     {
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
-        inputleap::theme::set_primary(ui_->m_pButtonToggleStart, false);
+        bluebridge::theme::set_primary(ui_->m_pButtonToggleStart, false);
         ui_->m_pButtonReload->setEnabled(true);
     }
     else if (state == AppConnectionState::DISCONNECTED)
     {
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
-        inputleap::theme::set_primary(ui_->m_pButtonToggleStart);
+        bluebridge::theme::set_primary(ui_->m_pButtonToggleStart);
         ui_->m_pButtonReload->setEnabled(false);
     }
 
@@ -1180,7 +1180,7 @@ void MainWindow::updateZeroconfService()
 void MainWindow::serverDetected(const QString name)
 {
     if (ui_->m_pComboServerList->findText(name) == -1) {
-        // Note: the first added item triggers startInputLeap
+        // Note: the first added item triggers startBlueBridge
         ui_->m_pComboServerList->addItem(name);
     }
 
@@ -1204,12 +1204,12 @@ void MainWindow::updateSSLFingerprint()
         return;
     }
 
-    auto local_path = inputleap::DataDirectories::local_ssl_fingerprints_path();
-    if (!inputleap::fs::exists(local_path)) {
+    auto local_path = bluebridge::DataDirectories::local_ssl_fingerprints_path();
+    if (!bluebridge::fs::exists(local_path)) {
         return;
     }
 
-    inputleap::FingerprintDatabase db;
+    bluebridge::FingerprintDatabase db;
     db.read(local_path);
     if (db.fingerprints().size() != 2) {
         return;
@@ -1217,18 +1217,18 @@ void MainWindow::updateSSLFingerprint()
 
     for (const auto& fingerprint : db.fingerprints()) {
         if (fingerprint.algorithm == "sha1") {
-            auto fingerprint_str = inputleap::format_ssl_fingerprint(fingerprint.data);
+            auto fingerprint_str = bluebridge::format_ssl_fingerprint(fingerprint.data);
             ui_->label_sha1_fingerprint_full->setText(QString::fromStdString(fingerprint_str));
             continue;
         }
 
         if (fingerprint.algorithm == "sha256") {
-            auto fingerprint_str = inputleap::format_ssl_fingerprint(fingerprint.data);
+            auto fingerprint_str = bluebridge::format_ssl_fingerprint(fingerprint.data);
             fingerprint_str.resize(40);
             fingerprint_str += " ...";
 
-            auto fingerprint_str_cols = inputleap::format_ssl_fingerprint_columns(fingerprint.data);
-            auto fingerprint_randomart = inputleap::create_fingerprint_randomart(fingerprint.data);
+            auto fingerprint_str_cols = bluebridge::format_ssl_fingerprint_columns(fingerprint.data);
+            auto fingerprint_randomart = bluebridge::create_fingerprint_randomart(fingerprint.data);
 
             ui_->m_pLabelLocalFingerprint->setText(QString::fromStdString(fingerprint_str));
             ui_->label_sha256_fingerprint_full->setText(QString::fromStdString(fingerprint_str_cols));
@@ -1649,13 +1649,13 @@ void MainWindow::setupConnectionModeUi()
     ui_->formLayout_3->addRow(m_pLabelClientBluetoothHint);
 
     connect(m_pLineEditServerBluetooth, &QLineEdit::editingFinished, this, [this]() {
-        QString normalized = inputleap::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+        QString normalized = bluebridge::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
         if (!normalized.isEmpty()) {
             m_pLineEditServerBluetooth->setText(normalized);
         }
     });
 
-    const bool bluetoothSupported = inputleap::is_bluetooth_supported();
+    const bool bluetoothSupported = bluebridge::is_bluetooth_supported();
     m_pLabelConnectionMode->setVisible(bluetoothSupported);
     m_pConnectionModeField->setVisible(bluetoothSupported);
     m_pConnectionModeRow->setVisible(m_policy.any());
@@ -1710,7 +1710,7 @@ void MainWindow::updateConnectionModeUi()
 
 bool MainWindow::server_accepts_bluetooth() const
 {
-    return inputleap::is_bluetooth_supported() && m_policy.bluetooth_allowed();
+    return bluebridge::is_bluetooth_supported() && m_policy.bluetooth_allowed();
 }
 
 namespace {
@@ -1735,8 +1735,8 @@ void set_server_item_text(QListWidgetItem* item, const QString& status)
 void MainWindow::refreshPairedBluetoothServers()
 {
     const QString current =
-            inputleap::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
-    const auto devices = inputleap::paired_bluetooth_computers();
+            bluebridge::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+    const auto devices = bluebridge::paired_bluetooth_computers();
 
     const QSignalBlocker blocker(m_pListBluetoothServers);
     m_pListBluetoothServers->clear();
@@ -1790,7 +1790,7 @@ void MainWindow::refreshPairedBluetoothServers()
     QThread* thread = QThread::create([self, generation, addresses]() {
         QMap<QString, bool> running;
         for (const auto& address : addresses) {
-            running[address] = inputleap::is_server_running_on(address);
+            running[address] = bluebridge::is_server_running_on(address);
         }
         QMetaObject::invokeMethod(qApp, [self, generation, running]() {
             if (self) {
@@ -1836,7 +1836,7 @@ void MainWindow::selectBluetoothServer(int index)
 
 void MainWindow::updateLocalBluetoothAddress()
 {
-    QString address = inputleap::local_bluetooth_address();
+    QString address = bluebridge::local_bluetooth_address();
     bool found = !address.isEmpty();
 
     if (found) {

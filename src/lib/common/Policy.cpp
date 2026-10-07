@@ -1,6 +1,6 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
-    Copyright (C) InputLeap contributors
+    BlueBridge -- mouse and keyboard sharing utility
+    Copyright (C) BlueBridge contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #include <map>
 #endif
 
-namespace inputleap {
+namespace bluebridge {
 
 namespace {
 
@@ -87,7 +87,7 @@ MachinePolicy read_machine_policy()
         std::wstring wide_name(name.begin(), name.end());
         DWORD value = 0;
         DWORD size = sizeof(value);
-        if (RegGetValueW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Policies\\InputLeap", wide_name.c_str(),
+        if (RegGetValueW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Policies\\BlueBridge", wide_name.c_str(),
                          RRF_RT_REG_DWORD, nullptr, &value, &size) != ERROR_SUCCESS) {
             return {};
         }
@@ -100,7 +100,7 @@ MachinePolicy read_machine_policy()
 MachinePolicy read_machine_policy()
 {
     std::map<std::string, std::uint32_t> values;
-    std::ifstream file("/etc/input-leap/policy.conf");
+    std::ifstream file("/etc/bluebridge/policy.conf");
     std::string line;
     while (std::getline(file, line)) {
         auto hash = line.find('#');
@@ -141,4 +141,4 @@ MachinePolicy read_machine_policy()
 
 #endif
 
-} // namespace inputleap
+} // namespace bluebridge

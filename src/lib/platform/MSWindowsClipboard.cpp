@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -26,7 +26,7 @@
 #include "arch/win32/ArchMiscWindows.h"
 #include "base/Log.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 UINT                    MSWindowsClipboard::s_ownershipFormat = 0;
 
@@ -84,7 +84,7 @@ MSWindowsClipboard::clear()
         return false;
     }
 
-    // mark clipboard as being owned by InputLeap
+    // mark clipboard as being owned by BlueBridge
     HGLOBAL data = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, 1);
     if (nullptr == SetClipboardData(getOwnershipFormat(), data)) {
         LOG_DEBUG("failed to set clipboard data");
@@ -206,7 +206,7 @@ bool MSWindowsClipboard::is_owned_by_us()
 {
     // create ownership format if we haven't yet
     if (s_ownershipFormat == 0) {
-        s_ownershipFormat = RegisterClipboardFormat(TEXT("InputLeapOwnership"));
+        s_ownershipFormat = RegisterClipboardFormat(TEXT("BlueBridgeOwnership"));
     }
     return (IsClipboardFormatAvailable(getOwnershipFormat()) != 0);
 }
@@ -216,11 +216,11 @@ MSWindowsClipboard::getOwnershipFormat()
 {
     // create ownership format if we haven't yet
     if (s_ownershipFormat == 0) {
-        s_ownershipFormat = RegisterClipboardFormat(TEXT("InputLeapOwnership"));
+        s_ownershipFormat = RegisterClipboardFormat(TEXT("BlueBridgeOwnership"));
     }
 
     // return the format
     return s_ownershipFormat;
 }
 
-} // namespace inputleap
+} // namespace bluebridge

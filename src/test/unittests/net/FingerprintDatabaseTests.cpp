@@ -1,5 +1,5 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
+    BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 #include "net/FingerprintDatabase.h"
 #include <gtest/gtest.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 TEST(FingerprintDatabase, parse_db_line)
 {
@@ -92,4 +92,4 @@ TEST(FingerprintDatabase, is_trusted)
     ASSERT_FALSE(db.is_trusted({ "algo1", { 1, 2, 3, 4, 0xac } }));
 }
 
-} // namespace inputleap
+} // namespace bluebridge

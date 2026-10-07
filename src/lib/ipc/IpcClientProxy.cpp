@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -20,12 +20,12 @@
 
 #include "ipc/Ipc.h"
 #include "ipc/IpcMessage.h"
-#include "inputleap/ProtocolUtil.h"
+#include "bluebridge/ProtocolUtil.h"
 #include "io/IStream.h"
 #include "arch/Arch.h"
 #include "base/Log.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 IpcClientProxy::IpcClientProxy(std::unique_ptr<IStream>&& stream, IEventQueue* events) :
     stream_(std::move(stream)),
@@ -161,4 +161,4 @@ IpcClientProxy::disconnect()
     m_events->add_event(EventType::IPC_CLIENT_PROXY_DISCONNECTED, this);
 }
 
-} // namespace inputleap
+} // namespace bluebridge

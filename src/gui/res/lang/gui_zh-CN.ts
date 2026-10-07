@@ -5,8 +5,8 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../../src/AboutDialog.ui" line="38"/>
-        <source>About InputLeap</source>
-        <translation>关于 InputLeap</translation>
+        <source>About BlueBridge</source>
+        <translation>关于 BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/AboutDialog.ui" line="140"/>
@@ -31,8 +31,8 @@ Keyboard and mouse sharing application. Cross platform and open source.&lt;br /&
 Copyright © 2018 Debauchee Open Source Group&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-InputLeap is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
-InputLeap is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
+BlueBridge is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
+BlueBridge is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
 The InputLeap GUI is based on QSynergy by Volker Lanz.
 &lt;/p&gt;</source>
         <translation>&lt;p&gt;
@@ -40,9 +40,9 @@ The InputLeap GUI is based on QSynergy by Volker Lanz.
 Copyright © 2018 Debauchee Open Source Group&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-InputLeap 适用 GNU 通用公共许可证（GPLv2）。&lt;br /&gt;&lt;br /&gt;
-InputLeap 基于 Richard Lee 和 Adam Feder 制作的 CosmoSynergy .&lt;br /&gt;
-InputLeap GUI 基于 Volker Lanz 制作的 QSynergy.
+BlueBridge 适用 GNU 通用公共许可证（GPLv2）。&lt;br /&gt;&lt;br /&gt;
+BlueBridge 基于 Richard Lee 和 Adam Feder 制作的 CosmoSynergy .&lt;br /&gt;
+BlueBridge GUI 基于 Volker Lanz 制作的 QSynergy.
 &lt;/p&gt;</translation>
     </message>
     <message>
@@ -189,8 +189,8 @@ InputLeap GUI 基于 Volker Lanz 制作的 QSynergy.
     <name>LogWindow</name>
     <message>
         <location filename="../../src/LogWindow.ui" line="26"/>
-        <source>Log - InputLeap</source>
-        <translation>日志 - InputLeap</translation>
+        <source>Log - BlueBridge</source>
+        <translation>日志 - BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/LogWindow.ui" line="71"/>
@@ -227,13 +227,13 @@ InputLeap GUI 基于 Volker Lanz 制作的 QSynergy.
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="583"/>
-        <source>InputLeap client not found</source>
-        <translation>未找到InputLeap客户端</translation>
+        <source>BlueBridge client not found</source>
+        <translation>未找到BlueBridge客户端</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="584"/>
-        <source>The executable for the InputLeap client does not exist.</source>
-        <translation>InputLeap客户端的可执行程序不存在。</translation>
+        <source>The executable for the BlueBridge client does not exist.</source>
+        <translation>BlueBridge客户端的可执行程序不存在。</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="610"/>
@@ -242,8 +242,8 @@ InputLeap GUI 基于 Volker Lanz 制作的 QSynergy.
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="611"/>
-        <source>Please fill in a hostname for the InputLeap client to connect to.</source>
-        <translation>请为InputLeap客户端设置一个用于连接的主机名。</translation>
+        <source>Please fill in a hostname for the BlueBridge client to connect to.</source>
+        <translation>请为BlueBridge客户端设置一个用于连接的主机名。</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="631"/>
@@ -252,8 +252,8 @@ InputLeap GUI 基于 Volker Lanz 制作的 QSynergy.
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="631"/>
-        <source>The temporary configuration file required to start InputLeap can not be written.</source>
-        <translation>启动InputLeap所需的临时配置文件不可写。</translation>
+        <source>The temporary configuration file required to start BlueBridge can not be written.</source>
+        <translation>启动BlueBridge所需的临时配置文件不可写。</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="644"/>
@@ -262,18 +262,18 @@ InputLeap GUI 基于 Volker Lanz 制作的 QSynergy.
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="645"/>
-        <source>You have not filled in a valid configuration file for the InputLeap server. Do you want to browse for the configuration file now?</source>
-        <translation>InputLeap服务端缺少有效的配置文件。需要现在浏览配置文件吗？</translation>
+        <source>You have not filled in a valid configuration file for the BlueBridge server. Do you want to browse for the configuration file now?</source>
+        <translation>BlueBridge服务端缺少有效的配置文件。需要现在浏览配置文件吗？</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="675"/>
-        <source>InputLeap server not found</source>
-        <translation>未找到InputLeap服务端</translation>
+        <source>BlueBridge server not found</source>
+        <translation>未找到BlueBridge服务端</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="676"/>
-        <source>The executable for the InputLeap server does not exist.</source>
-        <translation>InputLeap服务端可执行程序不存在。</translation>
+        <source>The executable for the BlueBridge server does not exist.</source>
+        <translation>BlueBridge服务端可执行程序不存在。</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="783"/>
@@ -325,18 +325,18 @@ Do you want to install Bonjour?</source>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="818"/>
-        <source>InputLeap is starting.</source>
-        <translation>InputLeap正在启动</translation>
+        <source>BlueBridge is starting.</source>
+        <translation>BlueBridge正在启动</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="812"/>
-        <source>InputLeap is running.</source>
-        <translation>InputLeap正在运行</translation>
+        <source>BlueBridge is running.</source>
+        <translation>BlueBridge正在运行</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="822"/>
-        <source>InputLeap is not running.</source>
-        <translation>InputLeap没有运行</translation>
+        <source>BlueBridge is not running.</source>
+        <translation>BlueBridge没有运行</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="878"/>
@@ -347,13 +347,13 @@ Do you want to install Bonjour?</source>
         <location filename="../../src/MainWindow.cpp" line="1134"/>
         <location filename="../../src/MainWindow.cpp" line="1217"/>
         <location filename="../../src/MainWindow.cpp" line="1247"/>
-        <source>InputLeap</source>
-        <translation>InputLeap</translation>
+        <source>BlueBridge</source>
+        <translation>BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="993"/>
-        <source>Browse for a InputLeap config file</source>
-        <translation>浏览InputLeap配置文件</translation>
+        <source>Browse for a BlueBridge config file</source>
+        <translation>浏览BlueBridge配置文件</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="432"/>
@@ -394,21 +394,21 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="244"/>
-        <source>&amp;InputLeap</source>
-        <translation>&amp;InputLeap</translation>
+        <source>&amp;BlueBridge</source>
+        <translation>&amp;BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="402"/>
-        <source>InputLeap is now connected. You can close the config window and InputLeap will remain connected in the background.</source>
-        <translation>InputLeap已连接。现在可以关闭窗口，InputLeap会在后台保持连接。</translation>
+        <source>BlueBridge is now connected. You can close the config window and BlueBridge will remain connected in the background.</source>
+        <translation>BlueBridge已连接。现在可以关闭窗口，BlueBridge会在后台保持连接。</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <location filename="../../src/MainWindow.ui" line="26"/>
-        <source>InputLeap</source>
-        <translation>InputLeap</translation>
+        <source>BlueBridge</source>
+        <translation>BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.ui" line="39"/>
@@ -483,8 +483,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="../../src/MainWindow.ui" line="303"/>
-        <source>&amp;About InputLeap...</source>
-        <translation>关于InputLeap(&amp;A)…</translation>
+        <source>&amp;About BlueBridge...</source>
+        <translation>关于BlueBridge(&amp;A)…</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.ui" line="311"/>
@@ -584,13 +584,13 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="58"/>
-        <source>InputLeap Configurations (*.sgc)</source>
-        <translation>InputLeap配置文件 (*.sgc)</translation>
+        <source>BlueBridge Configurations (*.sgc)</source>
+        <translation>BlueBridge配置文件 (*.sgc)</translation>
     </message>
     <message>
         <location filename="../../src/MainWindow.cpp" line="65"/>
-        <source>InputLeap Configurations (*.conf)</source>
-        <translation>InputLeap配置文件 (*.conf)</translation>
+        <source>BlueBridge Configurations (*.conf)</source>
+        <translation>BlueBridge配置文件 (*.conf)</translation>
     </message>
 </context>
 <context>
@@ -831,8 +831,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="../../src/ServerConfigDialog.ui" line="60"/>
-        <source>Configure the layout of your InputLeap server configuration.</source>
-        <translation>配置InputLeap服务端的屏幕布局。</translation>
+        <source>Configure the layout of your BlueBridge server configuration.</source>
+        <translation>配置BlueBridge服务端的屏幕布局。</translation>
     </message>
     <message>
         <location filename="../../src/ServerConfigDialog.ui" line="73"/>
@@ -1098,8 +1098,8 @@ Double click on a screen to edit its settings.</source>
     </message>
     <message>
         <location filename="../../src/SettingsDialog.ui" line="93"/>
-        <source>Specify when the InputLeap service should run at an elevated privilege level</source>
-        <translation>设置InputLeap服务何时应该提权运行</translation>
+        <source>Specify when the BlueBridge service should run at an elevated privilege level</source>
+        <translation>设置BlueBridge服务何时应该提权运行</translation>
     </message>
     <message>
         <location filename="../../src/SettingsDialog.ui" line="100"/>
@@ -1123,7 +1123,7 @@ Double click on a screen to edit its settings.</source>
     </message>
     <message>
         <location filename="../../src/SettingsDialog.ui" line="132"/>
-        <source>Start &amp;InputLeap on startup</source>
+        <source>Start &amp;BlueBridge on startup</source>
         <translation>自动启动</translation>
     </message>
     <message>
@@ -1146,8 +1146,8 @@ Double click on a screen to edit its settings.</source>
     <name>SetupWizard</name>
     <message>
         <location filename="../../src/SetupWizard.cpp" line="63"/>
-        <source>Setup InputLeap</source>
-        <translation>设置InputLeap</translation>
+        <source>Setup BlueBridge</source>
+        <translation>设置BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/SetupWizard.cpp" line="73"/>
@@ -1159,8 +1159,8 @@ Double click on a screen to edit its settings.</source>
     <name>SetupWizard</name>
     <message>
         <location filename="../../src/SetupWizard.ui" line="26"/>
-        <source>Setup InputLeap</source>
-        <translation>设置InputLeap</translation>
+        <source>Setup BlueBridge</source>
+        <translation>设置BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/SetupWizard.ui" line="30"/>
@@ -1169,13 +1169,13 @@ Double click on a screen to edit its settings.</source>
     </message>
     <message>
         <location filename="../../src/SetupWizard.ui" line="39"/>
-        <source>Thanks for installing InputLeap!</source>
-        <translation>感谢您安装InputLeap！</translation>
+        <source>Thanks for installing BlueBridge!</source>
+        <translation>感谢您安装BlueBridge！</translation>
     </message>
     <message>
         <location filename="../../src/SetupWizard.ui" line="114"/>
-        <source>InputLeap lets you easily share your mouse and keyboard between multiple computers on your desk, and it&apos;s Free and Open Source. Just move your mouse off the edge of one computer&apos;s screen on to another. You can even share all of your clipboards. All you need is a network connection. InputLeap is cross-platform (works on Windows, Mac OS X and Linux).</source>
-        <translation>InputLeap可以在多台计算机间轻松共享你的鼠标和键盘，它还是自由开源软件。将鼠标指针从计算机的屏幕边缘移出到另一个屏幕，并同时共享剪贴板，只要你有一个网络连接。InputLeap是跨平台的（可以运行于Windows，Mac OS X和Linux）。</translation>
+        <source>BlueBridge lets you easily share your mouse and keyboard between multiple computers on your desk, and it&apos;s Free and Open Source. Just move your mouse off the edge of one computer&apos;s screen on to another. You can even share all of your clipboards. All you need is a network connection. BlueBridge is cross-platform (works on Windows, Mac OS X and Linux).</source>
+        <translation>BlueBridge可以在多台计算机间轻松共享你的鼠标和键盘，它还是自由开源软件。将鼠标指针从计算机的屏幕边缘移出到另一个屏幕，并同时共享剪贴板，只要你有一个网络连接。BlueBridge是跨平台的（可以运行于Windows，Mac OS X和Linux）。</translation>
     </message>
     <message>
         <location filename="../../src/SetupWizard.ui" line="146"/>
@@ -1297,8 +1297,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../src/ZeroconfService.cpp" line="164"/>
-        <source>InputLeap</source>
-        <translation>InputLeap</translation>
+        <source>BlueBridge</source>
+        <translation>BlueBridge</translation>
     </message>
     <message>
         <location filename="../../src/ZeroconfService.cpp" line="165"/>

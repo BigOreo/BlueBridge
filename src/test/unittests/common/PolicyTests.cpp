@@ -1,6 +1,6 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
-    Copyright (C) InputLeap contributors
+    BlueBridge -- mouse and keyboard sharing utility
+    Copyright (C) BlueBridge contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -16,12 +16,12 @@
 */
 
 #include "common/Policy.h"
-#include "inputleap/ArgsBase.h"
+#include "bluebridge/ArgsBase.h"
 
 #include <gtest/gtest.h>
 #include <map>
 
-namespace inputleap {
+namespace bluebridge {
 
 namespace {
 
@@ -97,4 +97,4 @@ TEST(PolicyTests, RecognizesBluetoothHosts)
     EXPECT_FALSE(is_bluetooth_host("btserver"));
 }
 
-} // namespace inputleap
+} // namespace bluebridge

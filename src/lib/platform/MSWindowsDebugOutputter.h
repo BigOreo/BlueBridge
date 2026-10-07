@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -20,7 +20,7 @@
 
 #include "base/ILogOutputter.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 //! Write log to debugger
 /*!
@@ -40,4 +40,4 @@ public:
     virtual void flush();
 };
 
-} // namespace inputleap
+} // namespace bluebridge

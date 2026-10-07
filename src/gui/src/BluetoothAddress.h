@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #include <QList>
 #include <QString>
 
-namespace inputleap {
+namespace bluebridge {
 
 // Returns address in the canonical "XX:XX:XX:XX:XX:XX" form, or an empty
 // string if it is not a valid Bluetooth address. Accepts ':', '-' and
@@ -47,4 +47,4 @@ QList<PairedBluetoothDevice> paired_bluetooth_computers();
 // (longer if the device is out of range), so call it off the GUI thread.
 bool is_server_running_on(const QString& address);
 
-} // namespace inputleap
+} // namespace bluebridge

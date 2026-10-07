@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -30,7 +30,7 @@
 #include "base/log_outputters.h"
 #include "base/EventTypes.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 const UINT MSWindowsServerTaskBarReceiver::s_stateToIconID[kMaxState] =
 {
@@ -198,7 +198,7 @@ MSWindowsServerTaskBarReceiver::runMenu(int x, int y)
         m_events->add_event(EventType::SERVER_APP_FORCE_RECONNECT, m_events->getSystemTarget());
         break;
 
-    case ID_INPUTLEAP_RESETSERVER:
+    case ID_BLUEBRIDGE_RESETSERVER:
         m_events->add_event(EventType::SERVER_APP_RESET_SERVER, m_events->getSystemTarget());
         break;
 
@@ -386,11 +386,11 @@ createTaskBarReceiver(const BufferedLogOutputter* logBuffer, IEventQueue* events
 {
     ArchMiscWindows::setIcons(
         (HICON)LoadImage(ArchMiscWindows::instanceWin32(),
-        MAKEINTRESOURCE(IDI_INPUTLEAP),
+        MAKEINTRESOURCE(IDI_BLUEBRIDGE),
         IMAGE_ICON,
         32, 32, LR_SHARED),
         (HICON)LoadImage(ArchMiscWindows::instanceWin32(),
-        MAKEINTRESOURCE(IDI_INPUTLEAP),
+        MAKEINTRESOURCE(IDI_BLUEBRIDGE),
         IMAGE_ICON,
         16, 16, LR_SHARED));
 
@@ -398,4 +398,4 @@ createTaskBarReceiver(const BufferedLogOutputter* logBuffer, IEventQueue* events
         MSWindowsScreen::getWindowInstance(), logBuffer, events);
 }
 
-} // namespace inputleap
+} // namespace bluebridge

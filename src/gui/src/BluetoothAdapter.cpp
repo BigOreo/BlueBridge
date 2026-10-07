@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #include <vector>
 #endif
 
-namespace inputleap {
+namespace bluebridge {
 
 bool is_bluetooth_supported()
 {
@@ -144,4 +144,4 @@ bool is_server_running_on(const QString& address)
 #endif
 }
 
-} // namespace inputleap
+} // namespace bluebridge

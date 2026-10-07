@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "platform/OSXClipboardAnyTextConverter.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 //! Convert to/from locale text encoding
 class OSXClipboardTextConverter : public OSXClipboardAnyTextConverter {
@@ -42,4 +42,4 @@ protected:
                                      CFStringEncoding toEncoding);
 };
 
-} // namespace inputleap
+} // namespace bluebridge

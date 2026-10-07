@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2018 Debauchee Open Source Group
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
@@ -21,10 +21,10 @@
 
 #include "platform/synwinhk.h"
 #include "base/Fwd.h"
-#include "inputleap/Fwd.h"
-#include "inputleap/key_types.h"
-#include "inputleap/mouse_types.h"
-#include "inputleap/option_types.h"
+#include "bluebridge/Fwd.h"
+#include "bluebridge/key_types.h"
+#include "bluebridge/mouse_types.h"
+#include "bluebridge/option_types.h"
 #include <condition_variable>
 #include <functional>
 #include <mutex>
@@ -35,7 +35,7 @@
 
 #include <map>
 
-namespace inputleap {
+namespace bluebridge {
 
 class Thread;
 
@@ -48,9 +48,9 @@ desk at a time, you can't switch desks if the thread has any hooks
 installed or owns any windows, windows cannot exist on multiple
 desks at once, etc.  Basically, they're useless except for running
 the login window or the screensaver, which is what they're used
-for.  InputLeap must deal with them mainly because of the login
+for.  BlueBridge must deal with them mainly because of the login
 window and screensaver but users can create their own desks and
-InputLeap should work on those too.
+BlueBridge should work on those too.
 
 This class encapsulates all the desk nastiness.  Clients of this
 object don't have to know anything about desks.
@@ -297,4 +297,4 @@ private:
     bool m_stopOnDeskSwitch;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

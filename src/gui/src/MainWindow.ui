@@ -486,7 +486,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../res/InputLeap.qrc"/>
+  <include location="../res/BlueBridge.qrc"/>
  </resources>
  <connections>
   <connection>

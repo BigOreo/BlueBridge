@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include "inputleap/Fwd.h"
+#include "bluebridge/Fwd.h"
 #include <string>
 
-namespace inputleap {
+namespace bluebridge {
 
-/** This interface defines the task bar icon event handlers required by InputLeap.
+/** This interface defines the task bar icon event handlers required by BlueBridge.
     Each architecture must implement this interface though each operation can be a no-op.
 */
 class IArchTaskBarReceiver {
@@ -95,4 +95,4 @@ public:
     //@}
 };
 
-} // namespace inputleap
+} // namespace bluebridge

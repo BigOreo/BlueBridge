@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #include <libportal/portal.h>
 #include <libportal/inputcapture.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 class PortalInputCapture {
 public:
@@ -100,6 +100,6 @@ private:
     std::vector<XdpInputCapturePointerBarrier*> barriers_;
 };
 
-} // namespace inputleap
+} // namespace bluebridge
 
 #endif // HAVE_LIBPORTAL_INPUTCAPTURE

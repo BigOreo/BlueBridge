@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#import "inputleap/IPrimaryScreen.h"
+#import "bluebridge/IPrimaryScreen.h"
 #import "platform/OSXScreenSaver.h"
 
 #import "platform/OSXScreenSaverUtil.h"
@@ -27,7 +27,7 @@
 #import <sys/sysctl.h>
 
 
-namespace inputleap {
+namespace bluebridge {
 
 // TODO: upgrade deprecated function usage in these functions.
 void getProcessSerialNumber(const char* name, ProcessSerialNumber& psn);
@@ -195,4 +195,4 @@ testProcessName(const char* name, const ProcessSerialNumber& psn)
 
 #pragma GCC diagnostic error "-Wdeprecated-declarations"
 
-} // namespace inputleap
+} // namespace bluebridge

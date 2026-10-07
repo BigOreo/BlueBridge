@@ -172,7 +172,7 @@ The InputLeap GUI is based on QSynergy by Volker Lanz.
   </layout>
  </widget>
  <resources>
-  <include location="../res/InputLeap.qrc"/>
+  <include location="../res/BlueBridge.qrc"/>
  </resources>
  <connections>
   <connection>

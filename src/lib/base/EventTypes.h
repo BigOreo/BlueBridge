@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-namespace inputleap {
+namespace bluebridge {
 
 enum class EventType : std::uint32_t {
     /** An unknown event type. This type is used as a placeholder for unknown events when
@@ -287,4 +287,4 @@ enum class EventType : std::uint32_t {
     EVENT_COUNT,
 };
 
-} // namespace inputleap
+} // namespace bluebridge

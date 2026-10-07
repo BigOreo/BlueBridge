@@ -1,5 +1,5 @@
-# InputLeap -- mouse and keyboard sharing utility
-# Copyright (C) InputLeap contributors
+# BlueBridge -- mouse and keyboard sharing utility
+# Copyright (C) BlueBridge contributors
 #
 # This package is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $AppDir = Join-Path $env:ProgramFiles "BlueBridge"
-$ServiceName = "InputLeap"
+$ServiceName = "BlueBridge"
 $FirewallRule = "BlueBridge Listener"
 $Work = Join-Path ([IO.Path]::GetTempPath()) ("installer-smoke-" + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $Work | Out-Null
@@ -68,10 +68,10 @@ function New-Profile($path) {
     $ErrorActionPreference = "Continue"
     $ssl = Join-Path $path "SSL"
     New-Item -ItemType Directory -Path (Join-Path $ssl "Fingerprints") -Force | Out-Null
-    $pem = Join-Path $ssl "InputLeap.pem"
+    $pem = Join-Path $ssl "BlueBridge.pem"
     $key = "$pem.key"
     $crt = "$pem.crt"
-    & openssl req -x509 -nodes -newkey rsa:2048 -days 1 -subj "/CN=InputLeap" `
+    & openssl req -x509 -nodes -newkey rsa:2048 -days 1 -subj "/CN=BlueBridge" `
         -keyout $key -out $crt 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) { Fail "openssl could not create a certificate" }
     Set-Content -Path $pem -Value ((Get-Content $key -Raw) + (Get-Content $crt -Raw)) -NoNewline
@@ -87,7 +87,7 @@ function Set-Trusted($dir, $file, $fingerprint) {
 Step "installing $Installer"
 Run-Silent $Installer "install.log"
 
-foreach ($exe in "input-leap.exe", "input-leaps.exe", "input-leapc.exe", "input-leapd.exe") {
+foreach ($exe in "bluebridge.exe", "bluebridge-server.exe", "bluebridge-client.exe", "bluebridge-service.exe") {
     if (-not (Test-Path (Join-Path $AppDir $exe))) { Fail "$exe was not installed" }
 }
 Step "PASS: the program files are installed"
@@ -107,7 +107,7 @@ if (-not (Get-NetFirewallRule -DisplayName $FirewallRule -ErrorAction SilentlyCo
 Step "PASS: the firewall rule is in place"
 
 Step "starting the app"
-$app = Start-Process -FilePath (Join-Path $AppDir "input-leap.exe") -PassThru
+$app = Start-Process -FilePath (Join-Path $AppDir "bluebridge.exe") -PassThru
 Start-Sleep -Seconds 10
 if ($app.HasExited) { Fail "the app exited with code $($app.ExitCode) right after starting" }
 Stop-Process -Id $app.Id -Force
@@ -136,13 +136,13 @@ end
 $serverLog = Join-Path $Work "server.log"
 $clientLog = Join-Path $Work "client.log"
 $address = "127.0.0.1:24890"
-$server = Start-Process -FilePath (Join-Path $AppDir "input-leaps.exe") -PassThru -WindowStyle Hidden `
+$server = Start-Process -FilePath (Join-Path $AppDir "bluebridge-server.exe") -PassThru -WindowStyle Hidden `
     -ArgumentList "-f", "--no-tray", "--name", "server", "--config", "`"$config`"", "--address", $address, `
         "--profile-dir", "`"$serverProfile`"", "--debug", "DEBUG", "--log", "`"$serverLog`""
 Wait-For "the server to listen" {
     (Test-Path $serverLog) -and (Select-String -Path $serverLog -Pattern "started server" -Quiet)
 }
-$client = Start-Process -FilePath (Join-Path $AppDir "input-leapc.exe") -PassThru -WindowStyle Hidden `
+$client = Start-Process -FilePath (Join-Path $AppDir "bluebridge-client.exe") -PassThru -WindowStyle Hidden `
     -ArgumentList "-f", "--no-tray", "--name", "client", "--profile-dir", "`"$clientProfile`"", `
         "--debug", "DEBUG", "--log", "`"$clientLog`"", $address
 Wait-For "the client to connect" {
@@ -161,13 +161,13 @@ Step "PASS: the installed client connected to the installed server over TLS"
 Step "uninstalling"
 Run-Silent (Join-Path $AppDir "unins000.exe") "uninstall.log"
 # the uninstaller copies itself to a temporary folder and returns early
-Wait-For "the uninstaller to finish" { -not (Test-Path (Join-Path $AppDir "input-leap.exe")) } 60
+Wait-For "the uninstaller to finish" { -not (Test-Path (Join-Path $AppDir "bluebridge.exe")) } 60
 
 if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) { Fail "the service was not removed" }
 if (Get-NetFirewallRule -DisplayName $FirewallRule -ErrorAction SilentlyContinue) {
     Fail "the firewall rule was not removed"
 }
-$left = Get-Process -Name "input-leap*" -ErrorAction SilentlyContinue
+$left = Get-Process -Name "bluebridge*" -ErrorAction SilentlyContinue
 if ($left) { Fail "still running after uninstall: $($left.Name -join ', ')" }
 Step "PASS: uninstalling removes the program, the service and the firewall rule"
 

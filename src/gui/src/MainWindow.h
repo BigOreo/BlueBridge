@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "inputleap/AppRole.h"
+#include "bluebridge/AppRole.h"
 #include "AppConnectionState.h"
 
 #include <QMainWindow>
@@ -62,7 +62,7 @@ class QMessageBox;
 class QAbstractButton;
 
 class LogDialog;
-class QInputLeapApplication;
+class QBlueBridgeApplication;
 class SetupWizard;
 class ZeroconfService;
 class QComboBox;
@@ -86,7 +86,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    friend class QInputLeapApplication;
+    friend class QBlueBridgeApplication;
     friend class SetupWizard;
 
     public:
@@ -228,7 +228,7 @@ public slots:
         bool m_fingerprint_expanded = false;
 
         ConnectionMode m_ConnectionMode = ConnectionMode::Network;
-        inputleap::MachinePolicy m_policy;
+        bluebridge::MachinePolicy m_policy;
         QLabel* m_pLabelManaged = nullptr;
         QWidget* m_pConnectionModeRow = nullptr;
         QLabel* m_pLabelConnectionMode = nullptr;

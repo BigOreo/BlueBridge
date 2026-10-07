@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -18,7 +18,7 @@
 
 #include "platform/OSXClipboard.h"
 
-#include "inputleap/Clipboard.h"
+#include "bluebridge/Clipboard.h"
 #include "platform/OSXClipboardUTF16Converter.h"
 #include "platform/OSXClipboardTextConverter.h"
 #include "platform/OSXClipboardBMPConverter.h"
@@ -26,7 +26,7 @@
 #include "base/Log.h"
 #include "arch/XArch.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 OSXClipboard::OSXClipboard() :
     m_time(0),
@@ -251,4 +251,4 @@ OSXClipboard::clearConverters()
     m_converters.clear();
 }
 
-} // namespace inputleap
+} // namespace bluebridge

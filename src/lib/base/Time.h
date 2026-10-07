@@ -1,5 +1,5 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
+    BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@
 
 #pragma once
 
-namespace inputleap {
+namespace bluebridge {
 
 /*!
 Blocks the calling thread for \c timeout seconds.  If
@@ -36,4 +36,4 @@ This should return as high a precision as reasonable.
 */
 double current_time_seconds();
 
-} // namespace inputleap
+} // namespace bluebridge

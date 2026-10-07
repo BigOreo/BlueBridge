@@ -1,6 +1,6 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
-    Copyright (C) InputLeap contributors
+    BlueBridge -- mouse and keyboard sharing utility
+    Copyright (C) BlueBridge contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 #include <QStyleFactory>
 #include <QWidget>
 
-namespace inputleap {
+namespace bluebridge {
 namespace theme {
 
 namespace {
@@ -244,4 +244,4 @@ void set_primary(QWidget* button, bool primary)
 }
 
 } // namespace theme
-} // namespace inputleap
+} // namespace bluebridge

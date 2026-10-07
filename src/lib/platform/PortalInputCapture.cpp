@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 #include <sys/un.h> // for EIS fd hack, remove
 #include <sys/socket.h> // for EIS fd hack, remove
 
-namespace inputleap {
+namespace bluebridge {
 
 enum signals {
     SESSION_CLOSED,
@@ -420,6 +420,6 @@ void PortalInputCapture::glib_thread()
     LOG_DEBUG("Shutting down GLib thread");
 }
 
-} // namespace inputleap
+} // namespace bluebridge
 
 #endif

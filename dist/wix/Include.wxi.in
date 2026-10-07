@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
     <?define Name="BlueBridge" ?>
-    <?define Version="@INPUTLEAP_WIX_VERSION@" ?>
+    <?define Version="@BLUEBRIDGE_WIX_VERSION@" ?>
     <?define QtVersion="@QT_VERSION@" ?>
-    <?define Author="InputLeap contributors" ?>
+    <?define Author="BlueBridge contributors" ?>
     <?define BinPath="@CMAKE_RUNTIME_OUTPUT_DIRECTORY@/$(var.Configuration)" ?>
     <?define ResPath="@CMAKE_CURRENT_SOURCE_DIR@/res" ?>
     <?define ExtPath="@CMAKE_CURRENT_SOURCE_DIR@/ext" ?>
     <?if $(var.Platform) = "x64" ?>
         <?define ProgramFilesFolder="ProgramFiles64Folder" ?>
         <?define PlatformSimpleName="64-bit" ?>
-        <?define UpgradeGuid="E8A4FA54-14B9-4FD1-8E00-7BC46555FDA0" ?>
+        <?define UpgradeGuid="2A275023-6B79-4A93-B5B5-D6D5F031EBD0" ?>
         <?define QtPath="@CMAKE_PREFIX_PATH@" ?>
     <?else ?>
         <?define ProgramFilesFolder="ProgramFilesFolder" ?>
         <?define PlatformSimpleName="32-bit" ?>
-        <?define UpgradeGuid="BE0B9FD8-45E2-4A8E-A0D8-1F774D074A78" ?>
+        <?define UpgradeGuid="F57B6640-3B45-463E-83D5-ED9CC8180E21" ?>
         <?define QtPath="@CMAKE_PREFIX_PATH@" ?>
     <?endif ?>
     <?define QtBinPath="$(var.QtPath)\bin" ?>

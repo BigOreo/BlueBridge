@@ -1,6 +1,6 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
-    Copyright (C) InputLeap contributors
+    BlueBridge -- mouse and keyboard sharing utility
+    Copyright (C) BlueBridge contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 #include <functional>
 #include <string>
 
-namespace inputleap {
+namespace bluebridge {
 
 // A policy value that may not be set. Stands in for std::optional, which the
 // macOS x86_64 build (C++14) does not have.
@@ -47,9 +47,9 @@ private:
 // through Group Policy, an MDM such as Intune, or a configuration file. A
 // value that is not set leaves the user free to choose.
 //
-// Windows: DWORD values under HKEY_LOCAL_MACHINE\SOFTWARE\Policies\InputLeap
+// Windows: DWORD values under HKEY_LOCAL_MACHINE\SOFTWARE\Policies\BlueBridge
 // (writable only by administrators). Other platforms: NAME=VALUE lines in
-// /etc/input-leap/policy.conf.
+// /etc/bluebridge/policy.conf.
 struct MachinePolicy {
     enum ConnectionModes : std::uint32_t {
         kNetwork = 1,
@@ -80,4 +80,4 @@ MachinePolicy parse_machine_policy(
 // Reads the policy that applies to this computer.
 MachinePolicy read_machine_policy();
 
-} // namespace inputleap
+} // namespace bluebridge

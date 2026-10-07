@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include "inputleap/clipboard_types.h"
-#include "inputleap/IClipboard.h"
+#include "bluebridge/clipboard_types.h"
+#include "bluebridge/IClipboard.h"
 #include "XWindowsImpl.h"
 
 #include <X11/Xlib.h>
@@ -28,7 +28,7 @@
 #include <list>
 #include <vector>
 
-namespace inputleap {
+namespace bluebridge {
 
 class IXWindowsClipboardConverter;
 
@@ -379,4 +379,4 @@ public:
     //@}
 };
 
-} // namespace inputleap
+} // namespace bluebridge

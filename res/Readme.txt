@@ -1,9 +1,9 @@
-Thank you for choosing InputLeap!
-https://github.com/input-leap/input-leap/
+Thank you for choosing BlueBridge!
+https://github.com/BigOreo/BlueBridge/
 
-InputLeap allows you to share your keyboard and mouse between computers over a network.
+BlueBridge allows you to share your keyboard and mouse between computers over a network.
 
 Have fun!
 
 Thanks,
-The InputLeap Team
+The BlueBridge Team

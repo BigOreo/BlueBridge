@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,9 +20,9 @@
 
 #include "platform/IMSWindowsClipboardFacade.h"
 
-#include "inputleap/IClipboard.h"
+#include "bluebridge/IClipboard.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 class MSWindowsClipboardFacade : public IMSWindowsClipboardFacade
 {
@@ -30,4 +30,4 @@ public:
     virtual void write(HANDLE win32Data, UINT win32Format);
 };
 
-} // namespace inputleap
+} // namespace bluebridge
