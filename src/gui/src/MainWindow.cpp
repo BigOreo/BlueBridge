@@ -219,13 +219,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 #endif
 
     // change default size based on os
-#if defined(Q_OS_MAC)
-    resize(720, 550);
-    setMinimumSize(720, 0);
-#elif defined(Q_OS_LINUX)
-    resize(700, 530);
-    setMinimumSize(700, 0);
-#endif
+    setMinimumSize(860, 560);
 
     m_SuppressAutoConfigWarning = true;
     ui_->m_pCheckBoxAutoConfig->setChecked(appConfig.autoConfig());
@@ -238,6 +232,8 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     ui_->frame_fingerprint_details->hide();
 
     updateSSLFingerprint();
+
+    buildHomeLayout();
 
     connect(ui_->toolbutton_show_fingerprint, &QToolButton::clicked, this, [this](bool checked)
     {
@@ -253,8 +249,8 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
         }
     });
 
-    // resize window to smallest reasonable size
-    resize(0, 0);
+    // room for the sidebar and two cards side by side
+    resize(1000, 720);
 }
 
 MainWindow::~MainWindow()
@@ -524,6 +520,7 @@ void MainWindow::updateFromLogLine(const QString &line)
     // TODO: this code makes Andrew cry
     checkConnected(line);
     checkFingerprint(line);
+    trackConnectedClients(line);
 }
 
 void MainWindow::checkConnected(const QString& line)
@@ -1045,7 +1042,11 @@ void MainWindow::set_connection_state(AppConnectionState state)
     set_icon(state);
 
     connection_state_ = state;
+    if (state == AppConnectionState::DISCONNECTED) {
+        m_ConnectedClients.clear();
+    }
     updateStartButton();
+    updateHome();
 }
 
 void MainWindow::updateStartButton()
@@ -1154,9 +1155,7 @@ void MainWindow::changeEvent(QEvent* event)
 
 bool MainWindow::event(QEvent* event)
 {
-    if (event->type() == QEvent::LayoutRequest) {
-        setFixedSize(sizeHint());
-    }
+    // the window is freely resizable; the home screen scrolls when small
     return QMainWindow::event(event);
 }
 

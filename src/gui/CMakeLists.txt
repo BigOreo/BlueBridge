@@ -42,6 +42,7 @@ set(GUI_SOURCE_FILES
     src/LogWindow.cpp
     src/main.cpp
     src/MainWindow.cpp
+    src/MainWindowHome.cpp
     src/NewScreenWidget.cpp
     src/QInputLeapApplication.cpp
     src/QUtility.cpp
