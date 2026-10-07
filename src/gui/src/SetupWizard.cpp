@@ -20,8 +20,10 @@
 #include "MainWindow.h"
 #include "QInputLeapApplication.h"
 #include "QUtility.h"
+#include "Theme.h"
 
 #include <QMessageBox>
+#include <QPixmap>
 
 SetupWizard::SetupWizard(MainWindow& mainWindow, bool startMain) :
     ui_{std::make_unique<Ui::SetupWizard>()},
@@ -48,6 +50,20 @@ SetupWizard::SetupWizard(MainWindow& mainWindow, bool startMain) :
 
 #endif
 
+    // the same look on every platform, with the app icon in the header
+    setWizardStyle(QWizard::ModernStyle);
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/res/icons/256x256/input-leap.png")
+                                       .scaled(56, 56, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    QFont choiceFont = ui_->m_pServerRadioButton->font();
+    choiceFont.setWeight(QFont::DemiBold);
+    ui_->m_pServerRadioButton->setFont(choiceFont);
+    ui_->m_pClientRadioButton->setFont(choiceFont);
+    const QString secondary = QStringLiteral("color: %1;").arg(inputleap::theme::kSlate);
+    ui_->m_pLabelServerDescription->setStyleSheet(secondary);
+    ui_->m_pLabelClientDescription->setStyleSheet(secondary);
+    ui_->m_pLabelWelcomeNote->setStyleSheet(secondary);
+
     connect(ui_->m_pServerRadioButton, &QRadioButton::toggled, &m_MainWindow, &MainWindow::setServerMode);
     connect(ui_->m_pClientRadioButton, &QRadioButton::toggled, this, [=] (bool clientMode) {
         m_MainWindow.setServerMode(!clientMode);
@@ -72,13 +88,44 @@ bool SetupWizard::validateCurrentPage()
 
         if (!result)
         {
-            message.setText(tr("Please select an option."));
+            message.setText(tr("Choose whose keyboard and mouse this computer will use."));
             message.exec();
             return false;
         }
     }
 
     return true;
+}
+
+void SetupWizard::initializePage(int id)
+{
+    QWizard::initializePage(id);
+    if (page(id) != ui_->m_pDonePage) {
+        return;
+    }
+
+    QString steps;
+    const bool server = ui_->m_pServerRadioButton->isChecked();
+    ui_->m_pDonePage->setSubTitle(server ? tr("One thing left, on your other computer.")
+                                         : tr("Two quick checks before you connect."));
+    if (server) {
+        steps = tr("<ol style=\"margin-left: 0px; -qt-list-indent: 1;\">"
+                   "<li style=\"margin-bottom: 8px;\">Install InputLeap on the other computer and choose "
+                   "<span style=\"font-weight: 600;\">Another computer's</span>.</li>"
+                   "<li style=\"margin-bottom: 8px;\">Connecting over Bluetooth? Pair the two computers first in "
+                   "your Bluetooth settings.</li>"
+                   "<li style=\"margin-bottom: 8px;\">Back here, click <span style=\"font-weight: 600;\">Configure Server</span> and place the other "
+                   "computer where it sits on your desk.</li></ol>");
+    } else {
+        steps = tr("<ol style=\"margin-left: 0px; -qt-list-indent: 1;\">"
+                   "<li style=\"margin-bottom: 8px;\">Make sure InputLeap is running on your main computer, with "
+                   "<span style=\"font-weight: 600;\">This computer's</span> chosen.</li>"
+                   "<li style=\"margin-bottom: 8px;\">Connecting over Bluetooth? Pair the two computers first in "
+                   "your Bluetooth settings.</li>"
+                   "<li style=\"margin-bottom: 8px;\">In the next window, pick your main computer and click "
+                   "<span style=\"font-weight: 600;\">Start</span>.</li></ol>");
+    }
+    ui_->m_pLabelNextSteps->setText(steps);
 }
 
 void SetupWizard::changeEvent(QEvent* event)
@@ -107,6 +154,7 @@ void SetupWizard::accept()
 
     appConfig.setLanguage(ui_->m_pComboLanguage->itemData(ui_->m_pComboLanguage->currentIndex()).toString());
 
+    appConfig.setAutoStart(ui_->m_pCheckBoxAutoStart->isChecked());
     appConfig.setWizardHasRun();
     appConfig.saveSettings();
 

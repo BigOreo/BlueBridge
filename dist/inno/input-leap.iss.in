@@ -28,6 +28,7 @@ OutputDir=@CMAKE_INSTALL_PREFIX@/../installer-inno/bin
 OutputBaseFilename=InputLeapSetup-{#MyAppTextVersion}
 SetupIconFile=@CMAKE_CURRENT_SOURCE_DIR@/res/input-leap.ico
 WizardStyle=modern
+DisableWelcomePage=no
 WizardImageFile=@CMAKE_CURRENT_SOURCE_DIR@/res/inno/wizard-large-100.bmp,@CMAKE_CURRENT_SOURCE_DIR@/res/inno/wizard-large-150.bmp,@CMAKE_CURRENT_SOURCE_DIR@/res/inno/wizard-large-200.bmp
 WizardSmallImageFile=@CMAKE_CURRENT_SOURCE_DIR@/res/inno/wizard-small-100.bmp,@CMAKE_CURRENT_SOURCE_DIR@/res/inno/wizard-small-150.bmp,@CMAKE_CURRENT_SOURCE_DIR@/res/inno/wizard-small-200.bmp
 VersionInfoProductTextVersion={#MyAppTextVersion}
@@ -58,10 +59,10 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 ; there's no "check if exists" or "insert if not exists" for netsh's firewall commands
 ; to avoid duplicate entries remove the existing rule (fails if it doesn't exist) before adding
 Filename: {sys}\netsh.exe; Parameters: "advfirewall firewall delete rule name=""{#MyAppListenerDesc}"""; Flags: runhidden
-Filename: {sys}\netsh.exe; Parameters: "advfirewall firewall add rule name=""{#MyAppListenerDesc}"" protocol=TCP dir=in localport=24800 action=allow"; Flags: runhidden
+Filename: {sys}\netsh.exe; Parameters: "advfirewall firewall add rule name=""{#MyAppListenerDesc}"" protocol=TCP dir=in localport=24800 action=allow"; StatusMsg: "Letting your other computers reach this one on your network..."; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "create {#MyAppServiceName} start= auto binPath= ""\""{app}\{#MyAppServiceExe}\"""""; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "description {#MyAppServiceName} ""{#MyAppServiceDesc}"""; Flags: runhidden
-Filename: {sys}\sc.exe; Parameters: "start {#MyAppServiceName}"; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "start {#MyAppServiceName}"; StatusMsg: "Starting the background helper..."; Flags: runhidden
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
@@ -74,6 +75,13 @@ Filename: {sys}\net.exe; Parameters: "stop {#MyAppServiceName}"; Flags: runhidde
 Filename: {sys}\taskkill; Parameters: "/im {#MyAppServerExe} /im {#MyAppClientExe} /f"; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "delete {#MyAppServiceName}"; Flags: runhidden
 Filename: {sys}\netsh.exe; Parameters: "advfirewall firewall delete rule name=""{#MyAppListenerDesc}"""; Flags: runhidden
+
+[Messages]
+WelcomeLabel1=Set up [name]
+WelcomeLabel2=Use one keyboard and mouse across your computers, over your network or straight over Bluetooth.%n%nTakes about a minute. No restart needed.
+FinishedHeadingLabel=This computer is ready
+FinishedLabel=When [name] opens, choose whose keyboard and mouse this computer will use. Then install it on your other computer too.
+FinishedLabelNoIcons=When [name] opens, choose whose keyboard and mouse this computer will use. Then install it on your other computer too.
 
 [CustomMessages]
 DependenciesDir="redist"
