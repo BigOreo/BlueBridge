@@ -96,6 +96,9 @@ def main():
 
     # Qt resources
     save_png(app_icon(256), "src", "gui", "res", "icons", "256x256", "input-leap.png")
+    # window icons: title bars and the taskbar pick the closest size
+    for size in (16, 24, 32, 48, 64, 128):
+        save_png(app_icon(size), "src", "gui", "res", "icons", "app", f"input-leap-{size}.png")
     save_png(app_icon(180), "src", "gui", "res", "image", "about.png")
     states = {
         "connected": dict(tile=BLUE, dot=AMBER),

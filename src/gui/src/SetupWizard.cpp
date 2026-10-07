@@ -78,7 +78,7 @@ SetupWizard::~SetupWizard() = default;
 bool SetupWizard::validateCurrentPage()
 {
     QMessageBox message;
-    message.setWindowTitle(tr("Setup InputLeap"));
+    message.setWindowTitle(tr("Set up BlueBridge"));
     message.setIcon(QMessageBox::Information);
 
     if (currentPage() == ui_->m_pNodePage)
@@ -110,7 +110,7 @@ void SetupWizard::initializePage(int id)
                                          : tr("Two quick checks before you connect."));
     if (server) {
         steps = tr("<ol style=\"margin-left: 0px; -qt-list-indent: 1;\">"
-                   "<li style=\"margin-bottom: 8px;\">Install InputLeap on the other computer and choose "
+                   "<li style=\"margin-bottom: 8px;\">Install BlueBridge on the other computer and choose "
                    "<span style=\"font-weight: 600;\">Another computer's</span>.</li>"
                    "<li style=\"margin-bottom: 8px;\">Connecting over Bluetooth? Pair the two computers first in "
                    "your Bluetooth settings.</li>"
@@ -118,7 +118,7 @@ void SetupWizard::initializePage(int id)
                    "computer where it sits on your desk.</li></ol>");
     } else {
         steps = tr("<ol style=\"margin-left: 0px; -qt-list-indent: 1;\">"
-                   "<li style=\"margin-bottom: 8px;\">Make sure InputLeap is running on your main computer, with "
+                   "<li style=\"margin-bottom: 8px;\">Make sure BlueBridge is running on your main computer, with "
                    "<span style=\"font-weight: 600;\">This computer's</span> chosen.</li>"
                    "<li style=\"margin-bottom: 8px;\">Connecting over Bluetooth? Pair the two computers first in "
                    "your Bluetooth settings.</li>"

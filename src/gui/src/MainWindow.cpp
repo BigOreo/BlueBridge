@@ -76,13 +76,13 @@ namespace {
 static const QString allFilesFilter(QObject::tr("All files (*.*)"));
 #if defined(Q_OS_WIN)
 static const char APP_CONFIG_NAME[] = "input-leap.sgc";
-static const QString APP_CONFIG_FILTER(QObject::tr("InputLeap Configurations (*.sgc)"));
+static const QString APP_CONFIG_FILTER(QObject::tr("BlueBridge Configurations (*.sgc)"));
 // Bonjour used to be downloaded from binaries.symless.com, which no longer
 // serves it. Point users at Apple's official installer instead.
 static const char bonjourDownloadUrl[] = "https://support.apple.com/kb/DL999";
 #else
 static const char APP_CONFIG_NAME[] = "input-leap.conf";
-static const QString APP_CONFIG_FILTER(QObject::tr("InputLeap Configurations (*.conf)"));
+static const QString APP_CONFIG_FILTER(QObject::tr("BlueBridge Configurations (*.conf)"));
 #endif
 static const QString APP_CONFIG_OPEN_FILTER(APP_CONFIG_FILTER + ";;" + allFilesFilter);
 static const QString APP_CONFIG_SAVE_FILTER(APP_CONFIG_FILTER);
@@ -323,7 +323,7 @@ void MainWindow::createTrayIcon()
 
     m_pTrayIcon = new QSystemTrayIcon(this);
     m_pTrayIcon->setContextMenu(m_pTrayIconMenu);
-    m_pTrayIcon->setToolTip("InputLeap");
+    m_pTrayIcon->setToolTip("BlueBridge");
 
     connect(m_pTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayActivated);
 
@@ -335,7 +335,7 @@ void MainWindow::createTrayIcon()
 void MainWindow::retranslateMenuBar()
 {
 #ifndef Q_OS_DARWIN
-    main_menu_->setTitle(tr("&InputLeap"));
+    main_menu_->setTitle(tr("&BlueBridge"));
     m_pMenuHelp->setTitle(tr("&Help"));
 #else
     m_pMenuHelp->setTitle(tr("&File"));
@@ -537,9 +537,9 @@ void MainWindow::checkConnected(const QString& line)
 
         if (!appConfig().startedBefore() && isVisible()) {
                 QMessageBox::information(
-                    this, "InputLeap",
-                    tr("InputLeap is now connected. You can close the "
-                    "config window and InputLeap will remain connected in "
+                    this, "BlueBridge",
+                    tr("BlueBridge is now connected. You can close the "
+                    "config window and BlueBridge will remain connected in "
                     "the background."));
 
             appConfig().setStartedBefore(true);
@@ -755,8 +755,8 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
     if (!QFile::exists(app))
     {
         show();
-        QMessageBox::warning(this, tr("InputLeap client not found"),
-                             tr("The executable for the InputLeap client does not exist."));
+        QMessageBox::warning(this, tr("BlueBridge client not found"),
+                             tr("The executable for the BlueBridge client does not exist."));
         return false;
     }
 
@@ -799,7 +799,7 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
         show();
         if (!m_SuppressEmptyServerWarning) {
             QMessageBox::warning(this, tr("Hostname is empty"),
-                             tr("Please fill in a hostname for the InputLeap client to connect to."));
+                             tr("Please fill in a hostname for the BlueBridge client to connect to."));
         }
         return false;
     }
@@ -820,7 +820,7 @@ QString MainWindow::configFilename()
         if (!m_pTempConfigFile->open())
         {
             QMessageBox::critical(this, tr("Cannot write configuration file"),
-                                  tr("The temporary configuration file required to start InputLeap can not be written."));
+                                  tr("The temporary configuration file required to start BlueBridge can not be written."));
             return "";
         }
 
@@ -834,7 +834,7 @@ QString MainWindow::configFilename()
         if (!QFile::exists(ui_->m_pLineEditConfigFile->text()))
         {
             if (QMessageBox::warning(this, tr("Configuration filename invalid"),
-                tr("You have not filled in a valid configuration file for the InputLeap server. "
+                tr("You have not filled in a valid configuration file for the BlueBridge server. "
                         "Do you want to browse for the configuration file now?"), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes
                     || !on_m_pButtonBrowseConfigFile_clicked())
                 return "";
@@ -879,8 +879,8 @@ bool MainWindow::serverArgs(QStringList& args, QString& app)
 
     if (!QFile::exists(app))
     {
-        QMessageBox::warning(this, tr("InputLeap server not found"),
-                             tr("The executable for the InputLeap server does not exist."));
+        QMessageBox::warning(this, tr("BlueBridge server not found"),
+                             tr("The executable for the BlueBridge server does not exist."));
         return false;
     }
 
@@ -1024,17 +1024,17 @@ void MainWindow::set_connection_state(AppConnectionState state)
             ui_->m_pLabelPadlock->hide();
         }
 
-        setStatus(tr("InputLeap is running."));
+        setStatus(tr("BlueBridge is running."));
 
         break;
     }
     case AppConnectionState::CONNECTING:
         ui_->m_pLabelPadlock->hide();
-        setStatus(tr("InputLeap is starting."));
+        setStatus(tr("BlueBridge is starting."));
         break;
     case AppConnectionState::DISCONNECTED:
         ui_->m_pLabelPadlock->hide();
-        setStatus(tr("InputLeap is not running."));
+        setStatus(tr("BlueBridge is not running."));
         break;
     case AppConnectionState::TRANSFERRING:
         break;
@@ -1260,7 +1260,7 @@ void MainWindow::on_m_pGroupServer_toggled(bool on)
 
 bool MainWindow::on_m_pButtonBrowseConfigFile_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Browse for a InputLeap config file"), QString(), APP_CONFIG_OPEN_FILTER);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Browse for a BlueBridge config file"), QString(), APP_CONFIG_OPEN_FILTER);
 
     if (!fileName.isEmpty())
     {
@@ -1399,13 +1399,13 @@ void MainWindow::showBonjourMissingMessage()
 {
 #if defined(Q_OS_WIN)
     int r = QMessageBox::information(
-        this, tr("InputLeap"),
+        this, tr("BlueBridge"),
         tr("Auto config requires the Bonjour service, which is not running "
            "on this computer.\n\n"
            "Auto config is optional: you can instead type the server's IP "
            "address or hostname on the client.\n\n"
            "To use auto config, install \"Bonjour Print Services for "
-           "Windows\" from Apple, then restart InputLeap. "
+           "Windows\" from Apple, then restart BlueBridge. "
            "Open the download page now?"),
         QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 

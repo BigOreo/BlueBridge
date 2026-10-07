@@ -72,8 +72,8 @@ int main(int argc, char* argv[])
         // We're running on X11, all good.
         // Continue running.
     } else if (platformType == "wayland") {
-        QMessageBox::information(nullptr, "Input Leap",
-                                 "You are using Wayland. Input Leap supports Wayland via `libei` "
+        QMessageBox::information(nullptr, "BlueBridge",
+                                 "You are using Wayland. BlueBridge supports Wayland via `libei` "
                                  "but not all desktop environment/window managers support our "
                                  "implementation at this time. Therefore, your mileage may vary.");
     }
@@ -90,6 +90,13 @@ int main(int argc, char* argv[])
     QInputLeapApplication app(argc, argv);
     inputleap::theme::apply(app);
 
+    // every window, the setup wizard and dialogs included, shows the app icon
+    QIcon app_icon(QStringLiteral(":/res/icons/256x256/input-leap.png"));
+    for (int size : {16, 24, 32, 48, 64, 128}) {
+        app_icon.addFile(QStringLiteral(":/res/icons/app/input-leap-%1.png").arg(size), QSize(size, size));
+    }
+    app.setWindowIcon(app_icon);
+
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     app.setDesktopFileName(QStringLiteral("io.github.input_leap.input-leap"));
 #endif
@@ -102,8 +109,8 @@ int main(int argc, char* argv[])
         // especially if an identically named application already exists in
         // /Applications). Thus we require InputLeap to reside in the /Applications
         // folder
-        QMessageBox::information(nullptr, "InputLeap",
-                                 "Please drag InputLeap to the Applications folder, "
+        QMessageBox::information(nullptr, "BlueBridge",
+                                 "Please drag BlueBridge to the Applications folder, "
                                  "and open it from there.");
 		return 1;
 	}
@@ -203,10 +210,10 @@ bool checkMacAssistiveDevices()
 	bool result = AXAPIEnabled();
 	if (!result) {
 		QMessageBox::information(
-            nullptr, "InputLeap",
+            nullptr, "BlueBridge",
 			"Please enable access to assistive devices "
 			"System Preferences -> Security & Privacy -> "
-            "Privacy -> Accessibility, then re-open InputLeap.");
+            "Privacy -> Accessibility, then re-open BlueBridge.");
 	}
 	return result;
 

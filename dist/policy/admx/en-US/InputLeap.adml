@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <policyDefinitionResources xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
-  <displayName>InputLeap</displayName>
-  <description>Policies for InputLeap keyboard and mouse sharing.</description>
+  <displayName>BlueBridge</displayName>
+  <description>Policies for BlueBridge keyboard and mouse sharing.</description>
   <resources>
     <stringTable>
-      <string id="InputLeap">InputLeap</string>
-      <string id="SUPPORTED_InputLeap">Versions of InputLeap that support policies</string>
+      <string id="InputLeap">BlueBridge</string>
+      <string id="SUPPORTED_InputLeap">Versions of BlueBridge that support policies</string>
 
       <string id="ClipboardSharing">Allow clipboard sharing</string>
       <string id="ClipboardSharing_Explain">Controls whether text and images copied on one computer can be pasted on the other.
@@ -39,7 +39,7 @@ If you disable this policy or do not configure it, both modes are allowed.</stri
       <string id="AllowedConnectionModes_Bluetooth">Bluetooth only</string>
 
       <string id="LockSettings">Prevent changes to settings</string>
-      <string id="LockSettings_Explain">Prevents users from changing InputLeap's settings (screen name, port, network interface, encryption, logging and similar).
+      <string id="LockSettings_Explain">Prevents users from changing BlueBridge's settings (screen name, port, network interface, encryption, logging and similar).
 
 If you enable this policy, the settings window is read-only.
 

@@ -26,9 +26,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$AppDir = Join-Path $env:ProgramFiles "InputLeap"
+$AppDir = Join-Path $env:ProgramFiles "BlueBridge"
 $ServiceName = "InputLeap"
-$FirewallRule = "InputLeap Listener"
+$FirewallRule = "BlueBridge Listener"
 $Work = Join-Path ([IO.Path]::GetTempPath()) ("installer-smoke-" + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $Work | Out-Null
 
@@ -95,6 +95,9 @@ Step "PASS: the program files are installed"
 Wait-For "the service to run" {
     $service = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
     $service -and $service.Status -eq "Running"
+}
+if ((Get-Service -Name $ServiceName).DisplayName -ne "BlueBridge") {
+    Fail "the service is not shown as BlueBridge"
 }
 Step "PASS: the background service is running"
 

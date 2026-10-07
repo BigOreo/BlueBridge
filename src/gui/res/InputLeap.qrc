@@ -5,6 +5,12 @@
         <file>icons/64x64/video-display.png</file>
         <file>icons/64x64/user-trash.png</file>
         <file>icons/256x256/input-leap.png</file>
+        <file>icons/app/input-leap-16.png</file>
+        <file>icons/app/input-leap-24.png</file>
+        <file>icons/app/input-leap-32.png</file>
+        <file>icons/app/input-leap-48.png</file>
+        <file>icons/app/input-leap-64.png</file>
+        <file>icons/app/input-leap-128.png</file>
         <file>image/about.png</file>
         <file>lang/gui_ar.qm</file>
         <file>lang/gui_bg-BG.qm</file>

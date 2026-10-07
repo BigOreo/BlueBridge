@@ -120,7 +120,7 @@ XWindowsScreen::XWindowsScreen(
 		LOG_DEBUG("screen shape: %d,%d %dx%d %s", m_x, m_y, m_w, m_h, m_xinerama ? "(xinerama)" : "");
 		LOG_DEBUG("window is 0x%08lx", m_window);
         if (detectXwayland())
-            LOG_WARN("Running against Xwayland. InputLeap will not work as expected");
+            LOG_WARN("Running against Xwayland. BlueBridge will not work as expected");
 	}
 	catch (...) {
         if (m_display != nullptr) {
