@@ -15,6 +15,8 @@
     <path id="cableA" d="M72 322C72 404 214 404 290 300C350 214 404 96 476 92C540 88 520 150 512 184"/>
     <!-- and back from the mouse, under and into the middle of the screen -->
     <path id="cableB" d="M512 300C520 384 432 398 372 342C340 312 318 290 300 270"/>
+    <!-- Bluetooth symbol, in front of its Wi-Fi waves -->
+    <path id="rune" d="M278 74L318 110L298 128V46L318 64L278 100"/>
     <path id="arrow" d="M0 0V104L27 79L46 120L63 112L44 72L80 72Z" transform="translate(286 208)"/>
 
     <!-- each device leaves a gap where the cable crosses it -->
@@ -46,12 +48,12 @@
     <path d="M282 329H314L320 352H276Z" fill="url(#g)"/>
     <rect x="246" y="350" width="104" height="16" rx="7" fill="url(#g)"/>
   </g>
-  <g fill="none" stroke="url(#g)" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M232 78Q298 22 364 78" stroke-width="13"/>
-    <path d="M278 84L318 116L298 134V50L318 68L278 100" stroke-width="10"/>
+  <g fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round">
+    <path d="M232 64A78 78 0 0 1 364 64"/>
+    <path d="M252 78A54 54 0 0 1 273 59"/>
+    <path d="M335 66A54 54 0 0 1 344 78"/>
   </g>
-  <circle cx="260" cy="98" r="6" fill="url(#g)"/>
-  <circle cx="336" cy="98" r="6" fill="url(#g)"/>
+  <use href="#rune" fill="none" stroke="url(#g)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
 
   <!-- mouse -->
   <rect x="471" y="186" width="80" height="112" rx="40" fill="url(#g)" fill-opacity="0.28" stroke="url(#g)" stroke-width="12"/>
