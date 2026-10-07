@@ -197,6 +197,10 @@ public slots:
         void buildHomeLayout();
         void updateHome();
         void trackConnectedClients(const QString& line);
+        void showPanel(const QString& title, QWidget* page, QPushButton* nav);
+        void closePanel(QWidget* page);
+        void leavePanel();
+        void showHomePage();
         ConnectionMode connection_mode() const { return m_ConnectionMode; }
         bool server_accepts_bluetooth() const;
 
@@ -255,6 +259,12 @@ public slots:
         QStackedWidget* m_pHomePages = nullptr;
         QPushButton* m_pNavHome = nullptr;
         QPushButton* m_pNavArrange = nullptr;
+        QPushButton* m_pNavSettings = nullptr;
+        QPushButton* m_pNavLog = nullptr;
+        QStackedWidget* m_pMainStack = nullptr;
+        QLabel* m_pPanelTitle = nullptr;
+        QVBoxLayout* m_pPanelLayout = nullptr;
+        QWidget* m_pPanelWidget = nullptr;
         QLabel* m_pSidebarNote = nullptr;
         QPushButton* m_pRoleServer = nullptr;
         QPushButton* m_pRoleClient = nullptr;

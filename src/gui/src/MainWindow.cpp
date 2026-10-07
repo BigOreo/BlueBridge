@@ -1290,11 +1290,15 @@ void MainWindow::on_m_pActionAbout_triggered()
 
 void MainWindow::on_m_pActionSettings_triggered()
 {
-    auto dialog = std::make_unique<SettingsDialog>(this, appConfig());
-    connect(dialog.get(), &SettingsDialog::requestLanguageChange, this, &MainWindow::requestLanguageChange);
-    if (dialog.get()->exec() == QDialog::Accepted)
-        updateSSLFingerprint();
-    disconnect(dialog.get(), &SettingsDialog::requestLanguageChange, this, &MainWindow::requestLanguageChange);
+    auto* dialog = new SettingsDialog(this, appConfig());
+    connect(dialog, &SettingsDialog::requestLanguageChange, this, &MainWindow::requestLanguageChange);
+    connect(dialog, &QDialog::finished, this, [this, dialog](int result) {
+        if (result == QDialog::Accepted) {
+            updateSSLFingerprint();
+        }
+        closePanel(dialog);
+    });
+    showPanel(tr("Settings"), dialog, m_pNavSettings);
 }
 
 void MainWindow::autoAddScreen(const QString name)
@@ -1327,9 +1331,10 @@ void MainWindow::autoAddScreen(const QString name)
 
 void MainWindow::showConfigureServer(const QString& message)
 {
-    ServerConfigDialog dlg(this, serverConfig(), appConfig().screenName());
-    dlg.message(message);
-    dlg.exec();
+    auto* dialog = new ServerConfigDialog(this, serverConfig(), appConfig().screenName());
+    dialog->message(message);
+    connect(dialog, &QDialog::finished, this, [this, dialog](int) { closePanel(dialog); });
+    showPanel(tr("Arrange screens"), dialog, m_pNavArrange);
 }
 
 void MainWindow::on_m_pButtonConfigureServer_clicked()
@@ -1854,5 +1859,5 @@ void MainWindow::updateLocalBluetoothAddress()
 
 void MainWindow::showLogWindow()
 {
-    m_pLogWindow->show();
+    showPanel(tr("Activity log"), m_pLogWindow, m_pNavLog);
 }

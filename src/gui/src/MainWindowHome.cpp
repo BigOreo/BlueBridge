@@ -26,6 +26,9 @@
 #include "Theme.h"
 
 #include <QAbstractSocket>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QEvent>
 #include <QButtonGroup>
 #include <QClipboard>
 #include <QFormLayout>
@@ -47,6 +50,8 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
+
+#include <functional>
 
 namespace {
 
@@ -178,6 +183,26 @@ void move_form_rows(QFormLayout* from, QFormLayout* to)
     }
 }
 
+// Calls back when a watched widget is hidden, e.g. the log's own Hide button.
+class HideWatcher : public QObject
+{
+public:
+    HideWatcher(QObject* parent, std::function<void()> on_hide) :
+        QObject(parent), on_hide_(std::move(on_hide)) {}
+
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override
+    {
+        if (event->type() == QEvent::Hide) {
+            on_hide_();
+        }
+        return QObject::eventFilter(watched, event);
+    }
+
+private:
+    std::function<void()> on_hide_;
+};
+
 } // namespace
 
 void MainWindow::buildHomeLayout()
@@ -225,11 +250,16 @@ void MainWindow::buildHomeLayout()
         return button;
     };
     m_pNavHome = makeNav(tr("Home"), NavIcon::Home);
-    m_pNavHome->setCheckable(true);
-    m_pNavHome->setChecked(true);
     m_pNavArrange = makeNav(tr("Arrange screens"), NavIcon::Arrange);
-    auto* navSettings = makeNav(tr("Settings"), NavIcon::Settings);
-    auto* navLog = makeNav(tr("Activity log"), NavIcon::Log);
+    m_pNavSettings = makeNav(tr("Settings"), NavIcon::Settings);
+    m_pNavLog = makeNav(tr("Activity log"), NavIcon::Log);
+    // the sidebar shows which page is open
+    auto* navGroup = new QButtonGroup(this);
+    for (QPushButton* button : {m_pNavHome, m_pNavArrange, m_pNavSettings, m_pNavLog}) {
+        button->setCheckable(true);
+        navGroup->addButton(button);
+    }
+    m_pNavHome->setChecked(true);
     side->addStretch();
 
     // what the organization manages, or a reassurance about encryption
@@ -250,16 +280,12 @@ void MainWindow::buildHomeLayout()
     }
     side->addWidget(note);
 
-    connect(m_pNavHome, &QPushButton::clicked, this, [this]() {
-        m_pNavHome->setChecked(true);
-        m_pHomeScroll->ensureVisible(0, 0);
-    });
+    connect(m_pNavHome, &QPushButton::clicked, this, [this]() { showHomePage(); });
     connect(m_pNavArrange, &QPushButton::clicked, this, [this]() {
-        m_pNavHome->setChecked(true);
         on_m_pButtonConfigureServer_clicked();
     });
-    connect(navSettings, &QPushButton::clicked, ui_->m_pActionSettings, &QAction::trigger);
-    connect(navLog, &QPushButton::clicked, ui_->m_pActionShowLog, &QAction::trigger);
+    connect(m_pNavSettings, &QPushButton::clicked, ui_->m_pActionSettings, &QAction::trigger);
+    connect(m_pNavLog, &QPushButton::clicked, ui_->m_pActionShowLog, &QAction::trigger);
 
     // ---- main column
     m_pHomeScroll = new QScrollArea(root);
@@ -533,8 +559,38 @@ void MainWindow::buildHomeLayout()
     column->addWidget(status);
     column->addStretch();
 
+    // ---- pages opened from the sidebar take the place of Home
+    m_pMainStack = new QStackedWidget(root);
+    m_pMainStack->addWidget(m_pHomeScroll);
+
+    auto* panelScroll = new QScrollArea(m_pMainStack);
+    panelScroll->setWidgetResizable(true);
+    panelScroll->setFrameShape(QFrame::NoFrame);
+    auto* panel = new QWidget(panelScroll);
+    panel->setObjectName("homeContent");
+    auto* panelColumn = new QVBoxLayout(panel);
+    panelColumn->setContentsMargins(28, 22, 28, 22);
+    panelColumn->setSpacing(16);
+    m_pPanelTitle = make_title(QString(), panel, "pageTitle");
+    panelColumn->addWidget(m_pPanelTitle);
+    auto* panelCard = make_card(panel);
+    m_pPanelLayout = new QVBoxLayout(panelCard);
+    m_pPanelLayout->setContentsMargins(18, 16, 18, 16);
+    panelColumn->addWidget(panelCard, 1);
+    panelScroll->setWidget(panel);
+    m_pMainStack->addWidget(panelScroll);
+
+    // the log's own Hide button leads back to Home
+    m_pLogWindow->installEventFilter(new HideWatcher(this, [this]() {
+        // only its own Hide, not the whole window going to the tray
+        if (m_pPanelWidget == m_pLogWindow && m_pLogWindow->isHidden()) {
+            m_pPanelWidget = nullptr;
+            showHomePage();
+        }
+    }));
+
     rootLayout->addWidget(sidebar);
-    rootLayout->addWidget(m_pHomeScroll, 1);
+    rootLayout->addWidget(m_pMainStack, 1);
     setCentralWidget(root);
 
     updateHome();
@@ -652,4 +708,87 @@ void MainWindow::trackConnectedClients(const QString& line)
         m_ConnectedClients.removeAll(name);
         updateHome();
     }
+}
+
+void MainWindow::showPanel(const QString& title, QWidget* page, QPushButton* nav)
+{
+    if (m_pMainStack == nullptr) {
+        // before the home screen exists, fall back to a separate window
+        page->show();
+        return;
+    }
+
+    if (m_pPanelWidget != page) {
+        leavePanel();
+        page->setParent(m_pPanelLayout->parentWidget());
+        page->setWindowFlags(Qt::Widget);
+        page->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        page->setMinimumSize(0, 0);
+        page->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        m_pPanelLayout->addWidget(page, 1);
+        // as a page, the buttons save or go back rather than close a window
+        if (auto* buttons = page->findChild<QDialogButtonBox*>()) {
+            if (QPushButton* ok = buttons->button(QDialogButtonBox::Ok)) {
+                ok->setText(tr("&Save"));
+                bluebridge::theme::set_primary(ok);
+            }
+        }
+        if (auto* hide = page->findChild<QPushButton*>("m_pButtonHide")) {
+            hide->setText(tr("&Back to Home"));
+        }
+        m_pPanelWidget = page;
+    }
+    m_pPanelTitle->setText(title);
+    page->show();
+    nav->setChecked(true);
+    m_pMainStack->setCurrentIndex(1);
+
+    // a page can be opened from the tray while the window is hidden
+    if (!isVisible() || isMinimized()) {
+        showNormal();
+    }
+    raise();
+    activateWindow();
+}
+
+void MainWindow::closePanel(QWidget* page)
+{
+    if (m_pPanelWidget == page) {
+        m_pPanelWidget = nullptr;
+        showHomePage();
+    }
+    if (page != m_pLogWindow) {
+        page->deleteLater();
+    }
+}
+
+void MainWindow::leavePanel()
+{
+    QWidget* page = m_pPanelWidget;
+    if (page == nullptr) {
+        return;
+    }
+    m_pPanelWidget = nullptr;
+    m_pPanelLayout->removeWidget(page);
+    if (page == m_pLogWindow) {
+        page->hide();
+        return;
+    }
+    // a page left without saving discards its changes, like Cancel
+    page->disconnect(this);
+    if (auto* dialog = qobject_cast<QDialog*>(page)) {
+        dialog->reject();
+    }
+    page->deleteLater();
+}
+
+void MainWindow::showHomePage()
+{
+    leavePanel();
+    if (m_pMainStack == nullptr) {
+        return;
+    }
+    m_pNavHome->setChecked(true);
+    m_pMainStack->setCurrentIndex(0);
+    m_pHomeScroll->ensureVisible(0, 0);
 }
