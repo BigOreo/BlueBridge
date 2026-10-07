@@ -12,7 +12,7 @@
     <!-- and back from the mouse, curving up into the cursor, which is its head -->
     <path id="cableB" d="M512 300C516 370 470 392 430 368C410 356 392.5 319 364.3 285.3"/>
     <!-- Bluetooth symbol, in front of its Wi-Fi waves -->
-    <path id="rune" d="M281 76L315 107L298 124V50L315 67L281 98"/>
+    <path id="rune" d="M283 78L313 105L298 120V54L313 69L283 96"/>
     <path id="arrow" d="M286.0 192.0L311.3 287.5L330.0 258.0L357.4 291.0L371.1 279.5L343.9 247.4L377.0 238.7Z"/>
 
     <!-- the monitor breaks where a cable crosses it -->
@@ -28,7 +28,7 @@
   <path fill="url(#g)" fill-rule="evenodd" d="M34 172H110A16 16 0 0 1 126 188V304A16 16 0 0 1 110 320H34A16 16 0 0 1 18 304V188A16 16 0 0 1 34 172Z
            M35 185H109A4 4 0 0 1 113 189V286A4 4 0 0 1 109 290H35A4 4 0 0 1 31 286V189A4 4 0 0 1 35 185Z
            M66 305A6 6 0 1 0 78 305A6 6 0 1 0 66 305Z"/>
-  <g fill="none" stroke="url(#g)" stroke-width="13" stroke-linecap="round">
+  <g fill="none" stroke="url(#g)" stroke-width="13" stroke-linecap="round" transform="translate(0 -39)">
     <path d="M22 116Q72 70 122 116"/>
     <path d="M44 138Q72 114 100 138"/>
     <path d="M62 158Q72 150 82 158"/>
@@ -42,12 +42,15 @@
     <path d="M283 340H312L318 358H277Z" fill="url(#g)"/>
     <rect x="246" y="356" width="104" height="16" rx="7" fill="url(#g)"/>
   </g>
-  <g fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round">
-    <path d="M232 64A78 78 0 0 1 364 64"/>
-    <path d="M246 91.7A54 54 0 0 1 262 66.1"/>
-    <path d="M334 66.1A54 54 0 0 1 350 91.7"/>
+  <!-- lowered so its top lines up with the tablet's Wi-Fi -->
+  <g transform="translate(0 26)">
+    <g fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round">
+      <path d="M232 64A78 78 0 0 1 364 64"/>
+      <path d="M252.2 77.4A54 54 0 0 1 267.8 61.2"/>
+      <path d="M328.2 61.2A54 54 0 0 1 343.8 77.4"/>
+    </g>
+    <use href="#rune" fill="none" stroke="url(#g)" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <use href="#rune" fill="none" stroke="url(#g)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
 
   <!-- mouse -->
   <rect x="471" y="186" width="80" height="112" rx="40" fill="none" stroke="url(#g)" stroke-width="12"/>
