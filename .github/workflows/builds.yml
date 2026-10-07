@@ -16,9 +16,11 @@ on:
         required: false
         type: boolean
 
-# Set the build type here
+# Set the build type here. Merges to master build release installers so the
+# latest master can be installed and tested; pull requests build Debug and
+# run the tests.
 env:
-  B_BUILD_TYPE: ${{ (inputs.build_release || github.event_name == 'release') && 'Release' || 'Debug' }}
+  B_BUILD_TYPE: ${{ (inputs.build_release || github.event_name == 'release' || github.event_name == 'push') && 'Release' || 'Debug' }}
   DEBIAN_FRONTEND: noninteractive
 
 jobs:
@@ -198,6 +200,14 @@ jobs:
         if: env.B_BUILD_TYPE != 'Release'
         run: |
             ctest --test-dir build --verbose
+
+      # A real server and client on two virtual displays: connect over TLS,
+      # move the mouse across, type, paste, move back, stop the server.
+      - name: Run the two-screen smoke test
+        if: env.B_BUILD_TYPE != 'Release'
+        run: |
+            apt-get install -y openssl python3-xlib xclip xvfb
+            python3 input-leap/src/test/smoke/two_screens.py --bin-dir build/bin
 
       - name: Create Artifacts
         if: env.B_BUILD_TYPE != 'Release'
@@ -476,6 +486,15 @@ jobs:
           name: windows-installer-${{ matrix.name }}
           path: .\build\installer-inno\bin
           if-no-files-found: error
+
+      # Install, check the service, firewall rule and a TLS connection between
+      # the installed server and client, then uninstall and check the cleanup.
+      - name: Test the Installer
+        if: env.B_BUILD_TYPE == 'Release'
+        run: |
+          $setup = Get-ChildItem .\build\installer-inno\bin\*.exe | Select-Object -First 1
+          powershell -ExecutionPolicy Bypass -File .\input-leap\src\test\smoke\windows_installer.ps1 -Installer $setup.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
   flatpak:
     runs-on: ubuntu-latest
