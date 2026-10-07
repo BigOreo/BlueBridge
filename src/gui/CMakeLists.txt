@@ -43,6 +43,7 @@ set(GUI_SOURCE_FILES
     src/main.cpp
     src/MainWindow.cpp
     src/MainWindowHome.cpp
+    src/MainWindowPages.cpp
     src/NewScreenWidget.cpp
     src/QGlideKVMApplication.cpp
     src/QUtility.cpp

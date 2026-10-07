@@ -1055,7 +1055,17 @@ void MainWindow::updateStartButton()
     if (app_role() == AppRole::Server) {
         ui_->m_pButtonToggleStart->setText(running ? tr("&Stop sharing") : tr("&Start sharing"));
     } else {
-        ui_->m_pButtonToggleStart->setText(running ? tr("&Disconnect") : tr("&Connect"));
+        // name the computer it will connect to, once one is chosen
+        const QString target = connectTarget();
+        if (running) {
+            ui_->m_pButtonToggleStart->setText(tr("&Disconnect"));
+        } else if (target.isEmpty()) {
+            ui_->m_pButtonToggleStart->setText(tr("&Connect"));
+        } else {
+            QString escaped = target;
+            escaped.replace(QLatin1Char('&'), QStringLiteral("&&"));
+            ui_->m_pButtonToggleStart->setText(tr("&Connect to %1").arg(escaped));
+        }
     }
 }
 
@@ -1457,6 +1467,7 @@ void MainWindow::on_m_pCheckBoxAutoConfig_toggled(bool checked)
         ui_->m_pComboServerList->clear();
         ui_->m_pComboServerList->hide();
     }
+    updateStartButton();
 }
 
 void MainWindow::windowStateChanged()
@@ -1653,6 +1664,9 @@ void MainWindow::setupConnectionModeUi()
     m_pLabelClientBluetoothHint->setOpenExternalLinks(true);
     ui_->formLayout_3->addRow(m_pLabelClientBluetoothHint);
 
+    connect(ui_->m_pLineEditHostname, &QLineEdit::textChanged, this, [this]() { updateStartButton(); });
+    connect(ui_->m_pComboServerList, &QComboBox::currentTextChanged, this, [this]() { updateStartButton(); });
+    connect(m_pLineEditServerBluetooth, &QLineEdit::textChanged, this, [this]() { updateStartButton(); });
     connect(m_pLineEditServerBluetooth, &QLineEdit::editingFinished, this, [this]() {
         QString normalized = glidekvm::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
         if (!normalized.isEmpty()) {
@@ -1673,6 +1687,7 @@ void MainWindow::setConnectionMode(ConnectionMode mode)
     }
     m_ConnectionMode = mode;
     updateConnectionModeUi();
+    updateStartButton();
     saveSettings();
 
     // the client must be restarted to switch transport
@@ -1736,6 +1751,24 @@ void set_server_item_text(QListWidgetItem* item, const QString& status)
 }
 
 } // namespace
+
+QString MainWindow::connectTarget() const
+{
+    if (m_ConnectionMode == ConnectionMode::Bluetooth) {
+        QListWidgetItem* item = m_pListBluetoothServers ? m_pListBluetoothServers->currentItem()
+                                                        : nullptr;
+        if (item != nullptr && item->data(kAddressRole).toString() != BLUETOOTH_MANUAL_ENTRY) {
+            return item->data(kNameRole).toString();
+        }
+        return m_pLineEditServerBluetooth ? m_pLineEditServerBluetooth->text().trimmed()
+                                          : QString();
+    }
+    // matches clientArgs: a server found on the network wins over the typed address
+    if (ui_->m_pCheckBoxAutoConfig->isChecked() && ui_->m_pComboServerList->count() != 0) {
+        return ui_->m_pComboServerList->currentText();
+    }
+    return ui_->m_pLineEditHostname->text().trimmed();
+}
 
 void MainWindow::refreshPairedBluetoothServers()
 {
@@ -1837,6 +1870,7 @@ void MainWindow::selectBluetoothServer(int index)
     if (manual && bluetooth && isVisible()) {
         m_pLineEditServerBluetooth->setFocus();
     }
+    updateStartButton();
 }
 
 void MainWindow::updateLocalBluetoothAddress()

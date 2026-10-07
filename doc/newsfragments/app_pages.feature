@@ -1,0 +1,1 @@
+New Clipboard & files and Security pages. Home now has switches for the shared clipboard and file dragging, shows which side each connected computer sits on, and the Connect button names the computer it will connect to.

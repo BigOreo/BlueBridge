@@ -34,6 +34,8 @@ class MainWindow;
 class ServerConfig : public BaseConfig
 {
     friend class ServerConfigDialog;
+    // the window's sharing switches change these directly
+    friend class MainWindow;
     friend QTextStream& operator<<(QTextStream& outStream, const ServerConfig& config);
 
     public:

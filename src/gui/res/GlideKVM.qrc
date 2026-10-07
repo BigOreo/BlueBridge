@@ -63,6 +63,10 @@
         <file>icons/128x128/glidekvm-connected-mask.png</file>
         <file>icons/128x128/glidekvm-disconnected-mask.png</file>
         <file>icons/128x128/glidekvm-transfering-mask.png</file>
+        <file>icons/switch/on.png</file>
+        <file>icons/switch/off.png</file>
+        <file>icons/switch/on-disabled.png</file>
+        <file>icons/switch/off-disabled.png</file>
         <file>icons/48x48/computer.png</file>
         <file>icons/48x48/manual.png</file>
         <file>fonts/IBMPlexSans-Regular.ttf</file>

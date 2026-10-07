@@ -107,6 +107,16 @@ def main():
         save_png(render(solid(icon_svg, "#000000"), 128),
                  "src", "gui", "res", "icons", "128x128", f"glidekvm-{name}-mask.png")
 
+    # on/off switches for options (drawn at twice their 40x22 size)
+    os.makedirs(path("src", "gui", "res", "icons", "switch"), exist_ok=True)
+    for name, track, knob_x, opacity in (("on", "#1F5EFF", 59, 1), ("off", "#C9D3E0", 21, 1),
+                                         ("on-disabled", "#1F5EFF", 59, 0.4),
+                                         ("off-disabled", "#C9D3E0", 21, 0.5)):
+        svg = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 44">'
+               f'<g opacity="{opacity}"><rect x="0" y="0" width="80" height="44" rx="22" fill="{track}"/>'
+               f'<circle cx="{knob_x}" cy="22" r="17" fill="#FFFFFF"/></g></svg>')
+        save_png(render(svg, 80, 44), "src", "gui", "res", "icons", "switch", f"{name}.png")
+
     # interface icons (24-unit grid, drawn at 48 px)
     os.makedirs(path("src", "gui", "res", "icons", "48x48"), exist_ok=True)
     ui_icons = {
