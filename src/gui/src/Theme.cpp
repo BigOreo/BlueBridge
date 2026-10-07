@@ -130,6 +130,21 @@ QLineEdit {
 }
 QLineEdit:focus { border-color: #1F5EFF; }
 QLineEdit:disabled { background: #F4F6F9; color: #9AA8BB; }
+QListWidget#serverList { background: transparent; border: 0; outline: 0; }
+QListWidget#serverList::item {
+    background: #FFFFFF;
+    border: 1px solid #C9D3E0;
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin: 3px 0;
+    color: #0F1B2D;
+}
+QListWidget#serverList::item:selected {
+    background: #E8EFFF;
+    border: 2px solid #1F5EFF;
+    color: #0F1B2D;
+}
+QListWidget#serverList::item:hover:!selected { background: #F4F6F9; }
 QToolTip {
     background: #0F1B2D;
     color: #FFFFFF;

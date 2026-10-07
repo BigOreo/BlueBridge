@@ -35,6 +35,8 @@
 #include "net/FingerprintDatabase.h"
 #include "net/SecureUtils.h"
 
+#include <algorithm>
+
 #include <QtCore>
 #include <QtGui>
 #include <QtNetwork>
@@ -53,6 +55,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QListWidget>
 #include <QPainter>
 #include <QPainterPath>
 #include <QToolButton>
@@ -201,6 +204,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     setupConnectionModeUi();
     inputleap::theme::set_primary(ui_->m_pButtonToggleStart);
     loadSettings();
+    updateStartButton();
     initConnections();
 
     ui_->m_pLabelScreenName->setText(getScreenName());
@@ -991,7 +995,6 @@ void MainWindow::set_connection_state(AppConnectionState state)
     {
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
-        ui_->m_pButtonToggleStart->setText(tr("&Stop"));
         inputleap::theme::set_primary(ui_->m_pButtonToggleStart, false);
         ui_->m_pButtonReload->setEnabled(true);
     }
@@ -999,7 +1002,6 @@ void MainWindow::set_connection_state(AppConnectionState state)
     {
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
-        ui_->m_pButtonToggleStart->setText(tr("&Start"));
         inputleap::theme::set_primary(ui_->m_pButtonToggleStart);
         ui_->m_pButtonReload->setEnabled(false);
     }
@@ -1043,6 +1045,17 @@ void MainWindow::set_connection_state(AppConnectionState state)
     set_icon(state);
 
     connection_state_ = state;
+    updateStartButton();
+}
+
+void MainWindow::updateStartButton()
+{
+    const bool running = connection_state_ != AppConnectionState::DISCONNECTED;
+    if (app_role() == AppRole::Server) {
+        ui_->m_pButtonToggleStart->setText(running ? tr("&Stop sharing") : tr("&Start sharing"));
+    } else {
+        ui_->m_pButtonToggleStart->setText(running ? tr("&Disconnect") : tr("&Connect"));
+    }
 }
 
 void MainWindow::setVisible(bool visible)
@@ -1230,6 +1243,7 @@ void MainWindow::updateSSLFingerprint()
 void MainWindow::on_m_pGroupClient_toggled(bool on)
 {
     ui_->m_pGroupServer->setChecked(!on);
+    updateStartButton();
     if (on) {
         updateZeroconfService();
     }
@@ -1238,6 +1252,7 @@ void MainWindow::on_m_pGroupClient_toggled(bool on)
 void MainWindow::on_m_pGroupServer_toggled(bool on)
 {
     ui_->m_pGroupClient->setChecked(!on);
+    updateStartButton();
     if (on) {
         updateZeroconfService();
     }
@@ -1594,33 +1609,41 @@ void MainWindow::setupConnectionModeUi()
             this, &MainWindow::updateLocalBluetoothAddress);
 
     // client: pick the server from the paired computers, or type its address
-    m_pLabelServerBluetoothTitle = new QLabel(tr("Server:"), ui_->m_pGroupClient);
+    m_pLabelServerBluetoothTitle = new QLabel(tr("Your main computer:"), ui_->m_pGroupClient);
     m_pBluetoothServerField = new QWidget(ui_->m_pGroupClient);
-    auto* serverLayout = new QHBoxLayout(m_pBluetoothServerField);
+    auto* serverLayout = new QVBoxLayout(m_pBluetoothServerField);
     serverLayout->setContentsMargins(0, 0, 0, 0);
-    m_pComboBluetoothServer = new QComboBox(m_pBluetoothServerField);
-    m_pComboBluetoothServer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    serverLayout->setSpacing(6);
+    m_pListBluetoothServers = new QListWidget(m_pBluetoothServerField);
+    m_pListBluetoothServers->setObjectName(QStringLiteral("serverList"));
+    m_pListBluetoothServers->setIconSize(QSize(22, 22));
+    m_pListBluetoothServers->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_pListBluetoothServers->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_pListBluetoothServers->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pListBluetoothServers->setAccessibleName(tr("Paired computers"));
     m_pButtonRefreshBluetoothServers = new QToolButton(m_pBluetoothServerField);
-    m_pButtonRefreshBluetoothServers->setText(tr("Refresh"));
+    m_pButtonRefreshBluetoothServers->setText(tr("Refresh list"));
     m_pButtonRefreshBluetoothServers->setToolTip(tr("Look for paired computers again"));
-    serverLayout->addWidget(m_pComboBluetoothServer);
-    serverLayout->addWidget(m_pButtonRefreshBluetoothServers);
-    m_pLabelServerBluetoothTitle->setBuddy(m_pComboBluetoothServer);
-    ui_->formLayout_3->addRow(m_pLabelServerBluetoothTitle, m_pBluetoothServerField);
+    serverLayout->addWidget(m_pListBluetoothServers);
+    serverLayout->addWidget(m_pButtonRefreshBluetoothServers, 0, Qt::AlignRight);
+    m_pLabelServerBluetoothTitle->setBuddy(m_pListBluetoothServers);
+    ui_->formLayout_3->addRow(m_pLabelServerBluetoothTitle);
+    ui_->formLayout_3->addRow(m_pBluetoothServerField);
 
-    m_pLabelServerBluetoothManualTitle = new QLabel(tr("Server's address:"), ui_->m_pGroupClient);
+    m_pLabelServerBluetoothManualTitle = new QLabel(tr("Its Bluetooth address:"), ui_->m_pGroupClient);
     m_pLineEditServerBluetooth = new QLineEdit(ui_->m_pGroupClient);
     m_pLineEditServerBluetooth->setPlaceholderText(tr("e.g. 00:28:F8:8F:56:C3"));
     m_pLabelServerBluetoothManualTitle->setBuddy(m_pLineEditServerBluetooth);
     ui_->formLayout_3->addRow(m_pLabelServerBluetoothManualTitle, m_pLineEditServerBluetooth);
 
-    connect(m_pComboBluetoothServer, QOverload<int>::of(&QComboBox::activated),
+    connect(m_pListBluetoothServers, &QListWidget::currentRowChanged,
             this, &MainWindow::selectBluetoothServer);
     connect(m_pButtonRefreshBluetoothServers, &QToolButton::clicked,
             this, &MainWindow::refreshPairedBluetoothServers);
 
     m_pLabelClientBluetoothHint = new QLabel(
-        tr("Choose the computer that shares its keyboard and mouse.") + " " + pairingHint,
+        tr("Not listed? Pair it in <a href=\"ms-settings:bluetooth\">Bluetooth settings</a>, "
+           "then refresh the list."),
         ui_->m_pGroupClient);
     m_pLabelClientBluetoothHint->setWordWrap(true);
     m_pLabelClientBluetoothHint->setOpenExternalLinks(true);
@@ -1695,31 +1718,63 @@ namespace {
 const char BLUETOOTH_MANUAL_ENTRY[] = "manual";
 }
 
+namespace {
+
+const int kAddressRole = Qt::UserRole;
+const int kNameRole = Qt::UserRole + 1;
+
+void set_server_item_text(QListWidgetItem* item, const QString& status)
+{
+    const QString name = item->data(kNameRole).toString();
+    const QString address = item->data(kAddressRole).toString();
+    item->setText(status.isEmpty() ? QStringLiteral("%1\n%2").arg(name, address)
+                                   : QStringLiteral("%1\n%2  ·  %3").arg(name, address, status));
+}
+
+} // namespace
+
 void MainWindow::refreshPairedBluetoothServers()
 {
     const QString current =
             inputleap::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
     const auto devices = inputleap::paired_bluetooth_computers();
 
-    m_pComboBluetoothServer->clear();
+    const QSignalBlocker blocker(m_pListBluetoothServers);
+    m_pListBluetoothServers->clear();
+    const QIcon computerIcon(QStringLiteral(":/res/icons/48x48/computer.png"));
     for (const auto& device : devices) {
-        m_pComboBluetoothServer->addItem(device.name, device.address);
-        m_pComboBluetoothServer->setItemData(m_pComboBluetoothServer->count() - 1,
-                                             device.address, Qt::ToolTipRole);
+        auto* item = new QListWidgetItem(computerIcon, QString(), m_pListBluetoothServers);
+        item->setData(kNameRole, device.name);
+        item->setData(kAddressRole, device.address);
+        set_server_item_text(item, tr("checking…"));
     }
-    m_pComboBluetoothServer->addItem(tr("Enter address manually..."),
-                                     QString(BLUETOOTH_MANUAL_ENTRY));
+    auto* manual = new QListWidgetItem(QIcon(QStringLiteral(":/res/icons/48x48/manual.png")),
+                                       tr("Enter an address"), m_pListBluetoothServers);
+    manual->setData(kAddressRole, QString(BLUETOOTH_MANUAL_ENTRY));
+
+    // show every row without an inner scroll bar, up to five computers
+    const int rows = std::min(m_pListBluetoothServers->count(), 6);
+    int height = 2 * m_pListBluetoothServers->frameWidth();
+    for (int i = 0; i < rows; ++i) {
+        height += m_pListBluetoothServers->sizeHintForRow(i);
+    }
+    m_pListBluetoothServers->setFixedHeight(height + rows * 6);
 
     // keep the saved server selected; an address that is not paired (or no
     // paired computers at all) falls back to typing it in
-    int index = current.isEmpty() ? -1 : m_pComboBluetoothServer->findData(current);
+    int index = -1;
+    for (int i = 0; i < m_pListBluetoothServers->count(); ++i) {
+        if (!current.isEmpty() && m_pListBluetoothServers->item(i)->data(kAddressRole) == current) {
+            index = i;
+        }
+    }
     if (index < 0 && (devices.isEmpty() || !current.isEmpty())) {
-        index = m_pComboBluetoothServer->count() - 1;
+        index = m_pListBluetoothServers->count() - 1;
     }
     if (index < 0) {
         index = 0;
     }
-    m_pComboBluetoothServer->setCurrentIndex(index);
+    m_pListBluetoothServers->setCurrentRow(index);
     selectBluetoothServer(index);
 
     if (devices.isEmpty()) {
@@ -1753,24 +1808,24 @@ void MainWindow::applyBluetoothServerStatus(int generation, const QMap<QString, 
     if (generation != m_BluetoothServerScan) {
         return; // the list was refreshed since this check started
     }
-    for (int i = 0; i < m_pComboBluetoothServer->count(); ++i) {
-        const QString address = m_pComboBluetoothServer->itemData(i).toString();
+    for (int i = 0; i < m_pListBluetoothServers->count(); ++i) {
+        QListWidgetItem* item = m_pListBluetoothServers->item(i);
+        const QString address = item->data(kAddressRole).toString();
         if (!running.contains(address)) {
             continue;
         }
-        QString name = m_pComboBluetoothServer->itemText(i);
-        name = running[address] ? tr("%1 (ready)").arg(name) : tr("%1 (not running)").arg(name);
-        m_pComboBluetoothServer->setItemText(i, name);
+        set_server_item_text(item, running[address] ? tr("ready") : tr("not running"));
     }
 }
 
 void MainWindow::selectBluetoothServer(int index)
 {
-    const QString data = m_pComboBluetoothServer->itemData(index).toString();
+    QListWidgetItem* item = m_pListBluetoothServers->item(index);
+    const QString data = item != nullptr ? item->data(kAddressRole).toString() : QString();
     const bool manual = data == BLUETOOTH_MANUAL_ENTRY;
     const bool bluetooth = m_ConnectionMode == ConnectionMode::Bluetooth;
 
-    if (!manual) {
+    if (!manual && !data.isEmpty()) {
         m_pLineEditServerBluetooth->setText(data);
     }
     m_pLabelServerBluetoothManualTitle->setVisible(bluetooth && manual);

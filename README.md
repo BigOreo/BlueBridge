@@ -38,7 +38,7 @@ for example when a VPN on your work laptop blocks local network access.
    Give each one the exact screen name (case-sensitive) shown in that
    computer's BlueBridge window.
 4. On the other computers, choose **Client** and enter the server's IP address.
-5. Click **Start** on both.
+5. Click **Start sharing** on the server and **Connect** on the others.
 
 Once both show that BlueBridge is running, move the mouse off the edge of your
 screen toward the other computer.
@@ -55,13 +55,13 @@ The server accepts network and Bluetooth connections at the same time, so each
 client can connect whichever way works for it. For example, a laptop on a VPN
 can use Bluetooth while another computer uses the network.
 
-1. On the server, click **Start**. The main window shows both its IP address
+1. On the server, click **Start sharing**. The main window shows both its IP address
    and its Bluetooth address.
-2. On the client, set **Connect over** to **Bluetooth**, choose the server from
-   the **Server** list of paired computers (it shows "ready" once the server is
-   running) and click **Start**. If it isn't listed, choose **Enter address
-   manually** and type the address shown on the server, e.g.
-   `00:1A:7D:DA:71:13`.
+2. On the client, set **Connect over** to **Bluetooth**. Under **Your main
+   computer**, choose the server from the list of paired computers (it shows
+   "ready" once the server is running) and click **Connect**. If it isn't
+   listed, choose **Enter an address** and type the address shown on the
+   server, e.g. `00:1A:7D:DA:71:13`.
 
 This is a direct Bluetooth connection (RFCOMM), not Bluetooth networking, so no
 network adapter or IP address is involved. The link must be authenticated and
