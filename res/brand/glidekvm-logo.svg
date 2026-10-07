@@ -6,10 +6,6 @@
       <stop offset="0.5" stop-color="#3B9BFF"/>
       <stop offset="1" stop-color="#8E5CF7"/>
     </linearGradient>
-    <linearGradient id="cursor" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2EF0FF"/>
-      <stop offset="1" stop-color="#2F7BFF"/>
-    </linearGradient>
 
     <!-- the cable: tablet, under and up through the screen, over to the mouse -->
     <path id="cableA" d="M72 322C72 404 214 404 290 300C350 214 404 96 476 92C540 88 520 150 512 184"/>
@@ -17,7 +13,7 @@
     <path id="cableB" d="M512 300C516 370 470 392 430 368C410 356 392.5 319 364.3 285.3"/>
     <!-- Bluetooth symbol, in front of its Wi-Fi waves -->
     <path id="rune" d="M278 74L318 110L298 128V46L318 64L278 100"/>
-    <path id="arrow" d="M0 0V104L27 79L46 120L63 112L44 72L80 72Z" transform="translate(286 192) rotate(-14.83) scale(0.95)"/>
+    <path id="arrow" d="M286.0 192.0L311.3 287.5L330.0 258.0L357.4 291.0L371.1 279.5L343.9 247.4L377.0 238.7Z"/>
 
     <!-- each device leaves a gap where the cable crosses it -->
     <mask id="monitorMask" maskUnits="userSpaceOnUse" x="0" y="0" width="580" height="420">
@@ -25,10 +21,9 @@
       <use href="#cableA" fill="none" stroke="#000" stroke-width="34"/>
       <use href="#cableB" fill="none" stroke="#000" stroke-width="34"/>
     </mask>
-    <mask id="cableMask" maskUnits="userSpaceOnUse" x="0" y="0" width="580" height="420">
-      <rect x="0" y="0" width="580" height="420" fill="#fff"/>
-      <use href="#arrow" fill="#000" stroke="#000" stroke-width="22" stroke-linejoin="round"/>
-    </mask>
+    <clipPath id="cursorGap" clipPathUnits="userSpaceOnUse">
+      <path clip-rule="evenodd" d="M0 0H580V420H0ZM291.0 182.2L288.4 181.3L285.6 181.0L282.8 181.5L280.3 182.6L278.1 184.4L276.4 186.6L275.4 189.2L275.0 192.0L275.4 194.8L300.7 290.3L301.7 292.9L303.4 295.2L305.7 296.9L308.2 298.1L311.0 298.5L313.8 298.2L316.5 297.2L318.8 295.6L320.6 293.4L331.2 276.7L348.9 298.0L351.1 300.0L353.6 301.3L356.4 302.0L359.3 301.8L362.0 301.0L364.5 299.4L378.2 287.9L380.1 285.8L381.4 283.2L382.1 280.4L381.9 277.6L381.1 274.8L379.5 272.4L363.6 253.6L379.8 249.3L382.5 248.2L384.8 246.4L386.6 244.1L387.7 241.3L388.0 238.4L387.5 235.5L386.3 232.8L384.4 230.6L382.0 228.9Z"/>
+    </clipPath>
   </defs>
 
   <!-- tablet, with Wi-Fi above it -->
@@ -56,13 +51,13 @@
   <use href="#rune" fill="none" stroke="url(#g)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
 
   <!-- mouse -->
-  <rect x="471" y="186" width="80" height="112" rx="40" fill="url(#g)" fill-opacity="0.28" stroke="url(#g)" stroke-width="12"/>
+  <rect x="471" y="186" width="80" height="112" rx="40" fill="none" stroke="url(#g)" stroke-width="12"/>
   <rect x="504" y="208" width="14" height="30" rx="7" fill="none" stroke="url(#g)" stroke-width="7"/>
 
   <!-- the glowing cable: a gradient tube with a bright core -->
   <!-- the cable from the mouse runs into the cursor; the other one passes
        underneath with a gap all around the cursor -->
-  <g mask="url(#cableMask)" fill="none" stroke-linecap="round">
+  <g clip-path="url(#cursorGap)" fill="none" stroke-linecap="round">
     <use href="#cableA" stroke="url(#g)" stroke-width="15"/>
     <use href="#cableA" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
   </g>
@@ -72,5 +67,5 @@
   </g>
 
   <!-- the cursor gliding across -->
-  <use href="#arrow" fill="url(#cursor)"/>
+  <use href="#arrow" fill="url(#g)"/>
 </svg>
