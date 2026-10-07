@@ -199,6 +199,14 @@ jobs:
         run: |
             ctest --test-dir build --verbose
 
+      # A real server and client on two virtual displays: connect over TLS,
+      # move the mouse across, type, paste, move back, stop the server.
+      - name: Run the two-screen smoke test
+        if: env.B_BUILD_TYPE != 'Release'
+        run: |
+            apt-get install -y openssl python3-xlib xclip xvfb
+            python3 input-leap/src/test/smoke/two_screens.py --bin-dir build/bin
+
       - name: Create Artifacts
         if: env.B_BUILD_TYPE != 'Release'
         run: tar -cf input-leap-${{matrix.name}}.tar.gz input-leap-${{matrix.name}}
