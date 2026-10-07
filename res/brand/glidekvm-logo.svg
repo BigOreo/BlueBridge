@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 420" width="580" height="420">
+  <title>GlideKVM</title>
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="20" y1="40" x2="560" y2="400">
+      <stop offset="0" stop-color="#3EEBE0"/>
+      <stop offset="0.5" stop-color="#3B9BFF"/>
+      <stop offset="1" stop-color="#8E5CF7"/>
+    </linearGradient>
+    <linearGradient id="cursor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2EF0FF"/>
+      <stop offset="1" stop-color="#2F7BFF"/>
+    </linearGradient>
+
+    <!-- the cable: tablet, under and up through the screen, over to the mouse -->
+    <path id="cableA" d="M72 322C72 404 214 404 290 300C350 214 404 96 476 92C540 88 520 150 512 184"/>
+    <!-- and back from the mouse, under and into the middle of the screen -->
+    <path id="cableB" d="M512 300C520 384 432 398 372 342C340 312 318 290 300 270"/>
+    <path id="arrow" d="M0 0V104L27 79L46 120L63 112L44 72L80 72Z" transform="translate(286 208)"/>
+
+    <!-- each device leaves a gap where the cable crosses it -->
+    <mask id="monitorMask" maskUnits="userSpaceOnUse" x="0" y="0" width="580" height="420">
+      <rect x="0" y="0" width="580" height="420" fill="#fff"/>
+      <use href="#cableA" fill="none" stroke="#000" stroke-width="34"/>
+      <use href="#cableB" fill="none" stroke="#000" stroke-width="34"/>
+    </mask>
+    <mask id="cableMask" maskUnits="userSpaceOnUse" x="0" y="0" width="580" height="420">
+      <rect x="0" y="0" width="580" height="420" fill="#fff"/>
+      <use href="#arrow" fill="#000" stroke="#000" stroke-width="22" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+
+  <!-- tablet, with Wi-Fi above it -->
+  <g fill="none" stroke="url(#g)" stroke-width="13" stroke-linejoin="round">
+    <rect x="24.5" y="178.5" width="95" height="135" rx="11"/>
+  </g>
+  <path d="M24 290H120V306Q120 320 106 320H38Q24 320 24 306ZM66.5 305a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0-11 0Z" fill="url(#g)" fill-rule="evenodd"/>
+  <g fill="none" stroke="url(#g)" stroke-width="13" stroke-linecap="round">
+    <path d="M22 116Q72 70 122 116"/>
+    <path d="M44 138Q72 114 100 138"/>
+    <path d="M62 158Q72 150 82 158"/>
+  </g>
+
+  <!-- monitor, with Bluetooth and its signal above it -->
+  <g mask="url(#monitorMask)">
+    <rect x="183" y="173" width="229" height="149" rx="10" fill="none" stroke="url(#g)" stroke-width="14"/>
+    <path d="M282 329H314L320 352H276Z" fill="url(#g)"/>
+    <rect x="246" y="350" width="104" height="16" rx="7" fill="url(#g)"/>
+  </g>
+  <g fill="none" stroke="url(#g)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M232 78Q298 22 364 78" stroke-width="13"/>
+    <path d="M278 84L318 116L298 134V50L318 68L278 100" stroke-width="10"/>
+  </g>
+  <circle cx="260" cy="98" r="6" fill="url(#g)"/>
+  <circle cx="336" cy="98" r="6" fill="url(#g)"/>
+
+  <!-- mouse -->
+  <rect x="471" y="186" width="80" height="112" rx="40" fill="url(#g)" fill-opacity="0.28" stroke="url(#g)" stroke-width="12"/>
+  <rect x="504" y="208" width="14" height="30" rx="7" fill="none" stroke="url(#g)" stroke-width="7"/>
+
+  <!-- the glowing cable: a gradient tube with a bright core -->
+  <g mask="url(#cableMask)" fill="none" stroke-linecap="round">
+    <use href="#cableA" stroke="url(#g)" stroke-width="15"/>
+    <use href="#cableB" stroke="url(#g)" stroke-width="15"/>
+    <use href="#cableA" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
+    <use href="#cableB" stroke="#E8FDFF" stroke-opacity="0.85" stroke-width="4.5"/>
+  </g>
+
+  <!-- the cursor gliding across -->
+  <use href="#arrow" fill="url(#cursor)"/>
+</svg>
