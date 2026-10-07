@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -32,7 +32,7 @@
 #include <queue>
 #include <set>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Event queue
 /*!
@@ -131,4 +131,4 @@ private:
     std::queue<Event> m_pending;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

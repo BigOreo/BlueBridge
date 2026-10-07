@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -17,14 +17,14 @@
 #pragma once
 
 #include "base/Fwd.h"
-#include "bluebridge/Fwd.h"
-#include "bluebridge/clipboard_types.h"
-#include "bluebridge/key_types.h"
-#include "bluebridge/mouse_types.h"
-#include "bluebridge/option_types.h"
+#include "glidekvm/Fwd.h"
+#include "glidekvm/clipboard_types.h"
+#include "glidekvm/key_types.h"
+#include "glidekvm/mouse_types.h"
+#include "glidekvm/option_types.h"
 #include <string>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class IStream;
 
@@ -66,4 +66,4 @@ public:
     virtual void close() = 0;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

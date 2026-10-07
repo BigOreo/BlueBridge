@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -18,7 +18,7 @@
 
 #include "platform/MSWindowsClipboardAnyTextConverter.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 MSWindowsClipboardAnyTextConverter::MSWindowsClipboardAnyTextConverter()
 {
@@ -140,4 +140,4 @@ std::string MSWindowsClipboardAnyTextConverter::convertLinefeedToUnix(const std:
     return dst;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

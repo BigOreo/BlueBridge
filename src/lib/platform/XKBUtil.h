@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -24,7 +24,7 @@
 #include <map>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! XKB utility functions
 class XKBUtil {
@@ -53,4 +53,4 @@ private:
     static KeySymMap    s_keySymToUCS4;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

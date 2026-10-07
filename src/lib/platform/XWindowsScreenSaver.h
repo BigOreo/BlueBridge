@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "bluebridge/IScreenSaver.h"
+#include "glidekvm/IScreenSaver.h"
 #include "base/Fwd.h"
 #include "base/EventTarget.h"
 #include "XWindowsImpl.h"
@@ -29,7 +29,7 @@
 
 #include <map>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! X11 screen saver implementation
 class XWindowsScreenSaver : public IScreenSaver, public EventTarget {
@@ -171,4 +171,4 @@ private:
     IEventQueue* m_events;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include "bluebridge/Fwd.h"
+#include "glidekvm/Fwd.h"
 #include <string>
 
-namespace bluebridge {
+namespace glidekvm {
 
-/** This interface defines the task bar icon event handlers required by BlueBridge.
+/** This interface defines the task bar icon event handlers required by GlideKVM.
     Each architecture must implement this interface though each operation can be a no-op.
 */
 class IArchTaskBarReceiver {
@@ -95,4 +95,4 @@ public:
     //@}
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

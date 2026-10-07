@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -24,7 +24,7 @@
 #include "arch/Arch.h"
 #include "base/Log.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 TCPSocketFactory::TCPSocketFactory(IEventQueue* events, SocketMultiplexer* socketMultiplexer) :
     m_events(events),
@@ -64,4 +64,4 @@ std::unique_ptr<IListenSocket>
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

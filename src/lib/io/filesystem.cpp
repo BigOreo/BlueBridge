@@ -1,5 +1,5 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
+    GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#if BLUEBRIDGE_USE_GULRAK_FILESYSTEM
+#if GLIDEKVM_USE_GULRAK_FILESYSTEM
 // this header must come first so that it picks up the filesystem implementation
 #include <ghc/fs_impl.hpp>
 #endif
@@ -26,7 +26,7 @@
 #endif
 #include <fstream>
 
-namespace bluebridge {
+namespace glidekvm {
 
 namespace {
 
@@ -70,4 +70,4 @@ std::FILE* fopen_utf8_path(const fs::path& path, const std::string& mode)
 #endif
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

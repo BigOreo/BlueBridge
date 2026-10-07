@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ Q_SIGNALS:
     void generateFinished();
 
 private:
-    void generate_fingerprint(const bluebridge::fs::path& cert_path);
+    void generate_fingerprint(const glidekvm::fs::path& cert_path);
 
-    bool is_certificate_valid(const bluebridge::fs::path& path);
+    bool is_certificate_valid(const glidekvm::fs::path& path);
 };

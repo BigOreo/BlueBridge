@@ -1,6 +1,6 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
-    Copyright (C) BlueBridge contributors
+    GlideKVM -- mouse and keyboard sharing utility
+    Copyright (C) GlideKVM contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 class QApplication;
 class QWidget;
 
-namespace bluebridge {
+namespace glidekvm {
 namespace theme {
 
 // Brand colors, see res/brand and the design canvas.
@@ -41,4 +41,4 @@ void apply(QApplication& app);
 void set_primary(QWidget* button, bool primary = true);
 
 } // namespace theme
-} // namespace bluebridge
+} // namespace glidekvm

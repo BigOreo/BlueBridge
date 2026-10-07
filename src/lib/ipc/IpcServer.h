@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -27,7 +27,7 @@
 #include <list>
 #include <mutex>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class IpcClientProxy;
 class IpcMessage;
@@ -81,7 +81,7 @@ private:
     ClientList m_clients;
     mutable std::mutex m_clientsMutex;
 
-#ifdef BLUEBRIDGE_TEST_ENV
+#ifdef GLIDEKVM_TEST_ENV
 public:
     IpcServer() :
         m_mock(true),
@@ -90,4 +90,4 @@ public:
 #endif
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -18,19 +18,19 @@
 // TODO: fix, tests failing intermittently on mac.
 #ifndef WINAPI_CARBON
 
-#define BLUEBRIDGE_TEST_ENV
+#define GLIDEKVM_TEST_ENV
 
 #include "test/mock/server/MockConfig.h"
 #include "test/mock/server/MockPrimaryClient.h"
-#include "test/mock/bluebridge/MockScreen.h"
+#include "test/mock/glidekvm/MockScreen.h"
 #include "test/mock/server/MockInputFilter.h"
 #include "test/global/TestEventQueue.h"
 #include "server/Server.h"
 #include "server/ClientListener.h"
 #include "server/ClientProxy.h"
 #include "client/Client.h"
-#include "bluebridge/FileChunk.h"
-#include "bluebridge/StreamChunker.h"
+#include "glidekvm/FileChunk.h"
+#include "glidekvm/StreamChunker.h"
 #include "net/SocketMultiplexer.h"
 #include "net/NetworkAddress.h"
 #include "net/TCPSocketFactory.h"
@@ -44,7 +44,7 @@
 #include <iostream>
 #include <stdio.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 using ::testing::_;
 using ::testing::NiceMock;
@@ -521,6 +521,6 @@ void getCursorPos(std::int32_t& x, std::int32_t& y)
     y = 0;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm
 
 #endif // WINAPI_CARBON

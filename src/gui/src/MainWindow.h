@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "bluebridge/AppRole.h"
+#include "glidekvm/AppRole.h"
 #include "AppConnectionState.h"
 
 #include <QMainWindow>
@@ -62,7 +62,7 @@ class QMessageBox;
 class QAbstractButton;
 
 class LogDialog;
-class QBlueBridgeApplication;
+class QGlideKVMApplication;
 class SetupWizard;
 class ZeroconfService;
 class QComboBox;
@@ -86,7 +86,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    friend class QBlueBridgeApplication;
+    friend class QGlideKVMApplication;
     friend class SetupWizard;
 
     public:
@@ -232,7 +232,7 @@ public slots:
         bool m_fingerprint_expanded = false;
 
         ConnectionMode m_ConnectionMode = ConnectionMode::Network;
-        bluebridge::MachinePolicy m_policy;
+        glidekvm::MachinePolicy m_policy;
         QLabel* m_pLabelManaged = nullptr;
         QWidget* m_pConnectionModeRow = nullptr;
         QLabel* m_pLabelConnectionMode = nullptr;

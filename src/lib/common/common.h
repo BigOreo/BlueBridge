@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -38,15 +38,15 @@ enum {
 };
 
 #if defined(__GNUC__)
-    #define BLUEBRIDGE_DEFINE_ATTRIBUTE_PRINTF 1
+    #define GLIDEKVM_DEFINE_ATTRIBUTE_PRINTF 1
 #elif defined(__has_attribute)
     #if __has_attribute(__format__)
-        #define BLUEBRIDGE_DEFINE_ATTRIBUTE_PRINTF 1
+        #define GLIDEKVM_DEFINE_ATTRIBUTE_PRINTF 1
     #endif
 #endif
 
-#ifdef BLUEBRIDGE_DEFINE_ATTRIBUTE_PRINTF
-    #define BLUEBRIDGE_ATTRIBUTE_PRINTF(x,y) __attribute__((__format__(__printf__,x,y)))
+#ifdef GLIDEKVM_DEFINE_ATTRIBUTE_PRINTF
+    #define GLIDEKVM_ATTRIBUTE_PRINTF(x,y) __attribute__((__format__(__printf__,x,y)))
 #else
-    #define BLUEBRIDGE_ATTRIBUTE_PRINTF(x,y)
+    #define GLIDEKVM_ATTRIBUTE_PRINTF(x,y)
 #endif

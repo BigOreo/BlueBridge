@@ -1,1 +1,0 @@
-The app, installer, Windows file details, Mac and Linux app names and the policy templates now say BlueBridge, and every window shows the BlueBridge icon. Settings, the service and policy registry keys keep their original names, so upgrades keep working.

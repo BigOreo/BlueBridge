@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -19,7 +19,7 @@
 #include "base/BitUtilities.h"
 #include "platform/XWindowsClipboardBMPConverter.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 // BMP file header structure
 struct CBMPHeader {
@@ -108,4 +108,4 @@ std::string XWindowsClipboardBMPConverter::toIClipboard(const std::string& bmp) 
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

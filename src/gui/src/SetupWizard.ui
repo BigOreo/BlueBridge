@@ -17,11 +17,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Set up BlueBridge</string>
+   <string>Set up GlideKVM</string>
   </property>
   <widget class="QWizardPage" name="m_pWelcomePage">
    <property name="title">
-    <string>Welcome to BlueBridge</string>
+    <string>Welcome to GlideKVM</string>
    </property>
    <property name="subTitle">
     <string>Use one keyboard and mouse across your computers, over your network or straight over Bluetooth.</string>
@@ -172,7 +172,7 @@
     <item>
      <widget class="QCheckBox" name="m_pCheckBoxAutoStart">
       <property name="text">
-       <string>Start &amp;automatically whenever BlueBridge opens</string>
+       <string>Start &amp;automatically whenever GlideKVM opens</string>
       </property>
       <property name="checked">
        <bool>true</bool>

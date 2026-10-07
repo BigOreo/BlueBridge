@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -24,7 +24,7 @@
 #include "base/Fwd.h"
 #include <memory>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class ClientProxy;
 class IStream;
@@ -48,7 +48,7 @@ public:
     ClientProxy* orphanClientProxy();
 
     //! Get the stream
-    bluebridge::IStream* getStream() { return stream_.get(); }
+    glidekvm::IStream* getStream() { return stream_.get(); }
 
     //@}
 
@@ -66,7 +66,7 @@ private:
     void handle_ready();
 
 private:
-    std::unique_ptr<bluebridge::IStream> stream_;
+    std::unique_ptr<glidekvm::IStream> stream_;
     EventQueueTimer* m_timer;
     ClientProxy* m_proxy;
     bool m_ready;
@@ -74,4 +74,4 @@ private:
     IEventQueue* m_events;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

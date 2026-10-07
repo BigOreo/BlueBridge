@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include <Carbon/Carbon.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 KeyID IOSXKeyResource::getKeyID(std::uint8_t c)
 {
@@ -189,4 +189,4 @@ IOSXKeyResource::unicharToKeyID(UniChar c)
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

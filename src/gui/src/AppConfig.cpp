@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -23,13 +23,13 @@
 #include <QtNetwork>
 
 #if defined(Q_OS_WIN)
-const char AppConfig::server_name_[] = "bluebridge-server.exe";
-const char AppConfig::client_name_[] = "bluebridge-client.exe";
+const char AppConfig::server_name_[] = "glidekvm-server.exe";
+const char AppConfig::client_name_[] = "glidekvm-client.exe";
 const char AppConfig::log_dir_[] = "log/";
 #define DEFAULT_PROCESS_MODE Service
 #else
-const char AppConfig::server_name_[] = "bluebridge-server";
-const char AppConfig::client_name_[] = "bluebridge-client";
+const char AppConfig::server_name_[] = "glidekvm-server";
+const char AppConfig::client_name_[] = "glidekvm-client";
 const char AppConfig::log_dir_[] = "/var/log/";
 #define DEFAULT_PROCESS_MODE Desktop
 #endif
@@ -98,7 +98,7 @@ QString AppConfig::log_dir() const
 
 QString AppConfig::program_dir() const
 {
-    // BlueBridge binaries should be in the same dir.
+    // GlideKVM binaries should be in the same dir.
     return QCoreApplication::applicationDirPath() + "/";
 }
 
@@ -145,7 +145,7 @@ void AppConfig::loadSettings()
     m_Interface = settings().value("interface").toString();
     m_LogLevel = settings().value("logLevel", 3).toInt(); // level 3: INFO
     m_LogToFile = settings().value("logToFile", false).toBool();
-    m_LogFilename = settings().value("logFilename", log_dir() + "bluebridge.log").toString();
+    m_LogFilename = settings().value("logFilename", log_dir() + "glidekvm.log").toString();
     m_WizardLastRun = settings().value("wizardLastRun", 0).toInt();
     m_Language = settings().value("language", QLocale::system().name()).toString();
     m_StartedBefore = settings().value("startedBefore", false).toBool();
@@ -158,7 +158,7 @@ void AppConfig::loadSettings()
     m_ElevateMode = static_cast<ElevateMode>(elevateMode.toInt());
     m_AutoConfigPrompted = settings().value("autoConfigPrompted", false).toBool();
     m_CryptoEnabled = settings().value("cryptoEnabled", true).toBool();
-    // TODO: set default value of requireClientCertificate to true on BlueBridge 3.0.0
+    // TODO: set default value of requireClientCertificate to true on GlideKVM 3.0.0
     m_RequireClientCertificate = settings().value("requireClientCertificate", false).toBool();
     m_AutoHide = settings().value("autoHide", false).toBool();
     m_AutoStart = settings().value("autoStart", false).toBool();

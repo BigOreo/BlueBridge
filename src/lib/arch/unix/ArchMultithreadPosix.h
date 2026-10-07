@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -28,7 +28,7 @@
 
 #define ARCH_MULTITHREAD ArchMultithreadPosix
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Posix implementation of IArchMultithread
 class ArchMultithreadPosix : public IArchMultithread {
@@ -99,4 +99,4 @@ private:
     void* m_signalUserData[kNUM_SIGNALS];
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
-* BlueBridge -- mouse and keyboard sharing utility
+* GlideKVM -- mouse and keyboard sharing utility
 * Copyright (C) 2018 Deuauche Open Source Group
 *
 * This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include <fstream>
 
-namespace bluebridge {
+namespace glidekvm {
 
 const std::size_t AllocatedLineSize = 1024;
 const char CommentChar = '#';
@@ -54,4 +54,4 @@ static void add_key(const char * const buffer, std::vector<DWORD> &keys)
     return true;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

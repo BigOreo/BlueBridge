@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "server/ClientProxy.h"
 #include "server/ClientProxyUnknown.h"
-#include "bluebridge/PacketStreamFilter.h"
+#include "glidekvm/PacketStreamFilter.h"
 #include "net/IDataSocket.h"
 #include "net/IListenSocket.h"
 #include "net/ISocketFactory.h"
@@ -28,7 +28,7 @@
 #include "base/Log.h"
 #include "base/IEventQueue.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 ClientListener::ClientListener(const NetworkAddress& address,
                                std::unique_ptr<ISocketFactory> socket_factory,
@@ -216,4 +216,4 @@ ClientListener::cleanupClientSockets()
     client_sockets_.clear();
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

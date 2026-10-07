@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2011 Nick Bolton
  *
@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "test/mock/bluebridge/MockKeyMap.h"
-#include "test/mock/bluebridge/MockEventQueue.h"
+#include "test/mock/glidekvm/MockKeyMap.h"
+#include "test/mock/glidekvm/MockEventQueue.h"
 #include "platform/OSXKeyState.h"
 #include "base/Log.h"
 #include "base/Time.h"
@@ -31,7 +31,7 @@
 #define A_CHAR_ID 0x00000061
 #define A_CHAR_BUTTON 001
 
-namespace bluebridge {
+namespace glidekvm {
 
 class OSXKeyStateTests : public ::testing::Test {
 public:
@@ -43,7 +43,7 @@ public:
 
 TEST_F(OSXKeyStateTests, fakeAndPoll_shift)
 {
-    bluebridge::KeyMap keyMap;
+    glidekvm::KeyMap keyMap;
     MockEventQueue eventQueue;
     OSXKeyState keyState(&eventQueue, keyMap);
     keyState.updateKeyMap();
@@ -63,7 +63,7 @@ TEST_F(OSXKeyStateTests, fakeAndPoll_shift)
 
 TEST_F(OSXKeyStateTests, fakeAndPoll_charKey)
 {
-    bluebridge::KeyMap keyMap;
+    glidekvm::KeyMap keyMap;
     MockEventQueue eventQueue;
     OSXKeyState keyState(&eventQueue, keyMap);
     keyState.updateKeyMap();
@@ -82,7 +82,7 @@ TEST_F(OSXKeyStateTests, fakeAndPoll_charKey)
 
 TEST_F(OSXKeyStateTests, fakeAndPoll_charKeyAndModifier)
 {
-    bluebridge::KeyMap keyMap;
+    glidekvm::KeyMap keyMap;
     MockEventQueue eventQueue;
     OSXKeyState keyState(&eventQueue, keyMap);
     keyState.updateKeyMap();
@@ -103,7 +103,7 @@ bool
 OSXKeyStateTests::isKeyPressed(const OSXKeyState& keyState, KeyButton button)
 {
     // HACK: allow os to realize key state changes.
-    bluebridge::this_thread_sleep(.2);
+    glidekvm::this_thread_sleep(.2);
 
     IKeyState::KeyButtonSet pressed;
     keyState.pollPressedKeys(pressed);
@@ -120,4 +120,4 @@ OSXKeyStateTests::isKeyPressed(const OSXKeyState& keyState, KeyButton button)
 
 #endif
 
-} // namespace bluebridge
+} // namespace glidekvm

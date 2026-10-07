@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2023-2024 InputLeap Developers
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
@@ -27,9 +27,9 @@ AboutDialog::AboutDialog(QWidget* parent, const QString& app_name) :
     ui_{std::make_unique<Ui::AboutDialog>()}
 {
     ui_->setupUi(this);
-    QString version = QStringLiteral("%1-%2").arg(kVersion, BLUEBRIDGE_VERSION_STAGE);
-#ifdef BLUEBRIDGE_REVISION
-    version.append(QStringLiteral("-%1").arg(BLUEBRIDGE_REVISION));
+    QString version = QStringLiteral("%1-%2").arg(kVersion, GLIDEKVM_VERSION_STAGE);
+#ifdef GLIDEKVM_REVISION
+    version.append(QStringLiteral("-%1").arg(GLIDEKVM_REVISION));
 #endif
     ui_->m_pLabelAppVersion->setText(version);
     const int scaled_logo_height = sizeHint().width() <= 300 ? 45 : 90;

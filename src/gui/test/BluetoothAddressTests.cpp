@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 
 #include <gtest/gtest.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 TEST(BluetoothAddressTests, AcceptsCommonFormats)
 {
@@ -39,4 +39,4 @@ TEST(BluetoothAddressTests, RejectsInvalid)
     EXPECT_EQ(normalize_bluetooth_address("192.168.1.50"), QString());
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

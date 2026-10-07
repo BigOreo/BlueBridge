@@ -1,0 +1,83 @@
+%global package_version @GLIDEKVM_VERSION_MAJOR@.@GLIDEKVM_VERSION_MINOR@.@GLIDEKVM_VERSION_PATCH@
+%global tarname GlideKVM-%{version}-Source
+%global glidekvm_version_desc @GLIDEKVM_VERSION_DESC@
+%global timestamp @GLIDEKVM_BUILD_DATE@@GLIDEKVM_BUILD_TIME@
+
+%global rdnn_name io.github.bigoreo.glidekvm
+
+Summary: Keyboard and mouse sharing solution
+Name: glidekvm
+Version: %{package_version}
+Release: %{timestamp}.git%{?dist}
+# FIXME: Does not work with RPMs, address later.
+# FIXME: %%{glidekvm_version_desc}%%{?dist}
+License: GPLv2
+Group: System Environment/Daemons
+URL: https://github.com/BigOreo/GlideKVM
+# Run cmake package_source to get this tarball
+Source0: %{tarname}.tar.xz
+
+BuildRequires: pkgconfig(avahi-compat-libdns_sd)
+BuildRequires: cmake >= 3
+BuildRequires: desktop-file-utils
+BuildRequires: gcc-c++
+BuildRequires: pkgconfig(gmock)
+BuildRequires: pkgconfig(gtest)
+BuildRequires: pkgconfig(x11)
+BuildRequires: pkgconfig(xtst) pkgconfig(xinerama) pkgconfig(xrandr)
+BuildRequires: pkgconfig(ice) pkgconfig(sm)
+BuildRequires: pkgconfig(openssl)
+BuildRequires: pkgconfig(Qt6Core)
+BuildRequires: pkgconfig(Qt6Widgets)
+BuildRequires: pkgconfig(Qt6Network)
+BuildRequires: pkgconfig(Qt6Linguist)
+BuildRequires: make
+BuildRequires: pkgconfig(libei-1.0)
+BuildRequires: pkgconfig(libportal) >= 0.8
+
+%description
+GlideKVM allows you to share one mouse and keyboard between multiple computers.
+Work seamlessly across Windows, macOS and Linux.
+
+%prep
+%setup -q -n %{tarname}
+
+
+%build
+%{cmake} . \
+    -DGLIDEKVM_VERSION_DESC:STRING=%{glidekvm_version_desc} \
+    -DGLIDEKVM_BUILD_LIBEI=ON \
+    -DGLIDEKVM_BUILD_TESTS=ON \
+    -DGLIDEKVM_USE_EXTERNAL_GTEST=True \
+    -DGLIDEKVM_VERSION_STAGE:STRING=@GLIDEKVM_VERSION_STAGE@
+%{cmake_build}
+
+
+%install
+%{cmake_install}
+
+desktop-file-install --delete-original \
+  --dir %{buildroot}%{_datadir}/applications \
+  --set-icon=%{_datadir}/icons/hicolor/scalable/apps/%{rdnn_name}.svg \
+  %{buildroot}%{_datadir}/applications/%{rdnn_name}.desktop
+
+%check
+%ctest
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{rdnn_name}.desktop
+
+%files
+# None of the documentation files are actually useful here, they all point to
+# the online website, so include just one, the README
+%doc LICENSE ChangeLog res/Readme.txt doc/%{name}.conf.example*
+%{_bindir}/%{name}-client
+%{_bindir}/%{name}-server
+%{_bindir}/%{name}
+%{_datadir}/icons/hicolor/scalable/apps/%{rdnn_name}.svg
+%{_datadir}/applications/%{rdnn_name}.desktop
+%{_datadir}/metainfo/%{rdnn_name}.appdata.xml
+%{_mandir}/man1/%{name}-client.1*
+%{_mandir}/man1/%{name}-server.1*
+
+%changelog
+* Wed Oct 07 2026 GlideKVM <BigOreo@users.noreply.github.com>
+- First GlideKVM package

@@ -1,5 +1,5 @@
 /*
-* BlueBridge -- mouse and keyboard sharing utility
+* GlideKVM -- mouse and keyboard sharing utility
 * Copyright (C) 2018 Deuauche Open Source Group
 *
 * This package is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 // let's not import all of Windows just to get this typedef
 typedef unsigned long DWORD;
 
-namespace bluebridge {
+namespace glidekvm {
 
 class ImmuneKeysReader
 {
@@ -31,4 +31,4 @@ public:
     static bool get_list(const char * const path, std::vector<DWORD> &keys, std::string &badLine);
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

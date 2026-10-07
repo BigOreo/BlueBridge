@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ TEST(OSXScreenTests, hideCursor_notPrimary)
     EXPECT_EQ(false, CGCursorIsVisible());
 
     // workaround for screen class race condition.
-    bluebridge::this_thread_sleep(.1f);
+    glidekvm::this_thread_sleep(.1f);
 }
 
 TEST(OSXScreenTests, showCursor_notPrimary)
@@ -47,6 +47,6 @@ TEST(OSXScreenTests, showCursor_notPrimary)
     EXPECT_EQ(true, CGCursorIsVisible());
 
     // workaround for screen class race condition.
-    bluebridge::this_thread_sleep(.1f);
+    glidekvm::this_thread_sleep(.1f);
 }
 */

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -18,13 +18,13 @@
 
 #include "server/PrimaryClient.h"
 
-#include "bluebridge/Screen.h"
-#include "bluebridge/Clipboard.h"
+#include "glidekvm/Screen.h"
+#include "glidekvm/Clipboard.h"
 #include "base/Log.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
-PrimaryClient::PrimaryClient(const std::string& name, bluebridge::Screen* screen) :
+PrimaryClient::PrimaryClient(const std::string& name, glidekvm::Screen* screen) :
     BaseClientProxy(name),
     m_screen(screen),
     m_fakeInputCount(0)
@@ -262,4 +262,4 @@ PrimaryClient::setOptions(const OptionsList& options)
     m_screen->setOptions(options);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,8 +1,8 @@
-# BlueBridge
+# GlideKVM
 
 One keyboard and mouse for all your computers.
 
-BlueBridge lets you control several computers from the one in front of you.
+GlideKVM lets you control several computers from the one in front of you.
 Move the mouse off the edge of your screen and it continues onto the next
 computer, with the keyboard following along. Copy on one computer and paste on
 the other.
@@ -31,16 +31,16 @@ for example when a VPN on your work laptop blocks local network access.
 
 ## Getting started
 
-1. Install BlueBridge on each computer.
+1. Install GlideKVM on each computer.
 2. On the computer with the keyboard and mouse, choose **Server**.
 3. Click **Configure server** and drag a screen onto the grid for each other
    computer, next to your own screen on the side where it sits on your desk.
    Give each one the exact screen name (case-sensitive) shown in that
-   computer's BlueBridge window.
+   computer's GlideKVM window.
 4. On the other computers, choose **Client** and enter the server's IP address.
 5. Click **Start sharing** on the server and **Connect** on the others.
 
-Once both show that BlueBridge is running, move the mouse off the edge of your
+Once both show that GlideKVM is running, move the mouse off the edge of your
 screen toward the other computer.
 
 If Scroll Lock is on, the mouse stays on the current screen.
@@ -86,11 +86,11 @@ end
 ## Support
 
 Report problems and request features in the
-[issue tracker](https://github.com/BigOreo/BlueBridge/issues).
+[issue tracker](https://github.com/BigOreo/GlideKVM/issues).
 
 ## License
 
-BlueBridge is free software released under the GNU General Public License,
+GlideKVM is free software released under the GNU General Public License,
 version 2. See [LICENSE](LICENSE). It is built on the open source InputLeap
 project; the original copyright notices are kept in the source files.
 

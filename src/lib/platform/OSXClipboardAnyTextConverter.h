@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "platform/OSXClipboard.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Convert to/from some text encoding
 class OSXClipboardAnyTextConverter : public IOSXClipboardConverter {
@@ -53,4 +53,4 @@ private:
     static std::string convertLinefeedToUnix(const std::string&);
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

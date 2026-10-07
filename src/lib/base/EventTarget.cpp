@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@
 #include "EventTarget.h"
 #include "IEventQueue.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 EventTarget::EventTarget() = default;
 
@@ -28,4 +28,4 @@ EventTarget::~EventTarget()
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

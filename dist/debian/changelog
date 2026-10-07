@@ -1,5 +1,5 @@
-bluebridge (1.0.0) UNRELEASED; urgency=medium
+glidekvm (1.0.0) UNRELEASED; urgency=medium
 
-  * First BlueBridge release.
+  * First GlideKVM release.
 
- -- BlueBridge <BigOreo@users.noreply.github.com>  Wed, 07 Oct 2026 00:00:00 +0000
+ -- GlideKVM <BigOreo@users.noreply.github.com>  Wed, 07 Oct 2026 00:00:00 +0000

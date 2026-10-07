@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -28,9 +28,9 @@
 #include "platform/OSXDragSimulator.h"
 #include "platform/OSXMediaKeySupport.h"
 #include "platform/OSXPasteboardPeeker.h"
-#include "bluebridge/Clipboard.h"
-#include "bluebridge/KeyMap.h"
-#include "bluebridge/ClientApp.h"
+#include "glidekvm/Clipboard.h"
+#include "glidekvm/KeyMap.h"
+#include "glidekvm/ClientApp.h"
 #include "mt/Thread.h"
 #include "arch/XArch.h"
 #include "base/Log.h"
@@ -43,12 +43,12 @@
 #include <IOKit/hidsystem/event_status_driver.h>
 #include <AppKit/NSEvent.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 // This isn't in any Apple SDK that I know of as of yet.
-constexpr int BLUE_BRIDGE_EVENT_MOUSE_SCROLL = 11;
-constexpr int BLUE_BRIDGE_MOUSE_SCROLL_AXIS_X = 'saxx';
-constexpr int BLUE_BRIDGE_MOUSE_SCROLL_AXIS_Y = 'saxy';
+constexpr int GLIDE_KVM_EVENT_MOUSE_SCROLL = 11;
+constexpr int GLIDE_KVM_MOUSE_SCROLL_AXIS_X = 'saxx';
+constexpr int GLIDE_KVM_MOUSE_SCROLL_AXIS_Y = 'saxy';
 
 enum {
 	kCarbonLoopWaitTimeout = 10
@@ -286,7 +286,7 @@ void OSXScreen::getCursorCenter(std::int32_t& x, std::int32_t& y) const
 
 std::uint32_t OSXScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 {
-    // get mac virtual key and modifier mask matching BlueBridge key and mask
+    // get mac virtual key and modifier mask matching GlideKVM key and mask
 	std::uint32_t macKey, macMask;
     if (!m_keyState->map_hot_key_to_mac(key, mask, macKey, macMask)) {
 		LOG_DEBUG("could not map hotkey id=%04x mask=%04x", key, mask);
@@ -328,13 +328,13 @@ std::uint32_t OSXScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 	if (!okay) {
 		m_oldHotKeyIDs.push_back(id);
 		m_hotKeyToIDMap.erase(HotKeyItem(macKey, macMask));
-		LOG_WARN("failed to register hotkey %s (id=%04x mask=%04x)", bluebridge::KeyMap::formatKey(key, mask).c_str(), key, mask);
+		LOG_WARN("failed to register hotkey %s (id=%04x mask=%04x)", glidekvm::KeyMap::formatKey(key, mask).c_str(), key, mask);
 		return 0;
 	}
 
 	m_hotKeys.insert(std::make_pair(id, HotKeyItem(ref, macKey, macMask)));
 
-	LOG_DEBUG("registered hotkey %s (id=%04x mask=%04x) as id=%d", bluebridge::KeyMap::formatKey(key, mask).c_str(), key, mask, id);
+	LOG_DEBUG("registered hotkey %s (id=%04x mask=%04x) as id=%d", glidekvm::KeyMap::formatKey(key, mask).c_str(), key, mask, id);
 	return id;
 }
 
@@ -506,14 +506,14 @@ OSXScreen::fakeMouseButton(ButtonID id, bool press)
     // This will allow for higher than triple click but the quartz documentation
     // does not specify that this should be limited to triple click
     if (press) {
-        if ((bluebridge::current_time_seconds() - m_lastClickTime) <= clickTime && diff <= maxDiff) {
+        if ((glidekvm::current_time_seconds() - m_lastClickTime) <= clickTime && diff <= maxDiff) {
             m_clickState++;
         }
         else {
             m_clickState = 1;
         }
 
-        m_lastClickTime = bluebridge::current_time_seconds();
+        m_lastClickTime = glidekvm::current_time_seconds();
     }
 
     if (m_clickState == 1) {
@@ -556,9 +556,9 @@ void OSXScreen::get_drop_target_thread()
     char* cstr = nullptr;
 
 	// wait for 5 secs for the drop destinaiton string to be filled.
-    std::uint32_t timeout = bluebridge::current_time_seconds() + 5;
+    std::uint32_t timeout = glidekvm::current_time_seconds() + 5;
 
-    while (bluebridge::current_time_seconds() < timeout) {
+    while (glidekvm::current_time_seconds() < timeout) {
 		CFStringRef cfstr = getCocoaDropTarget();
 		cstr = CFStringRefToUTF8String(cfstr);
 		CFRelease(cfstr);
@@ -566,7 +566,7 @@ void OSXScreen::get_drop_target_thread()
         if (cstr != nullptr) {
 			break;
 		}
-		bluebridge::this_thread_sleep(.1f);
+		glidekvm::this_thread_sleep(.1f);
 	}
 
     if (cstr != nullptr) {
@@ -791,7 +791,7 @@ void
 OSXScreen::enter()
 {
     // Mark as on screen so other events are handled as on screen.
-    // Mitigates https://github.com/BigOreo/BlueBridge/issues/1043 from the bogus movement check
+    // Mitigates https://github.com/BigOreo/GlideKVM/issues/1043 from the bogus movement check
 	m_isOnScreen = true;
 
 	showCursor();
@@ -816,7 +816,7 @@ OSXScreen::enter()
 		}
 
 		// IOKit API for declaring a power management assertion
-		IOPMAssertionDeclareUserActivity(CFSTR("BlueBridge - entering screen"), kIOPMUserActiveLocal, &assertionID);
+		IOPMAssertionDeclareUserActivity(CFSTR("GlideKVM - entering screen"), kIOPMUserActiveLocal, &assertionID);
 
 		avoidSupression();
 	}
@@ -962,19 +962,19 @@ void OSXScreen::handle_system_event(const Event& event)
 	switch (eventClass) {
 	case kEventClassMouse:
 		switch (GetEventKind(*carbonEvent)) {
-        case BLUE_BRIDGE_EVENT_MOUSE_SCROLL:
+        case GLIDE_KVM_EVENT_MOUSE_SCROLL:
 		{
 			OSStatus r;
 			long xScroll;
 			long yScroll;
 
 			// get scroll amount
-            r = GetEventParameter(*carbonEvent, BLUE_BRIDGE_MOUSE_SCROLL_AXIS_X,
+            r = GetEventParameter(*carbonEvent, GLIDE_KVM_MOUSE_SCROLL_AXIS_X,
                                   typeSInt32, nullptr, sizeof(xScroll), nullptr, &xScroll);
 			if (r != noErr) {
 				xScroll = 0;
 			}
-            r = GetEventParameter(*carbonEvent, BLUE_BRIDGE_MOUSE_SCROLL_AXIS_Y,
+            r = GetEventParameter(*carbonEvent, GLIDE_KVM_MOUSE_SCROLL_AXIS_Y,
                                   typeSInt32, nullptr, sizeof(yScroll), nullptr, &yScroll);
 			if (r != noErr) {
 				yScroll = 0;
@@ -1813,7 +1813,7 @@ OSXScreen::HotKeyItem::operator<(const HotKeyItem& x) const
 }
 
 // Quartz event tap support for the secondary display. This makes sure that we
-// will show the cursor if a local event comes in while BlueBridge has the cursor
+// will show the cursor if a local event comes in while GlideKVM has the cursor
 // off the screen.
 CGEventRef
 OSXScreen::handleCGInputEventSecondary(
@@ -2081,4 +2081,4 @@ avoidHesitatingCursor()
 
 #pragma GCC diagnostic error "-Wdeprecated-declarations"
 
-} // namespace bluebridge
+} // namespace glidekvm

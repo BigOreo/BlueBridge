@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2005 Chris Schoeneman
  *
@@ -20,15 +20,15 @@
 
 #include "base/Fwd.h"
 #include "base/EventTarget.h"
-#include "bluebridge/key_types.h"
-#include "bluebridge/mouse_types.h"
-#include "bluebridge/protocol_types.h"
-#include "bluebridge/IPlatformScreen.h"
+#include "glidekvm/key_types.h"
+#include "glidekvm/mouse_types.h"
+#include "glidekvm/protocol_types.h"
+#include "glidekvm/IPlatformScreen.h"
 
 #include <map>
 #include <set>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class PrimaryClient;
 
@@ -316,7 +316,7 @@ public:
     InputFilter(const InputFilter&);
     virtual ~InputFilter();
 
-#ifdef BLUEBRIDGE_TEST_ENV
+#ifdef GLIDEKVM_TEST_ENV
     InputFilter() : m_primaryClient(nullptr) { }
 #endif
 
@@ -348,4 +348,4 @@ std::string format_rules(const std::vector<InputFilter::Rule>& rules,
 bool are_rules_equal(const std::vector<InputFilter::Rule>& rules1,
                      const std::vector<InputFilter::Rule>& rules2);
 
-} // namespace bluebridge
+} // namespace glidekvm

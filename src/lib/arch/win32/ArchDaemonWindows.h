@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -30,7 +30,7 @@
 
 #define ARCH_DAEMON ArchDaemonWindows
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Win32 implementation of IArchDaemon
 class ArchDaemonWindows : public IArchDaemon {
@@ -143,15 +143,15 @@ private:
     std::string m_commandLine;
 };
 
-#define DEFAULT_DAEMON_NAME _T("BlueBridge")
-#define DEFAULT_DAEMON_INFO _T("Manages the BlueBridge foreground processes.")
+#define DEFAULT_DAEMON_NAME _T("GlideKVM")
+#define DEFAULT_DAEMON_INFO _T("Manages the GlideKVM foreground processes.")
 
 static const TCHAR* const g_daemonKeyPath[] = {
     _T("SOFTWARE"),
-    _T("The BlueBridge Project"),
-    _T("BlueBridge"),
+    _T("The GlideKVM Project"),
+    _T("GlideKVM"),
     _T("Service"),
     nullptr
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

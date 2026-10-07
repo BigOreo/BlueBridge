@@ -1,19 +1,19 @@
-Source: bluebridge
+Source: glidekvm
 Section: utils
 Priority: optional
 Build-Depends:
  debhelper-compat (=12)
 Standards-Version: 4.4.0
-Homepage: https://github.com/BigOreo/BlueBridge
-Maintainer: BlueBridge <BigOreo@users.noreply.github.com>
+Homepage: https://github.com/BigOreo/GlideKVM
+Maintainer: GlideKVM <BigOreo@users.noreply.github.com>
 
-Package: bluebridge
+Package: glidekvm
 Architecture: amd64
 Section: utils
 Priority: optional
 Depends: ${shlibs:Depends},
          ${misc:Depends}
 Description: Keyboard and mouse sharing solution
- BlueBridge allows you to share one mouse and keyboard between multiple computers.
+ GlideKVM allows you to share one mouse and keyboard between multiple computers.
  Work seamlessly across Windows, macOS and Linux.
-Homepage: https://github.com/BigOreo/BlueBridge
+Homepage: https://github.com/BigOreo/GlideKVM

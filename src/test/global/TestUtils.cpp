@@ -1,5 +1,5 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
+    GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 #include "TestUtils.h"
 #include <random>
 
-namespace bluebridge {
+namespace glidekvm {
 
 std::vector<std::uint8_t> generate_pseudo_random_bytes(std::size_t seed, std::size_t size)
 {
@@ -34,4 +34,4 @@ std::vector<std::uint8_t> generate_pseudo_random_bytes(std::size_t seed, std::si
     return bytes;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

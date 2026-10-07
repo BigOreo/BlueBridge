@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -17,13 +17,13 @@
 
 #pragma once
 
-#define BLUEBRIDGE_TEST_ENV
+#define GLIDEKVM_TEST_ENV
 
 #include "server/InputFilter.h"
 
 #include <gmock/gmock.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class MockInputFilter : public InputFilter
 {
@@ -31,4 +31,4 @@ public:
      MOCK_METHOD1(setPrimaryClient, void(PrimaryClient*));
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

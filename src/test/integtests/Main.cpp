@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2011 Nick Bolton
  *
@@ -38,13 +38,13 @@ main(int argc, char **argv)
 {
 #if SYSAPI_WIN32
     // record window instance for tray icon, etc
-    bluebridge::ArchMiscWindows::setInstanceWin32(GetModuleHandle(nullptr));
+    glidekvm::ArchMiscWindows::setInstanceWin32(GetModuleHandle(nullptr));
 #endif
 
-    bluebridge::Arch arch;
+    glidekvm::Arch arch;
     arch.init();
 
-    bluebridge::Log log;
+    glidekvm::Log log;
     log.setFilter(kDEBUG2);
 
     std::string lockFile;
@@ -77,10 +77,10 @@ main(int argc, char **argv)
 
 void lock(std::string lockFile)
 {
-    double start = bluebridge::current_time_seconds();
+    double start = glidekvm::current_time_seconds();
 
     // keep checking until timeout is reached.
-    while ((bluebridge::current_time_seconds() - start) < LOCK_TIMEOUT) {
+    while ((glidekvm::current_time_seconds() - start) < LOCK_TIMEOUT) {
 
         std::ifstream is(lockFile.c_str());
         bool noLock = !is;
@@ -91,7 +91,7 @@ void lock(std::string lockFile)
         }
 
         // check every second if file has gone.
-        bluebridge::this_thread_sleep(1);
+        glidekvm::this_thread_sleep(1);
     }
 
     // write empty lock file.

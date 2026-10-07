@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -23,7 +23,7 @@
 #undef ARCH_DAEMON
 #define ARCH_DAEMON ArchDaemonUnix
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Unix implementation of IArchDaemon
 class ArchDaemonUnix : public ArchDaemonNone {
@@ -35,6 +35,6 @@ public:
     int daemonize(const char* name, DaemonFunc func) override;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm
 
-#define CONFIG_FILE "/etc/bluebridge/bluebridge-service.conf"
+#define CONFIG_FILE "/etc/glidekvm/glidekvm-service.conf"

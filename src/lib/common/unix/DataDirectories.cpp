@@ -1,5 +1,5 @@
 /*
-* BlueBridge -- mouse and keyboard sharing utility
+* GlideKVM -- mouse and keyboard sharing utility
 * Copyright (C) 2018 Debauchee Open Source Group
 *
 * This package is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 #include <sys/types.h> // getpwuid(_r)
 #include <pwd.h>       // getpwuid(_r)
 
-namespace bluebridge {
+namespace glidekvm {
 
 static std::string pw_dir(struct passwd* pwentp)
 {
@@ -90,10 +90,10 @@ static fs::path old_profile_basedir()
 const fs::path& DataDirectories::profile()
 {
     if (_profile.empty()) {
-        _profile = profile_basedir() / "BlueBridge";
+        _profile = profile_basedir() / "GlideKVM";
         maybe_copy_old_profile(profile_basedir() / "barrier", _profile);
 #if defined(WINAPI_XWINDOWS) || defined(WINAPI_LIBEI)
-        maybe_copy_old_profile(old_profile_basedir() / "BlueBridge", _profile);
+        maybe_copy_old_profile(old_profile_basedir() / "GlideKVM", _profile);
 #endif
     }
     return _profile;
@@ -131,4 +131,4 @@ const fs::path& DataDirectories::systemconfig(const fs::path& path)
     return _systemconfig;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

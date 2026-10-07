@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -42,7 +42,7 @@ setSignalSet(sigset_t* sigset)
     sigaddset(sigset, SIGUSR2);
 }
 
-namespace bluebridge {
+namespace glidekvm {
 
 namespace {
 
@@ -346,9 +346,9 @@ ArchMultithreadPosix::wait(ArchThread target, double timeout)
 
         // wait and repeat test if there's a timeout
         if (timeout != 0.0) {
-            const double start = bluebridge::current_time_seconds();
+            const double start = glidekvm::current_time_seconds();
             do {
-                bluebridge::this_thread_sleep(0.05);
+                glidekvm::this_thread_sleep(0.05);
 
                 // repeat test
                 testCancelThreadImpl(self);
@@ -358,7 +358,7 @@ ArchMultithreadPosix::wait(ArchThread target, double timeout)
                 }
 
                 // repeat wait and test until timed out
-            } while (timeout < 0.0 || (bluebridge::current_time_seconds() - start) <= timeout);
+            } while (timeout < 0.0 || (glidekvm::current_time_seconds() - start) <= timeout);
         }
 
         closeThread(target);
@@ -470,7 +470,7 @@ ArchMultithreadPosix::insert(ArchThreadImpl* thread)
 
     // set thread id.  note that we don't worry about m_nextID
     // wrapping back to 0 and duplicating thread ID's since the
-    // likelihood of BlueBridge running that long is vanishingly
+    // likelihood of GlideKVM running that long is vanishingly
     // small.
     thread->m_id = ++m_nextID;
 
@@ -643,4 +643,4 @@ ArchMultithreadPosix::threadSignalHandler(void*)
     return nullptr;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

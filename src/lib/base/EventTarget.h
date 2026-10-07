@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include "EventTypes.h"
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 /** EventTarget represents an object to which events are being sent. Event targets can be
     registered to IEventQueue. On destruction of an EventTarget, all such registrations are
@@ -40,4 +40,4 @@ private:
     mutable IEventQueue* event_queue_ = nullptr;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

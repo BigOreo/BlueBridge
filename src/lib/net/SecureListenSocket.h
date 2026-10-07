@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #include "net/TCPListenSocket.h"
 #include "ConnectionSecurityLevel.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 class SecureListenSocket : public TCPListenSocket {
 public:
@@ -35,4 +35,4 @@ private:
     ConnectionSecurityLevel security_level_;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2018 Debauchee Open Source Group
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
@@ -25,26 +25,26 @@
 #include <Windows.h>
 
 #if defined(synwinhk_EXPORTS)
-#define CBLUEBRIDGE_HOOK_API __declspec(dllexport)
+#define CGLIDEKVM_HOOK_API __declspec(dllexport)
 #else
-#define CBLUEBRIDGE_HOOK_API __declspec(dllimport)
+#define CGLIDEKVM_HOOK_API __declspec(dllimport)
 #endif
 
-#define BLUEBRIDGE_MSG_MARK            WM_APP + 0x0011    // mark id; <unused>
-#define BLUEBRIDGE_MSG_KEY             WM_APP + 0x0012    // vk code; key data
-#define BLUEBRIDGE_MSG_MOUSE_BUTTON    WM_APP + 0x0013    // button msg; <unused>
-#define BLUEBRIDGE_MSG_MOUSE_WHEEL     WM_APP + 0x0014    // delta; <unused>
-#define BLUEBRIDGE_MSG_MOUSE_MOVE      WM_APP + 0x0015    // x; y
-#define BLUEBRIDGE_MSG_POST_WARP       WM_APP + 0x0016    // <unused>; <unused>
-#define BLUEBRIDGE_MSG_PRE_WARP        WM_APP + 0x0017    // x; y
-#define BLUEBRIDGE_MSG_SCREEN_SAVER    WM_APP + 0x0018    // activated; <unused>
-#define BLUEBRIDGE_MSG_DEBUG           WM_APP + 0x0019    // data, data
-#define BLUEBRIDGE_MSG_INPUT_FIRST BLUEBRIDGE_MSG_KEY
-#define BLUEBRIDGE_MSG_INPUT_LAST BLUEBRIDGE_MSG_PRE_WARP
-#define BLUEBRIDGE_HOOK_LAST_MSG BLUEBRIDGE_MSG_DEBUG
+#define GLIDEKVM_MSG_MARK            WM_APP + 0x0011    // mark id; <unused>
+#define GLIDEKVM_MSG_KEY             WM_APP + 0x0012    // vk code; key data
+#define GLIDEKVM_MSG_MOUSE_BUTTON    WM_APP + 0x0013    // button msg; <unused>
+#define GLIDEKVM_MSG_MOUSE_WHEEL     WM_APP + 0x0014    // delta; <unused>
+#define GLIDEKVM_MSG_MOUSE_MOVE      WM_APP + 0x0015    // x; y
+#define GLIDEKVM_MSG_POST_WARP       WM_APP + 0x0016    // <unused>; <unused>
+#define GLIDEKVM_MSG_PRE_WARP        WM_APP + 0x0017    // x; y
+#define GLIDEKVM_MSG_SCREEN_SAVER    WM_APP + 0x0018    // activated; <unused>
+#define GLIDEKVM_MSG_DEBUG           WM_APP + 0x0019    // data, data
+#define GLIDEKVM_MSG_INPUT_FIRST GLIDEKVM_MSG_KEY
+#define GLIDEKVM_MSG_INPUT_LAST GLIDEKVM_MSG_PRE_WARP
+#define GLIDEKVM_HOOK_LAST_MSG GLIDEKVM_MSG_DEBUG
 
-#define BLUEBRIDGE_HOOK_FAKE_INPUT_VIRTUAL_KEY    VK_CANCEL
-#define BLUEBRIDGE_HOOK_FAKE_INPUT_SCANCODE    0
+#define GLIDEKVM_HOOK_FAKE_INPUT_VIRTUAL_KEY    VK_CANCEL
+#define GLIDEKVM_HOOK_FAKE_INPUT_SCANCODE    0
 
 extern "C" {
 
@@ -59,7 +59,7 @@ enum EHookMode {
 typedef void            (*SetImmuneKeysFunc)(const DWORD*, std::size_t);
 
 // do not call setImmuneKeys() while the hooks are active!
-CBLUEBRIDGE_HOOK_API void setImmuneKeys(const DWORD *list, std::size_t size);
+CGLIDEKVM_HOOK_API void setImmuneKeys(const DWORD *list, std::size_t size);
 
 */
 

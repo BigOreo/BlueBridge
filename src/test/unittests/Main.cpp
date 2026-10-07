@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2011 Nick Bolton
  *
@@ -30,13 +30,13 @@ main(int argc, char **argv)
 {
 #if SYSAPI_WIN32
     // HACK: shouldn't be needed, but logging fails without this.
-    bluebridge::ArchMiscWindows::setInstanceWin32(GetModuleHandle(nullptr));
+    glidekvm::ArchMiscWindows::setInstanceWin32(GetModuleHandle(nullptr));
 #endif
 
-    bluebridge::Arch arch;
+    glidekvm::Arch arch;
     arch.init();
 
-    bluebridge::Log log;
+    glidekvm::Log log;
     log.setFilter(kDEBUG4);
 
     testing::InitGoogleTest(&argc, argv);

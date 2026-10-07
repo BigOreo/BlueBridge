@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "common/common.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 void* screenSaverUtilCreatePool();
 void screenSaverUtilReleasePool(void*);
@@ -33,4 +33,4 @@ void screenSaverUtilActivate(void*);
 void screenSaverUtilDeactivate(void*, int isEnabled);
 int screenSaverUtilIsActive(void*);
 
-} // namespace bluebridge
+} // namespace glidekvm

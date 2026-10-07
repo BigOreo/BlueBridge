@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Administrative template for GlideKVM machine policies. See doc/admin-policies.md. -->
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+  <policyNamespaces>
+    <target prefix="glidekvm" namespace="GlideKVM.Policies" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="SUPPORTED_GlideKVM" displayName="$(string.SUPPORTED_GlideKVM)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="GlideKVM" displayName="$(string.GlideKVM)" />
+  </categories>
+  <policies>
+    <policy name="ClipboardSharing" class="Machine" displayName="$(string.ClipboardSharing)" explainText="$(string.ClipboardSharing_Explain)" key="Software\Policies\GlideKVM" valueName="ClipboardSharing">
+      <parentCategory ref="GlideKVM" />
+      <supportedOn ref="SUPPORTED_GlideKVM" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="FileTransfer" class="Machine" displayName="$(string.FileTransfer)" explainText="$(string.FileTransfer_Explain)" key="Software\Policies\GlideKVM" valueName="FileTransfer">
+      <parentCategory ref="GlideKVM" />
+      <supportedOn ref="SUPPORTED_GlideKVM" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="RequireEncryption" class="Machine" displayName="$(string.RequireEncryption)" explainText="$(string.RequireEncryption_Explain)" key="Software\Policies\GlideKVM" valueName="RequireEncryption">
+      <parentCategory ref="GlideKVM" />
+      <supportedOn ref="SUPPORTED_GlideKVM" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="AllowedConnectionModes" class="Machine" displayName="$(string.AllowedConnectionModes)" explainText="$(string.AllowedConnectionModes_Explain)" key="Software\Policies\GlideKVM" presentation="$(presentation.AllowedConnectionModes)">
+      <parentCategory ref="GlideKVM" />
+      <supportedOn ref="SUPPORTED_GlideKVM" />
+      <elements>
+        <enum id="AllowedConnectionModes_Enum" valueName="AllowedConnectionModes" required="true">
+          <item displayName="$(string.AllowedConnectionModes_Both)"><value><decimal value="3" /></value></item>
+          <item displayName="$(string.AllowedConnectionModes_Network)"><value><decimal value="1" /></value></item>
+          <item displayName="$(string.AllowedConnectionModes_Bluetooth)"><value><decimal value="2" /></value></item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LockSettings" class="Machine" displayName="$(string.LockSettings)" explainText="$(string.LockSettings_Explain)" key="Software\Policies\GlideKVM" valueName="LockSettings">
+      <parentCategory ref="GlideKVM" />
+      <supportedOn ref="SUPPORTED_GlideKVM" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+  </policies>
+</policyDefinitions>

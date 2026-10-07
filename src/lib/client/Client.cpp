@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,15 +19,15 @@
 #include "client/Client.h"
 
 #include "client/ServerProxy.h"
-#include "bluebridge/Screen.h"
-#include "bluebridge/FileChunk.h"
-#include "bluebridge/DropHelper.h"
-#include "bluebridge/PacketStreamFilter.h"
-#include "bluebridge/ProtocolUtil.h"
-#include "bluebridge/protocol_types.h"
-#include "bluebridge/Exceptions.h"
-#include "bluebridge/StreamChunker.h"
-#include "bluebridge/IPlatformScreen.h"
+#include "glidekvm/Screen.h"
+#include "glidekvm/FileChunk.h"
+#include "glidekvm/DropHelper.h"
+#include "glidekvm/PacketStreamFilter.h"
+#include "glidekvm/ProtocolUtil.h"
+#include "glidekvm/protocol_types.h"
+#include "glidekvm/Exceptions.h"
+#include "glidekvm/StreamChunker.h"
+#include "glidekvm/IPlatformScreen.h"
 #include "mt/Thread.h"
 #include "net/TCPSocket.h"
 #include "net/IDataSocket.h"
@@ -47,11 +47,11 @@
 #include <stdexcept>
 #include <fstream>
 
-namespace bluebridge {
+namespace glidekvm {
 
 Client::Client(IEventQueue* events, const std::string& name, const NetworkAddress& address,
                ISocketFactory* socketFactory,
-               bluebridge::Screen* screen,
+               glidekvm::Screen* screen,
                ClientArgs const& args) :
     m_mock(false),
     m_name(name),
@@ -724,7 +724,7 @@ void Client::write_to_drop_dir_thread()
     LOG_DEBUG("starting write to drop dir thread");
 
     while (m_screen->isFakeDraggingStarted()) {
-        bluebridge::this_thread_sleep(.1f);
+        glidekvm::this_thread_sleep(.1f);
     }
 
     DropHelper::writeToDir(m_screen->getDropTarget(), m_dragFileList,
@@ -777,4 +777,4 @@ void Client::sendDragInfo(std::uint32_t fileCount, std::string& info, size_t siz
     m_server->sendDragInfo(fileCount, info.c_str(), size);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

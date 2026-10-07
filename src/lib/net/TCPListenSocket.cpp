@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -28,7 +28,7 @@
 #include "arch/XArch.h"
 #include "base/IEventQueue.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 TCPListenSocket::TCPListenSocket(IEventQueue* events, SocketMultiplexer* socketMultiplexer, IArchNetwork::EAddressFamily family) :
     m_events(events),
@@ -151,4 +151,4 @@ MultiplexerJobStatus TCPListenSocket::serviceListening(ISocketMultiplexerJob* jo
     return {true, {}};
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

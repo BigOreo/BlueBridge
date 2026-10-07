@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) 2021 Povilas Kanapickas <povilas@radix.lt>
 
     This package is free software; you can redistribute it and/or

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "base/String.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 MSWindowsClipboardHTMLConverter::MSWindowsClipboardHTMLConverter()
 {
@@ -60,11 +60,11 @@ std::string MSWindowsClipboardHTMLConverter::doFromIClipboard(const std::string&
     std::uint32_t EndHTML = EndFragment + (std::uint32_t)suffix.size();
 
     prefix.replace(prefix.find("XXXXXXXXXX"), 10,
-                            bluebridge::string::sprintf("%010u", StartFragment));
+                            glidekvm::string::sprintf("%010u", StartFragment));
     prefix.replace(prefix.find("YYYYYYYYYY"), 10,
-                            bluebridge::string::sprintf("%010u", EndFragment));
+                            glidekvm::string::sprintf("%010u", EndFragment));
     prefix.replace(prefix.find("ZZZZZZZZZZ"), 10,
-                            bluebridge::string::sprintf("%010u", EndHTML));
+                            glidekvm::string::sprintf("%010u", EndHTML));
 
     // concatenate
     prefix += data;
@@ -114,4 +114,4 @@ std::string MSWindowsClipboardHTMLConverter::findArg(const std::string& data,
     return data.substr(i, j - i);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

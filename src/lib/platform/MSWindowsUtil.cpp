@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include "base/String.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 std::string MSWindowsUtil::getString(HINSTANCE instance, DWORD id)
 {
@@ -47,8 +47,8 @@ std::string MSWindowsUtil::getErrorString(HINSTANCE hinstance, DWORD error, DWOR
                                 (LPTSTR)&buffer,
                                 0,
                                 nullptr) == 0) {
-        std::string errorString = bluebridge::string::sprintf("%d", error);
-        return bluebridge::string::format(getString(hinstance, id).c_str(),
+        std::string errorString = glidekvm::string::sprintf("%d", error);
+        return glidekvm::string::format(getString(hinstance, id).c_str(),
                             errorString.c_str());
     }
     else {
@@ -78,4 +78,4 @@ MSWindowsUtil::createDirectory(const std::string& path, bool stripLast)
         CreateDirectory(path.c_str(), nullptr);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

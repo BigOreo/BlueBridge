@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include <string>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class ArchThreadImpl;
 typedef ArchThreadImpl* ArchThread;
@@ -54,7 +54,7 @@ An opaque type representing a network address.
 */
 typedef ArchNetAddressImpl* ArchNetAddress;
 
-/** This interface defines the networking operations required by BlueBridge.
+/** This interface defines the networking operations required by GlideKVM.
     Each architecture must implement this interface.
 */
 class IArchNetwork {
@@ -284,4 +284,4 @@ public:
     virtual void init() = 0;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -19,7 +19,7 @@
 #include "ipc/IpcMessage.h"
 #include "ipc/Ipc.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 IpcMessage::IpcMessage(std::uint8_t type) :
     m_type(type)
@@ -70,4 +70,4 @@ IpcCommandMessage::~IpcCommandMessage()
 {
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

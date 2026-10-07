@@ -1,6 +1,6 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
-    Copyright (C) BlueBridge contributors
+    GlideKVM -- mouse and keyboard sharing utility
+    Copyright (C) GlideKVM contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 
 // The main window's home screen: a sidebar, a role switch, and one page for
 // each role. The widgets created by the .ui file and setupConnectionModeUi()
-// keep their logic; this file only arranges them into the BlueBridge layout.
+// keep their logic; this file only arranges them into the GlideKVM layout.
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -104,7 +104,7 @@ QIcon nav_icon(NavIcon kind)
     };
     QIcon icon;
     icon.addPixmap(paint(QColor("#3A4A61")), QIcon::Normal, QIcon::Off);
-    icon.addPixmap(paint(QColor(bluebridge::theme::kBlue)), QIcon::Normal, QIcon::On);
+    icon.addPixmap(paint(QColor(glidekvm::theme::kBlue)), QIcon::Normal, QIcon::On);
     return icon;
 }
 
@@ -233,8 +233,8 @@ void MainWindow::buildHomeLayout()
     brandLayout->setContentsMargins(8, 0, 0, 16);
     brandLayout->setSpacing(10);
     auto* logo = new QLabel(brand);
-    logo->setPixmap(QIcon(":/res/icons/app/bluebridge-64.png").pixmap(30, 30));
-    auto* wordmark = new QLabel(tr("BlueBridge"), brand);
+    logo->setPixmap(QIcon(":/res/icons/app/glidekvm-64.png").pixmap(30, 30));
+    auto* wordmark = new QLabel(tr("GlideKVM"), brand);
     wordmark->setProperty("role", "wordmark");
     brandLayout->addWidget(logo);
     brandLayout->addWidget(wordmark);
@@ -350,7 +350,7 @@ void MainWindow::buildHomeLayout()
     heroLayout->setContentsMargins(26, 22, 26, 22);
     heroLayout->setSpacing(18);
     auto* heroIcon = new QLabel(m_pHero);
-    heroIcon->setPixmap(QIcon(":/res/icons/256x256/bluebridge.png").pixmap(52, 52));
+    heroIcon->setPixmap(QIcon(":/res/icons/256x256/glidekvm.png").pixmap(52, 52));
     heroIcon->setFixedSize(52, 52);
     auto* heroText = new QVBoxLayout();
     heroText->setSpacing(4);
@@ -510,7 +510,7 @@ void MainWindow::buildHomeLayout()
         tr("A secure link is made"),
         tr("Everything is encrypted with TLS, and Bluetooth links must be paired too."),
         tr("The first time, check the fingerprint"),
-        tr("BlueBridge shows your main computer's fingerprint. If it matches the one shown "
+        tr("GlideKVM shows your main computer's fingerprint. If it matches the one shown "
            "there, you're connected to the right computer."),
         tr("Move the mouse across"),
         tr("Your main computer decides which edge leads here, under Arrange screens."),
@@ -653,7 +653,7 @@ void MainWindow::updateHome()
         m_pHeroText->setText(tr("Start sharing so your other computers can connect to this one."));
     } else if (connected == 0) {
         m_pHeroTitle->setText(tr("Waiting for your other computers"));
-        m_pHeroText->setText(tr("Open BlueBridge on another computer and connect to this one."));
+        m_pHeroText->setText(tr("Open GlideKVM on another computer and connect to this one."));
     } else {
         m_pHeroTitle->setText(connected == 1 ? tr("Sharing with 1 computer")
                                              : tr("Sharing with %1 computers").arg(connected));
@@ -681,7 +681,7 @@ void MainWindow::updateHome()
     m_pListConnected->setFixedHeight(rowHeight * connected + 4 * connected);
     m_pListConnected->setVisible(connected > 0);
     m_pLabelNoneConnected->setText(running
-        ? tr("No computers yet. Connect from BlueBridge on another computer.")
+        ? tr("No computers yet. Connect from GlideKVM on another computer.")
         : tr("Computers appear here once you start sharing."));
     m_pLabelNoneConnected->setVisible(connected == 0);
     m_pLinkArrange->setVisible(ui_->m_pRadioInternalConfig->isChecked());
@@ -730,7 +730,7 @@ void MainWindow::showPanel(const QString& title, QWidget* page, QPushButton* nav
         if (auto* buttons = page->findChild<QDialogButtonBox*>()) {
             if (QPushButton* ok = buttons->button(QDialogButtonBox::Ok)) {
                 ok->setText(tr("&Save"));
-                bluebridge::theme::set_primary(ok);
+                glidekvm::theme::set_primary(ok);
             }
         }
         if (auto* hide = page->findChild<QPushButton*>("m_pButtonHide")) {

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "base/ELevel.h"
 
-/** This interface defines the logging operations required by BlueBridge.
+/** This interface defines the logging operations required by GlideKVM.
     Each architecture must implement this interface.
 */
 class IArchLog {

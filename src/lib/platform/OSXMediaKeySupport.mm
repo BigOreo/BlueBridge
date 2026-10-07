@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2016 Symless.
  *
  * This package is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@
 #import <Cocoa/Cocoa.h>
 #import <IOKit/hidsystem/ev_keymap.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 int convertKeyIDToNXKeyType(KeyID id)
 {
@@ -155,4 +155,4 @@ fakeNativeMediaKey(KeyID id)
 	return true;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

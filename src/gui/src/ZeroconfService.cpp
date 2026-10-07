@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2014-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -40,8 +40,8 @@ static const QStringList preferedIPAddress(
                 "10." <<
                 "172.");
 
-const char* ZeroconfService:: m_ServerServiceName = "_blueBridgeServerZeroconf._tcp";
-const char* ZeroconfService:: m_ClientServiceName = "_blueBridgeClientZeroconf._tcp";
+const char* ZeroconfService:: m_ServerServiceName = "_glideKvmServerZeroconf._tcp";
+const char* ZeroconfService:: m_ClientServiceName = "_glideKvmClientZeroconf._tcp";
 
 static void silence_avahi_warning()
 {

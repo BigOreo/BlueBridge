@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2018 Debauchee Open Source Group
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
@@ -20,8 +20,8 @@
 #include "platform/MSWindowsDesks.h"
 
 #include "platform/MSWindowsScreen.h"
-#include "bluebridge/IScreenSaver.h"
-#include "bluebridge/XScreen.h"
+#include "glidekvm/IScreenSaver.h"
+#include "glidekvm/XScreen.h"
 #include "mt/Thread.h"
 #include "arch/win32/ArchMiscWindows.h"
 #include "base/Log.h"
@@ -31,7 +31,7 @@
 #include <malloc.h>
 #include <VersionHelpers.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 // these are only defined when WINVER >= 0x0500
 #if !defined(SPI_GETMOUSESPEED)
@@ -67,29 +67,29 @@ namespace bluebridge {
 #endif
 
 // <unused>; <unused>
-#define BLUEBRIDGE_MSG_SWITCH BLUEBRIDGE_HOOK_LAST_MSG + 1
+#define GLIDEKVM_MSG_SWITCH GLIDEKVM_HOOK_LAST_MSG + 1
 // <unused>; <unused>
-#define BLUEBRIDGE_MSG_ENTER BLUEBRIDGE_HOOK_LAST_MSG + 2
+#define GLIDEKVM_MSG_ENTER GLIDEKVM_HOOK_LAST_MSG + 2
 // <unused>; <unused>
-#define BLUEBRIDGE_MSG_LEAVE BLUEBRIDGE_HOOK_LAST_MSG + 3
+#define GLIDEKVM_MSG_LEAVE GLIDEKVM_HOOK_LAST_MSG + 3
 // wParam = flags, HIBYTE(lParam) = virtual key, LOBYTE(lParam) = scan code
-#define BLUEBRIDGE_MSG_FAKE_KEY BLUEBRIDGE_HOOK_LAST_MSG + 4
+#define GLIDEKVM_MSG_FAKE_KEY GLIDEKVM_HOOK_LAST_MSG + 4
  // flags, XBUTTON id
-#define BLUEBRIDGE_MSG_FAKE_BUTTON BLUEBRIDGE_HOOK_LAST_MSG + 5
+#define GLIDEKVM_MSG_FAKE_BUTTON GLIDEKVM_HOOK_LAST_MSG + 5
 // x; y
-#define BLUEBRIDGE_MSG_FAKE_MOVE BLUEBRIDGE_HOOK_LAST_MSG + 6
+#define GLIDEKVM_MSG_FAKE_MOVE GLIDEKVM_HOOK_LAST_MSG + 6
 // xDelta; yDelta
-#define BLUEBRIDGE_MSG_FAKE_WHEEL BLUEBRIDGE_HOOK_LAST_MSG + 7
+#define GLIDEKVM_MSG_FAKE_WHEEL GLIDEKVM_HOOK_LAST_MSG + 7
 // POINT*; <unused>
-#define BLUEBRIDGE_MSG_CURSOR_POS BLUEBRIDGE_HOOK_LAST_MSG + 8
+#define GLIDEKVM_MSG_CURSOR_POS GLIDEKVM_HOOK_LAST_MSG + 8
 // IKeyState*; <unused>
-#define BLUEBRIDGE_MSG_SYNC_KEYS BLUEBRIDGE_HOOK_LAST_MSG + 9
+#define GLIDEKVM_MSG_SYNC_KEYS GLIDEKVM_HOOK_LAST_MSG + 9
 // install; <unused>
-#define BLUEBRIDGE_MSG_SCREENSAVER BLUEBRIDGE_HOOK_LAST_MSG + 10
+#define GLIDEKVM_MSG_SCREENSAVER GLIDEKVM_HOOK_LAST_MSG + 10
 // dx; dy
-#define BLUEBRIDGE_MSG_FAKE_REL_MOVE BLUEBRIDGE_HOOK_LAST_MSG + 11
+#define GLIDEKVM_MSG_FAKE_REL_MOVE GLIDEKVM_HOOK_LAST_MSG + 11
 // enable; <unused>
-#define BLUEBRIDGE_MSG_FAKE_INPUT BLUEBRIDGE_HOOK_LAST_MSG + 12
+#define GLIDEKVM_MSG_FAKE_INPUT GLIDEKVM_HOOK_LAST_MSG + 12
 
 //
 // MSWindowsDesks
@@ -165,13 +165,13 @@ MSWindowsDesks::disable()
 void
 MSWindowsDesks::enter()
 {
-    sendMessage(BLUEBRIDGE_MSG_ENTER, 0, 0);
+    sendMessage(GLIDEKVM_MSG_ENTER, 0, 0);
 }
 
 void
 MSWindowsDesks::leave(HKL keyLayout)
 {
-    sendMessage(BLUEBRIDGE_MSG_LEAVE, (WPARAM)keyLayout, 0);
+    sendMessage(GLIDEKVM_MSG_LEAVE, (WPARAM)keyLayout, 0);
 }
 
 void
@@ -194,7 +194,7 @@ MSWindowsDesks::setOptions(const OptionsList& options)
 void
 MSWindowsDesks::updateKeys()
 {
-    sendMessage(BLUEBRIDGE_MSG_SYNC_KEYS, 0, 0);
+    sendMessage(GLIDEKVM_MSG_SYNC_KEYS, 0, 0);
 }
 
 void MSWindowsDesks::setShape(std::int32_t x, std::int32_t y, std::int32_t width,
@@ -215,26 +215,26 @@ MSWindowsDesks::installScreensaverHooks(bool install)
 {
     if (m_isPrimary && m_screensaverNotify != install) {
         m_screensaverNotify = install;
-        sendMessage(BLUEBRIDGE_MSG_SCREENSAVER, install, 0);
+        sendMessage(GLIDEKVM_MSG_SCREENSAVER, install, 0);
     }
 }
 
 void
 MSWindowsDesks::fakeInputBegin()
 {
-    sendMessage(BLUEBRIDGE_MSG_FAKE_INPUT, 1, 0);
+    sendMessage(GLIDEKVM_MSG_FAKE_INPUT, 1, 0);
 }
 
 void
 MSWindowsDesks::fakeInputEnd()
 {
-    sendMessage(BLUEBRIDGE_MSG_FAKE_INPUT, 0, 0);
+    sendMessage(GLIDEKVM_MSG_FAKE_INPUT, 0, 0);
 }
 
 void MSWindowsDesks::getCursorPos(std::int32_t& x, std::int32_t& y) const
 {
     POINT pos;
-    sendMessage(BLUEBRIDGE_MSG_CURSOR_POS, reinterpret_cast<WPARAM>(&pos), 0);
+    sendMessage(GLIDEKVM_MSG_CURSOR_POS, reinterpret_cast<WPARAM>(&pos), 0);
     x = pos.x;
     y = pos.y;
 }
@@ -252,7 +252,7 @@ MSWindowsDesks::fakeKeyEvent(
     if (!press) {
         flags |= KEYEVENTF_KEYUP;
     }
-    sendMessage(BLUEBRIDGE_MSG_FAKE_KEY, flags,
+    sendMessage(GLIDEKVM_MSG_FAKE_KEY, flags,
                             MAKEWORD(static_cast<BYTE>(button & 0xffu),
                                 static_cast<BYTE>(virtualKey & 0xffu)));
 }
@@ -307,26 +307,26 @@ MSWindowsDesks::fakeMouseButton(ButtonID button, bool press)
     }
 
     // do it
-    sendMessage(BLUEBRIDGE_MSG_FAKE_BUTTON, flags, data);
+    sendMessage(GLIDEKVM_MSG_FAKE_BUTTON, flags, data);
 }
 
 void MSWindowsDesks::fakeMouseMove(std::int32_t x, std::int32_t y) const
 {
-    sendMessage(BLUEBRIDGE_MSG_FAKE_MOVE,
+    sendMessage(GLIDEKVM_MSG_FAKE_MOVE,
                             static_cast<WPARAM>(x),
                             static_cast<LPARAM>(y));
 }
 
 void MSWindowsDesks::fakeMouseRelativeMove(std::int32_t dx, std::int32_t dy) const
 {
-    sendMessage(BLUEBRIDGE_MSG_FAKE_REL_MOVE,
+    sendMessage(GLIDEKVM_MSG_FAKE_REL_MOVE,
                             static_cast<WPARAM>(dx),
                             static_cast<LPARAM>(dy));
 }
 
 void MSWindowsDesks::fakeMouseWheel(std::int32_t xDelta, std::int32_t yDelta) const
 {
-    sendMessage(BLUEBRIDGE_MSG_FAKE_WHEEL, xDelta, yDelta);
+    sendMessage(GLIDEKVM_MSG_FAKE_WHEEL, xDelta, yDelta);
 }
 
 void
@@ -379,7 +379,7 @@ MSWindowsDesks::createDeskWindowClass(bool isPrimary) const
     classInfo.hCursor       = m_cursor;
     classInfo.hbrBackground = nullptr;
     classInfo.lpszMenuName = nullptr;
-    classInfo.lpszClassName = "BlueBridgeDesk";
+    classInfo.lpszClassName = "GlideKVMDesk";
     classInfo.hIconSm = nullptr;
     return RegisterClassEx(&classInfo);
 }
@@ -472,7 +472,7 @@ void MSWindowsDesks::deskMouseRelativeMove(std::int32_t dx, std::int32_t dy) con
     // restore acceleration.  there's a slight chance we'll end up in
     // the wrong place if the user moves the cursor using this system's
     // mouse while simultaneously moving the mouse on the server
-    // system.  that defeats the purpose of BlueBridge so we'll assume
+    // system.  that defeats the purpose of GlideKVM so we'll assume
     // that won't happen.  even if it does, the next mouse move will
     // correct the position.
 
@@ -602,7 +602,7 @@ void MSWindowsDesks::desk_thread(Desk* desk)
 
         // create a window.  we use this window to hide the cursor.
         try {
-            desk->m_window = createWindow(m_deskClass, "BlueBridgeDesk");
+            desk->m_window = createWindow(m_deskClass, "GlideKVMDesk");
             LOG_DEBUG("desk %s window is 0x%08x", desk->m_name.c_str(), desk->m_window);
         }
         catch (...) {
@@ -625,7 +625,7 @@ void MSWindowsDesks::desk_thread(Desk* desk)
             DispatchMessage(&msg);
             continue;
 
-        case BLUEBRIDGE_MSG_SWITCH:
+        case GLIDEKVM_MSG_SWITCH:
             if (m_isPrimary && !m_noHooks) {
                 MSWindowsHook::uninstall();
                 if (m_screensaverNotify) {
@@ -643,38 +643,38 @@ void MSWindowsDesks::desk_thread(Desk* desk)
             }
             break;
 
-        case BLUEBRIDGE_MSG_ENTER:
+        case GLIDEKVM_MSG_ENTER:
             m_isOnScreen = true;
             deskEnter(desk);
             break;
 
-        case BLUEBRIDGE_MSG_LEAVE:
+        case GLIDEKVM_MSG_LEAVE:
             m_isOnScreen = false;
             m_keyLayout  = (HKL)msg.wParam;
             deskLeave(desk, m_keyLayout);
             break;
 
-        case BLUEBRIDGE_MSG_FAKE_KEY:
+        case GLIDEKVM_MSG_FAKE_KEY:
             keybd_event(HIBYTE(msg.lParam), LOBYTE(msg.lParam), (DWORD)msg.wParam, 0);
             break;
 
-        case BLUEBRIDGE_MSG_FAKE_BUTTON:
+        case GLIDEKVM_MSG_FAKE_BUTTON:
             if (msg.wParam != 0) {
                 mouse_event((DWORD)msg.wParam, 0, 0, (DWORD)msg.lParam, 0);
             }
             break;
 
-        case BLUEBRIDGE_MSG_FAKE_MOVE:
+        case GLIDEKVM_MSG_FAKE_MOVE:
             deskMouseMove(static_cast<std::int32_t>(msg.wParam),
                           static_cast<std::int32_t>(msg.lParam));
             break;
 
-        case BLUEBRIDGE_MSG_FAKE_REL_MOVE:
+        case GLIDEKVM_MSG_FAKE_REL_MOVE:
             deskMouseRelativeMove(static_cast<std::int32_t>(msg.wParam),
                                   static_cast<std::int32_t>(msg.lParam));
             break;
 
-        case BLUEBRIDGE_MSG_FAKE_WHEEL:
+        case GLIDEKVM_MSG_FAKE_WHEEL:
             if (msg.lParam != 0) {
                 mouse_event(MOUSEEVENTF_WHEEL, 0, 0, (DWORD)msg.lParam, 0);
             }
@@ -683,7 +683,7 @@ void MSWindowsDesks::desk_thread(Desk* desk)
             }
             break;
 
-        case BLUEBRIDGE_MSG_CURSOR_POS: {
+        case GLIDEKVM_MSG_CURSOR_POS: {
             POINT* pos = reinterpret_cast<POINT*>(msg.wParam);
             if (!GetCursorPos(pos)) {
                 pos->x = m_xCenter;
@@ -692,11 +692,11 @@ void MSWindowsDesks::desk_thread(Desk* desk)
             break;
         }
 
-        case BLUEBRIDGE_MSG_SYNC_KEYS:
+        case GLIDEKVM_MSG_SYNC_KEYS:
             m_updateKeys();
             break;
 
-        case BLUEBRIDGE_MSG_SCREENSAVER:
+        case GLIDEKVM_MSG_SCREENSAVER:
             if (!m_noHooks) {
                 if (msg.wParam != 0) {
                     MSWindowsHook::installScreenSaver();
@@ -707,9 +707,9 @@ void MSWindowsDesks::desk_thread(Desk* desk)
             }
             break;
 
-        case BLUEBRIDGE_MSG_FAKE_INPUT:
-            keybd_event(BLUEBRIDGE_HOOK_FAKE_INPUT_VIRTUAL_KEY,
-                        BLUEBRIDGE_HOOK_FAKE_INPUT_SCANCODE,
+        case GLIDEKVM_MSG_FAKE_INPUT:
+            keybd_event(GLIDEKVM_HOOK_FAKE_INPUT_VIRTUAL_KEY,
+                        GLIDEKVM_HOOK_FAKE_INPUT_SCANCODE,
                         msg.wParam ? 0 : KEYEVENTF_KEYUP, 0);
             break;
         }
@@ -792,7 +792,7 @@ MSWindowsDesks::checkDesk()
         // show cursor on previous desk
         bool wasOnScreen = m_isOnScreen;
         if (!wasOnScreen) {
-            sendMessage(BLUEBRIDGE_MSG_ENTER, 0, 0);
+            sendMessage(GLIDEKVM_MSG_ENTER, 0, 0);
         }
 
         // check for desk accessibility change.  we don't get events
@@ -815,11 +815,11 @@ MSWindowsDesks::checkDesk()
         // switch desk
         m_activeDesk     = desk;
         m_activeDeskName = name;
-        sendMessage(BLUEBRIDGE_MSG_SWITCH, 0, 0);
+        sendMessage(GLIDEKVM_MSG_SWITCH, 0, 0);
 
         // hide cursor on new desk
         if (!wasOnScreen) {
-            sendMessage(BLUEBRIDGE_MSG_LEAVE, (WPARAM)m_keyLayout, 0);
+            sendMessage(GLIDEKVM_MSG_LEAVE, (WPARAM)m_keyLayout, 0);
         }
 
         // update keys if necessary
@@ -829,7 +829,7 @@ MSWindowsDesks::checkDesk()
     }
     else if (name != m_activeDeskName) {
         // screen saver might have started
-        PostThreadMessage(m_threadID, BLUEBRIDGE_MSG_SCREEN_SAVER, TRUE, 0);
+        PostThreadMessage(m_threadID, GLIDEKVM_MSG_SCREEN_SAVER, TRUE, 0);
     }
 }
 
@@ -858,7 +858,7 @@ void MSWindowsDesks::handle_check_desk()
     if (m_isPrimary) {
         BOOL running;
         SystemParametersInfo(SPI_GETSCREENSAVERRUNNING, 0, &running, FALSE);
-        PostThreadMessage(m_threadID, BLUEBRIDGE_MSG_SCREEN_SAVER, running, 0);
+        PostThreadMessage(m_threadID, GLIDEKVM_MSG_SCREEN_SAVER, running, 0);
     }
 }
 
@@ -906,4 +906,4 @@ MSWindowsDesks::getForegroundWindow() const
     return GetForegroundWindow();
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

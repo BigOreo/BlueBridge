@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -31,9 +31,9 @@
 #define VK_XBUTTON2				0x06
 #endif
 
-namespace bluebridge {
+namespace glidekvm {
 
-// map virtual keys to BlueBridge key enumeration
+// map virtual keys to GlideKVM key enumeration
 const KeyID				MSWindowsKeyState::s_virtualKey[] =
 {
 	/* 0x000 */ { kKeyNone },		// reserved
@@ -589,7 +589,7 @@ MSWindowsKeyState::MSWindowsKeyState(MSWindowsDesks* desks, const void* event_ta
 }
 
 MSWindowsKeyState::MSWindowsKeyState(
-    MSWindowsDesks* desks, const void* event_target, IEventQueue* events, bluebridge::KeyMap& keyMap) :
+    MSWindowsDesks* desks, const void* event_target, IEventQueue* events, glidekvm::KeyMap& keyMap) :
 	KeyState(events, keyMap),
     event_target_(event_target),
 	m_desks(desks),
@@ -896,7 +896,7 @@ MSWindowsKeyState::pollPressedKeys(KeyButtonSet& pressedKeys) const
 }
 
 void
-MSWindowsKeyState::getKeyMap(bluebridge::KeyMap& keyMap)
+MSWindowsKeyState::getKeyMap(glidekvm::KeyMap& keyMap)
 {
 	// update keyboard groups
 	if (getGroups(m_groups)) {
@@ -912,7 +912,7 @@ MSWindowsKeyState::getKeyMap(bluebridge::KeyMap& keyMap)
 	memset(m_virtualKeyToButton, 0, sizeof(m_virtualKeyToButton));
 	m_keyToVKMap.clear();
 
-	bluebridge::KeyMap::KeyItem item;
+	glidekvm::KeyMap::KeyItem item;
 	std::int32_t numGroups = (std::int32_t)m_groups.size();
 	for (std::int32_t g = 0; g < numGroups; ++g) {
 		item.m_group = g;
@@ -1091,7 +1091,7 @@ MSWindowsKeyState::getKeyMap(bluebridge::KeyMap& keyMap)
 				item.m_client    = m_buttonToVK[i];
 
 				// get flags for modifier keys
-				bluebridge::KeyMap::initModifierKey(item);
+				glidekvm::KeyMap::initModifierKey(item);
 
 				if (item.m_id == 0) {
 					// translate virtual key to a character with and without
@@ -1334,7 +1334,7 @@ MSWindowsKeyState::mapButtonToVirtualKey(KeyButton button) const
 }
 
 KeyID
-MSWindowsKeyState::getIDForKey(bluebridge::KeyMap::KeyItem& item,
+MSWindowsKeyState::getIDForKey(glidekvm::KeyMap::KeyItem& item,
 				KeyButton button, UINT virtualKey,
 				PBYTE keyState, HKL hkl) const
 {
@@ -1357,7 +1357,7 @@ MSWindowsKeyState::getIDForKey(bluebridge::KeyMap::KeyItem& item,
         // as an alternative, we could use the returned
         // buffer in unicode to look at the dead key character
         // and not rely on getDeadKey to provide the mapping
-        return bluebridge::KeyMap::getDeadKey(id);
+        return glidekvm::KeyMap::getDeadKey(id);
     }
 
 	default:
@@ -1377,7 +1377,7 @@ MSWindowsKeyState::getIDForKey(bluebridge::KeyMap::KeyItem& item,
 }
 
 void
-MSWindowsKeyState::addKeyEntry(bluebridge::KeyMap& keyMap, bluebridge::KeyMap::KeyItem& item)
+MSWindowsKeyState::addKeyEntry(glidekvm::KeyMap& keyMap, glidekvm::KeyMap::KeyItem& item)
 {
 	keyMap.addKeyEntry(item);
 	if (item.m_group == 0) {
@@ -1385,4 +1385,4 @@ MSWindowsKeyState::addKeyEntry(bluebridge::KeyMap& keyMap, bluebridge::KeyMap::K
 	}
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

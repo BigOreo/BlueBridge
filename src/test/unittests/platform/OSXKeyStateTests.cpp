@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2011 Nick Bolton
  *
@@ -16,18 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "test/mock/bluebridge/MockKeyMap.h"
-#include "test/mock/bluebridge/MockEventQueue.h"
+#include "test/mock/glidekvm/MockKeyMap.h"
+#include "test/mock/glidekvm/MockEventQueue.h"
 #include "platform/OSXKeyState.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 TEST(OSXKeyStateTests, mapModifiersFromOSX_OSXMask)
 {
-    bluebridge::KeyMap keyMap;
+    glidekvm::KeyMap keyMap;
     MockEventQueue eventQueue;
     OSXKeyState keyState(&eventQueue, keyMap);
 
@@ -58,4 +58,4 @@ TEST(OSXKeyStateTests, mapModifiersFromOSX_OSXMask)
     EXPECT_EQ(KeyModifierNumLock, outMask);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

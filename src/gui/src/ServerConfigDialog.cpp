@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -65,7 +65,7 @@ ServerConfigDialog::ServerConfigDialog(QWidget* parent, ServerConfig& config, co
     ui_->m_pSpinBoxClipboardSizeLimit->setValue(serverConfig().clipboardSharingSize());
     ui_->m_pSpinBoxClipboardSizeLimit->setEnabled(serverConfig().clipboardSharing());
 
-    const auto policy = bluebridge::read_machine_policy();
+    const auto policy = glidekvm::read_machine_policy();
     const QString managed = tr("Turned off by your organization");
     if (policy.file_transfer_disabled()) {
         ui_->m_pCheckBoxEnableDragAndDrop->setChecked(false);

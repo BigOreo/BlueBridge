@@ -1,9 +1,9 @@
-Thank you for choosing BlueBridge!
-https://github.com/BigOreo/BlueBridge/
+Thank you for choosing GlideKVM!
+https://github.com/BigOreo/GlideKVM/
 
-BlueBridge allows you to share your keyboard and mouse between computers over a network.
+GlideKVM allows you to share your keyboard and mouse between computers over a network.
 
 Have fun!
 
 Thanks,
-The BlueBridge Team
+The GlideKVM Team

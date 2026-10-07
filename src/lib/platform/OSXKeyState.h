@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "bluebridge/KeyState.h"
+#include "glidekvm/KeyState.h"
 
 #include <Carbon/Carbon.h>
 
@@ -26,7 +26,7 @@
 #include <set>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 typedef TISInputSourceRef KeyLayout;
 class IOSXKeyResource;
@@ -40,7 +40,7 @@ public:
     typedef std::vector<KeyID> KeyIDs;
 
     OSXKeyState(IEventQueue* events);
-    OSXKeyState(IEventQueue* events, bluebridge::KeyMap& keyMap);
+    OSXKeyState(IEventQueue* events, glidekvm::KeyMap& keyMap);
     virtual ~OSXKeyState();
 
     //! @name modifiers
@@ -58,9 +58,9 @@ public:
     //! @name accessors
     //@{
 
-    //! Convert OS X modifier mask to BlueBridge mask
+    //! Convert OS X modifier mask to GlideKVM mask
     /*!
-    Returns the BlueBridge modifier mask corresponding to the OS X modifier
+    Returns the GlideKVM modifier mask corresponding to the OS X modifier
     mask in \p mask.
     */
     KeyModifierMask mapModifiersFromOSX(std::uint32_t mask) const;
@@ -102,18 +102,18 @@ public:
     CGEventFlags getModifierStateAsOSXFlags();
 protected:
     // KeyState overrides
-    virtual void getKeyMap(bluebridge::KeyMap& keyMap);
+    virtual void getKeyMap(glidekvm::KeyMap& keyMap);
     virtual void fakeKey(const Keystroke& keystroke);
 
 private:
     class KeyResource;
     typedef std::vector<KeyLayout> GroupList;
 
-    // Add hard coded special keys to a bluebridge::KeyMap.
-    void getKeyMapForSpecialKeys(bluebridge::KeyMap& keyMap, std::int32_t group) const;
+    // Add hard coded special keys to a glidekvm::KeyMap.
+    void getKeyMapForSpecialKeys(glidekvm::KeyMap& keyMap, std::int32_t group) const;
 
     // Convert keyboard resource to a key map
-    bool getKeyMap(bluebridge::KeyMap& keyMap, std::int32_t group, const IOSXKeyResource& r) const;
+    bool getKeyMap(glidekvm::KeyMap& keyMap, std::int32_t group, const IOSXKeyResource& r) const;
 
     // Get the available keyboard groups
     bool getGroups(GroupList&) const;
@@ -154,7 +154,7 @@ private:
     void postHIDVirtualKey(const std::uint8_t virtualKeyCode, const bool postDown);
 
 private:
-    // OS X uses a physical key if 0 for the 'A' key.  BlueBridge reserves
+    // OS X uses a physical key if 0 for the 'A' key.  GlideKVM reserves
     // KeyButton 0 so we offset all OS X physical key ids by this much
     // when used as a KeyButton and by minus this much to map a KeyButton
     // to a physical button.
@@ -176,4 +176,4 @@ private:
     bool m_capsPressed;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

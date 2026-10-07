@@ -1,21 +1,21 @@
-name: bluebridge
+name: glidekvm
 base: core18
 version: master
 version-script: git describe --tags | sed "s/^v//"
-adopt-info: bluebridge
+adopt-info: glidekvm
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
-icon: res/bluebridge.svg
+icon: res/glidekvm.svg
 license: GPL-2.0
 
 apps:
-  bluebridge:
-    command: desktop-launch bluebridge #first run might take longer
+  glidekvm:
+    command: desktop-launch glidekvm #first run might take longer
     environment:
       # Fallback to XWayland if running in a Wayland session.
       DISABLE_WAYLAND: 1
-    desktop: usr/share/applications/bluebridge.desktop
-    common-id: io.github.bigoreo.bluebridge
+    desktop: usr/share/applications/glidekvm.desktop
+    common-id: io.github.bigoreo.glidekvm
     plugs: &plugs
       - desktop
       - desktop-legacy
@@ -28,11 +28,11 @@ apps:
       - unity7
       - wayland
       - x11
-  bluebridge-client:
-    command: desktop-launch bluebridge-client
+  glidekvm-client:
+    command: desktop-launch glidekvm-client
     plugs: *plugs
-  bluebridge-server:
-    command: desktop-launch bluebridge-server
+  glidekvm-server:
+    command: desktop-launch glidekvm-server
     plugs: *plugs
 
 parts:
@@ -41,10 +41,10 @@ parts:
     source-subdir: qt
     plugin: make
 
-  bluebridge:
+  glidekvm:
     source: .
     source-type: git
-    parse-info: [res/io.github.bigoreo.bluebridge.appdata.xml]
+    parse-info: [res/io.github.bigoreo.glidekvm.appdata.xml]
     plugin: cmake
     configflags:
       - "-DQT_DEFAULT_MAJOR_VERSION=5"
@@ -82,6 +82,6 @@ parts:
   fix-icon:
     plugin: nil
     override-build:
-      sed -i 's|Icon=bluebridge|Icon=/usr/share/icons/hicolor/scalable/apps/bluebridge.svg|' $SNAPCRAFT_STAGE/usr/share/applications/bluebridge.desktop
-    after: [bluebridge]
+      sed -i 's|Icon=glidekvm|Icon=/usr/share/icons/hicolor/scalable/apps/glidekvm.svg|' $SNAPCRAFT_STAGE/usr/share/applications/glidekvm.desktop
+    after: [glidekvm]
 

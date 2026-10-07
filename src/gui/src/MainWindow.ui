@@ -9,7 +9,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>BlueBridge</string>
+   <string>GlideKVM</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -367,7 +367,7 @@
   </widget>
   <action name="m_pActionAbout">
    <property name="text">
-    <string>&amp;About BlueBridge...</string>
+    <string>&amp;About GlideKVM...</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -486,7 +486,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../res/BlueBridge.qrc"/>
+  <include location="../res/GlideKVM.qrc"/>
  </resources>
  <connections>
   <connection>

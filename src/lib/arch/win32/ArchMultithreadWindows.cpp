@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -36,7 +36,7 @@
 // can cause busy waiting.
 //
 
-namespace bluebridge {
+namespace glidekvm {
 
 class ArchThreadImpl {
 public:
@@ -525,4 +525,4 @@ ArchMultithreadWindows::doThreadFunc(ArchThread thread)
     closeThread(thread);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

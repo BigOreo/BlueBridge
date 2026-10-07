@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -27,7 +27,7 @@
 #include <cctype>
 #include <cstdio>
 
-namespace bluebridge {
+namespace glidekvm {
 
 static const int s_family[] = {
     PF_UNSPEC,
@@ -79,7 +79,7 @@ static INT (WSAAPI *WSASetServiceW_winsock)(LPWSAQUERYSETW, WSAESETSERVICEOP, DW
 // {3bf44e11-0433-4f8f-a978-aaaa2c495c96}
 static const GUID s_bluetoothServiceClass =
     { 0x3bf44e11, 0x0433, 0x4f8f, { 0xa9, 0x78, 0xaa, 0xaa, 0x2c, 0x49, 0x5c, 0x96 } };
-static wchar_t s_bluetoothServiceName[] = L"BlueBridge";
+static wchar_t s_bluetoothServiceName[] = L"GlideKVM";
 
 // Parses "bt" (any local adapter) or "bt:XX:XX:XX:XX:XX:XX" (a remote
 // device; ':' and '-' separators are optional). Returns false if name is
@@ -1152,4 +1152,4 @@ ArchNetworkWinsock::throwNameError(int err)
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

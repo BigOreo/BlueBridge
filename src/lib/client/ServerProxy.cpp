@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,14 +19,14 @@
 #include "client/ServerProxy.h"
 
 #include "client/Client.h"
-#include "bluebridge/FileChunk.h"
-#include "bluebridge/ClipboardChunk.h"
-#include "bluebridge/StreamChunker.h"
-#include "bluebridge/Clipboard.h"
-#include "bluebridge/ProtocolUtil.h"
-#include "bluebridge/option_types.h"
-#include "bluebridge/protocol_types.h"
-#include "bluebridge/Exceptions.h"
+#include "glidekvm/FileChunk.h"
+#include "glidekvm/ClipboardChunk.h"
+#include "glidekvm/StreamChunker.h"
+#include "glidekvm/Clipboard.h"
+#include "glidekvm/ProtocolUtil.h"
+#include "glidekvm/option_types.h"
+#include "glidekvm/protocol_types.h"
+#include "glidekvm/Exceptions.h"
 #include "io/IStream.h"
 #include "base/Log.h"
 #include "base/IEventQueue.h"
@@ -35,9 +35,9 @@
 
 #include <memory>
 
-namespace bluebridge {
+namespace glidekvm {
 
-ServerProxy::ServerProxy(Client* client, bluebridge::IStream* stream, IEventQueue* events) :
+ServerProxy::ServerProxy(Client* client, glidekvm::IStream* stream, IEventQueue* events) :
     m_client(client),
     m_stream(stream),
     m_seqNum(0),
@@ -909,4 +909,4 @@ void ServerProxy::sendDragInfo(std::uint32_t fileCount, const char* info, size_t
     ProtocolUtil::writef(m_stream, kMsgDDragInfo, fileCount, &data);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

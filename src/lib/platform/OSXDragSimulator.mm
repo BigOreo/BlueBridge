@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #import <CoreData/CoreData.h>
 #import <Cocoa/Cocoa.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 #if defined(MAC_OS_X_VERSION_10_7)
 
@@ -103,4 +103,4 @@ getCocoaDropTarget()
 
 #endif
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,11 +1,11 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by bluebridge-server.rc
+// Used by glidekvm-server.rc
 //
 #define IDS_FAILED                      1
 #define IDS_INIT_FAILED                 2
 #define IDS_UNCAUGHT_EXCEPTION          3
-#define IDI_BLUEBRIDGE                   101
+#define IDI_GLIDEKVM                   101
 #define IDI_TASKBAR_NOT_RUNNING         102
 #define IDI_TASKBAR_NOT_WORKING         103
 #define IDI_TASKBAR_NOT_CONNECTED       104
@@ -27,8 +27,8 @@
 #define IDC_TASKBAR_LOG_LEVEL_DEBUG     40013
 #define IDC_TASKBAR_LOG_LEVEL_DEBUG1    40014
 #define IDC_TASKBAR_LOG_LEVEL_DEBUG2    40015
-#define ID_BLUEBRIDGE_RELOADSYSTEM         40016
-#define ID_BLUEBRIDGE_RESETSERVER          40017
+#define ID_GLIDEKVM_RELOADSYSTEM         40016
+#define ID_GLIDEKVM_RESETSERVER          40017
 
 // Next default values for new objects
 //

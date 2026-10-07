@@ -1,5 +1,5 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
+    GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -21,8 +21,8 @@
 
 FingerprintAcceptDialog::FingerprintAcceptDialog(QWidget *parent,
                                                  AppRole type,
-                                                 const bluebridge::FingerprintData& fingerprint_sha1,
-                                                 const bluebridge::FingerprintData& fingerprint_sha256) :
+                                                 const glidekvm::FingerprintData& fingerprint_sha1,
+                                                 const glidekvm::FingerprintData& fingerprint_sha256) :
     QDialog(parent),
     ui_{std::make_unique<Ui::FingerprintAcceptDialog>()}
 {
@@ -33,13 +33,13 @@ FingerprintAcceptDialog::FingerprintAcceptDialog(QWidget *parent,
         ui_->label_sha1_fingerprint_full->hide();
     } else {
         ui_->label_sha1_fingerprint_full->setText(
-                QString::fromStdString(bluebridge::format_ssl_fingerprint(fingerprint_sha1.data)));
+                QString::fromStdString(glidekvm::format_ssl_fingerprint(fingerprint_sha1.data)));
     }
 
     ui_->label_sha256_fingerprint_full->setText(
-            QString::fromStdString(bluebridge::format_ssl_fingerprint_columns(fingerprint_sha256.data)));
+            QString::fromStdString(glidekvm::format_ssl_fingerprint_columns(fingerprint_sha256.data)));
     ui_->label_sha256_fingerprint_randomart->setText(
-            QString::fromStdString(bluebridge::create_fingerprint_randomart(fingerprint_sha256.data)));
+            QString::fromStdString(glidekvm::create_fingerprint_randomart(fingerprint_sha256.data)));
 
     QString explanation;
     if (type == AppRole::Server) {

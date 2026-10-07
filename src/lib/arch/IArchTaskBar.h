@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -18,11 +18,11 @@
 
 #pragma once
 
-namespace bluebridge {
+namespace glidekvm {
 
 class IArchTaskBarReceiver;
 
-/** This interface defines the task bar icon operations required by BlueBridge.
+/** This interface defines the task bar icon operations required by GlideKVM.
     Each architecture must implement this interface though each operation can be a no-op.
 */
 class IArchTaskBar {
@@ -61,4 +61,4 @@ public:
     virtual void init() = 0;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

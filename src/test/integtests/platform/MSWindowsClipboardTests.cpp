@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2011 Nick Bolton
  *
@@ -22,7 +22,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class MSWindowsClipboardTests : public ::testing::Test
 {
@@ -230,4 +230,4 @@ TEST_F(MSWindowsClipboardTests, is_owned_by_us_defaultState_noError)
     EXPECT_EQ(true, actual);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm
