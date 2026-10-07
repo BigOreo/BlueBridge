@@ -1,5 +1,5 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
+    BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -20,15 +20,15 @@
 #include <cstdio>
 #include <iosfwd>
 #include <ios>
-#if INPUTLEAP_USE_GULRAK_FILESYSTEM
+#if BLUEBRIDGE_USE_GULRAK_FILESYSTEM
 #include <ghc/fs_fwd.hpp>
 #else
 #include <filesystem>
 #endif
 
-namespace inputleap {
+namespace bluebridge {
 
-#if INPUTLEAP_USE_GULRAK_FILESYSTEM
+#if BLUEBRIDGE_USE_GULRAK_FILESYSTEM
 namespace fs = ghc::filesystem;
 #else
 namespace fs = std::filesystem;
@@ -43,4 +43,4 @@ void open_utf8_path(std::fstream& stream, const fs::path& path,
 
 std::FILE* fopen_utf8_path(const fs::path& path, const std::string& mode);
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2011 Nick Bolton
  *
@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define INPUTLEAP_TEST_ENV
+#define BLUEBRIDGE_TEST_ENV
 
-#include "test/mock/inputleap/MockEventQueue.h"
-#include "test/mock/inputleap/MockKeyMap.h"
+#include "test/mock/bluebridge/MockEventQueue.h"
+#include "test/mock/bluebridge/MockKeyMap.h"
 #include "platform/MSWindowsKeyState.h"
 #include "platform/MSWindowsDesks.h"
 #include "platform/MSWindowsScreen.h"
@@ -29,9 +29,9 @@
 #include <gtest/gtest.h>
 
 // wParam = flags, HIBYTE(lParam) = virtual key, LOBYTE(lParam) = scan code
-#define INPUTLEAP_MSG_FAKE_KEY		INPUTLEAP_HOOK_LAST_MSG + 4
+#define BLUEBRIDGE_MSG_FAKE_KEY		BLUEBRIDGE_HOOK_LAST_MSG + 4
 
-namespace inputleap {
+namespace bluebridge {
 
 using ::testing::_;
 using ::testing::NiceMock;
@@ -137,4 +137,4 @@ TEST_F(MSWindowsKeyStateTests, testKoreanLocale_inputModeKey_resultCorrectKeyID)
 	delete desks;
 }
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 
 #include <xkbcommon/xkbcommon.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 EiKeyState::EiKeyState(EiScreen* screen, IEventQueue* events) :
     KeyState(events),
@@ -148,7 +148,7 @@ std::uint32_t EiKeyState::convert_mod_mask(std::uint32_t xkb_mask) const
 // Only way to figure out whether a key is a modifier key is to press it,
 // check if a modifier changed state and then release it again.
 // Luckily xkbcommon allows us to do this in a separate state
-void EiKeyState::assign_generated_modifiers(std::uint32_t keycode, inputleap::KeyMap::KeyItem& item)
+void EiKeyState::assign_generated_modifiers(std::uint32_t keycode, bluebridge::KeyMap::KeyItem& item)
 {
     std::uint32_t mods_generates = 0;
     auto state = xkb_state_new(xkb_keymap_);
@@ -170,7 +170,7 @@ void EiKeyState::assign_generated_modifiers(std::uint32_t keycode, inputleap::Ke
     item.m_generates = convert_mod_mask(mods_generates);
 }
 
-void EiKeyState::getKeyMap(inputleap::KeyMap& keyMap)
+void EiKeyState::getKeyMap(bluebridge::KeyMap& keyMap)
 {
     auto min_keycode = xkb_keymap_min_keycode(xkb_keymap_);
     auto max_keycode = xkb_keymap_max_keycode(xkb_keymap_);
@@ -198,7 +198,7 @@ void EiKeyState::getKeyMap(inputleap::KeyMap& keyMap)
                 if (nsyms > 1)
                     LOG_WARN(" Multiple keysyms per keycode are not supported, keycode %d", keycode);
 
-                inputleap::KeyMap::KeyItem item{};
+                bluebridge::KeyMap::KeyItem item{};
                 xkb_keysym_t keysym = syms[0];
                 KeySym sym = static_cast<KeyID>(keysym);
                 item.m_id = XKBUtil::mapKeySymToKeyID(sym);
@@ -278,4 +278,4 @@ void EiKeyState::update_xkb_state(uint32_t keyval, bool is_pressed)
     xkb_state_update_key(xkb_state_, keyval, is_pressed ? XKB_KEY_DOWN : XKB_KEY_UP);
 }
 
-} // namespace inputleap
+} // namespace bluebridge

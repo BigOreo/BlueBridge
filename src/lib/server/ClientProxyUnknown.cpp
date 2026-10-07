@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -22,17 +22,17 @@
 #include "base/ELevel.h"
 #include "server/Server.h"
 #include "server/ClientProxy1_6.h"
-#include "inputleap/protocol_types.h"
-#include "inputleap/ProtocolUtil.h"
-#include "inputleap/Exceptions.h"
+#include "bluebridge/protocol_types.h"
+#include "bluebridge/ProtocolUtil.h"
+#include "bluebridge/Exceptions.h"
 #include "io/IStream.h"
 #include "io/XIO.h"
 #include "base/Log.h"
 #include "base/IEventQueue.h"
 
-namespace inputleap {
+namespace bluebridge {
 
-ClientProxyUnknown::ClientProxyUnknown(std::unique_ptr<inputleap::IStream> stream,
+ClientProxyUnknown::ClientProxyUnknown(std::unique_ptr<bluebridge::IStream> stream,
                                        double timeout, Server* server, IEventQueue* events) :
     stream_(std::move(stream)),
     m_proxy(nullptr),
@@ -243,4 +243,4 @@ void ClientProxyUnknown::handle_ready()
     sendSuccess();
 }
 
-} // namespace inputleap
+} // namespace bluebridge

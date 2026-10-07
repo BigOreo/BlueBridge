@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -24,9 +24,9 @@
 #include "platform/XWindowsKeyState.h"
 #include "platform/XWindowsScreenSaver.h"
 #include "platform/XWindowsUtil.h"
-#include "inputleap/Clipboard.h"
-#include "inputleap/KeyMap.h"
-#include "inputleap/XScreen.h"
+#include "bluebridge/Clipboard.h"
+#include "bluebridge/KeyMap.h"
+#include "bluebridge/XScreen.h"
 #include "arch/XArch.h"
 #include "arch/Arch.h"
 #include "base/Log.h"
@@ -40,7 +40,7 @@
 
 #define SCROLL_LOCK_EXCLUDE_MASK 0xDFFF
 // To ignore scroll lock state for hotkeys, as it is used for alternate keyboard layout indication
-namespace inputleap {
+namespace bluebridge {
 
 static int xi_opcode;
 
@@ -120,7 +120,7 @@ XWindowsScreen::XWindowsScreen(
 		LOG_DEBUG("screen shape: %d,%d %dx%d %s", m_x, m_y, m_w, m_h, m_xinerama ? "(xinerama)" : "");
 		LOG_DEBUG("window is 0x%08lx", m_window);
         if (detectXwayland())
-            LOG_WARN("Running against Xwayland. InputLeap will not work as expected");
+            LOG_WARN("Running against Xwayland. BlueBridge will not work as expected");
 	}
 	catch (...) {
         if (m_display != nullptr) {
@@ -700,11 +700,11 @@ std::uint32_t XWindowsScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 
 		m_oldHotKeyIDs.push_back(id);
 		m_hotKeys.erase(id);
-		LOG_WARN("failed to register hotkey %s (id=%04x mask=%04x)", inputleap::KeyMap::formatKey(key, mask).c_str(), key, mask);
+		LOG_WARN("failed to register hotkey %s (id=%04x mask=%04x)", bluebridge::KeyMap::formatKey(key, mask).c_str(), key, mask);
 		return 0;
 	}
 
-	LOG_DEBUG("registered hotkey %s (id=%04x mask=%04x) as id=%d", inputleap::KeyMap::formatKey(key, mask).c_str(), key, mask, id);
+	LOG_DEBUG("registered hotkey %s (id=%04x mask=%04x) as id=%d", bluebridge::KeyMap::formatKey(key, mask).c_str(), key, mask, id);
 	return id;
 }
 
@@ -936,7 +936,7 @@ XWindowsScreen::saveShape()
 	// 0,0 to Wm,Hm where Wm (Hm) is the minimum width (height) over
 	// all physical screens.  this warp only seems to happen if the
 	// pointer wasn't in that region before the XWarpPointer().  the
-    // second (unexpected) warp causes InputLeap to think the pointer
+    // second (unexpected) warp causes BlueBridge to think the pointer
 	// has been moved when it hasn't.  to work around the problem,
 	// we warp the pointer to the center of the first physical
 	// screen instead of the logical screen.
@@ -1022,7 +1022,7 @@ XWindowsScreen::openIM()
 		return;
 	}
 
-    // find the appropriate style.  InputLeap supports XIMPreeditNothing
+    // find the appropriate style.  BlueBridge supports XIMPreeditNothing
 	// only at the moment.
 	XIMStyles* styles;
     if (m_impl->XGetIMValues(im, XNQueryInputStyle, &styles) != nullptr ||
@@ -1948,7 +1948,7 @@ XWindowsScreen::grabMouseAndKeyboard()
 			assert(result != GrabNotViewable);
 			if (result != GrabSuccess) {
 				LOG_DEBUG2("waiting to grab keyboard");
-                inputleap::this_thread_sleep(0.05);
+                bluebridge::this_thread_sleep(0.05);
 				if (timer.getTime() >= s_timeout) {
 					LOG_DEBUG2("grab keyboard timed out");
 					return false;
@@ -1966,7 +1966,7 @@ XWindowsScreen::grabMouseAndKeyboard()
 			// back off to avoid grab deadlock
             m_impl->XUngrabKeyboard(m_display, CurrentTime);
 			LOG_DEBUG2("ungrabbed keyboard, waiting to grab pointer");
-            inputleap::this_thread_sleep(0.05);
+            bluebridge::this_thread_sleep(0.05);
 			if (timer.getTime() >= s_timeout) {
 				LOG_DEBUG2("grab pointer timed out");
 				return false;
@@ -2051,4 +2051,4 @@ XWindowsScreen::selectXIRawMotion()
 	free(mask.mask);
 }
 
-} // namespace inputleap
+} // namespace bluebridge

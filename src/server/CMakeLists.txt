@@ -1,4 +1,4 @@
-# InputLeap -- mouse and keyboard sharing utility
+# BlueBridge -- mouse and keyboard sharing utility
 # Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2009 Nick Bolton
 #
@@ -15,17 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 set(sources
-    input-leaps.cpp
+    bluebridge-server.cpp
 )
 
 if (BUILD_MSWINDOWS)
     file(GLOB mswin_headers "MSWindows*.h")
     file(GLOB mswin_sources "MSWindows*.cpp")
     list(APPEND sources
-        input-leaps.exe.manifest
-        input-leaps.rc
+        bluebridge-server.exe.manifest
+        bluebridge-server.rc
     )
-    set_property(SOURCE input-leaps.rc PROPERTY COMPILE_FLAGS /nologo)
+    set_property(SOURCE bluebridge-server.rc PROPERTY COMPILE_FLAGS /nologo)
 endif()
 if (BUILD_CARBON)
     file(GLOB carbon_headers "OSX*.h")
@@ -43,18 +43,18 @@ endif()
 list(APPEND sources ${mswin_sources} ${carbon_sources} ${xwin_sources} ${ei_sources})
 list(APPEND headers ${mswin_headers} ${carbon_headers} ${xwin_headers} ${ei_headers})
 
-if(INPUTLEAP_ADD_HEADERS)
+if(BLUEBRIDGE_ADD_HEADERS)
     list(APPEND sources ${headers})
 endif()
 
-add_executable(input-leaps ${sources})
-target_link_libraries(input-leaps
+add_executable(bluebridge-server ${sources})
+target_link_libraries(bluebridge-server
     arch base client common io mt net ipc platform server synlib ${libs} OpenSSL::SSL OpenSSL::Crypto)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    install(TARGETS input-leaps DESTINATION ${INPUTLEAP_BUNDLE_BINARY_DIR})
+    install(TARGETS bluebridge-server DESTINATION ${BLUEBRIDGE_BUNDLE_BINARY_DIR})
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    install (TARGETS input-leaps DESTINATION bin)
+    install (TARGETS bluebridge-server DESTINATION bin)
 else()
-    install (TARGETS input-leaps DESTINATION .)
+    install (TARGETS bluebridge-server DESTINATION .)
 endif()

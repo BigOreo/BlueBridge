@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -18,13 +18,13 @@
 
 #include "server/PrimaryClient.h"
 
-#include "inputleap/Screen.h"
-#include "inputleap/Clipboard.h"
+#include "bluebridge/Screen.h"
+#include "bluebridge/Clipboard.h"
 #include "base/Log.h"
 
-namespace inputleap {
+namespace bluebridge {
 
-PrimaryClient::PrimaryClient(const std::string& name, inputleap::Screen* screen) :
+PrimaryClient::PrimaryClient(const std::string& name, bluebridge::Screen* screen) :
     BaseClientProxy(name),
     m_screen(screen),
     m_fakeInputCount(0)
@@ -262,4 +262,4 @@ PrimaryClient::setOptions(const OptionsList& options)
     m_screen->setOptions(options);
 }
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,15 +19,15 @@
 #include "server/Config.h"
 
 #include "server/Server.h"
-#include "inputleap/KeyMap.h"
-#include "inputleap/key_types.h"
+#include "bluebridge/KeyMap.h"
+#include "bluebridge/key_types.h"
 #include "net/XSocket.h"
 
 #include <cstdlib>
 
-namespace inputleap {
+namespace bluebridge {
 
-using namespace inputleap::string;
+using namespace bluebridge::string;
 
 Config::Config() :
     m_hasLockToScreenAction(false)
@@ -603,7 +603,7 @@ std::string Config::formatInterval(const Interval& x)
 	if (x.first == 0.0f && x.second == 1.0f) {
 		return "";
 	}
-    return inputleap::string::sprintf("(%d,%d)", static_cast<int>(x.first * 100.0f + 0.5f),
+    return bluebridge::string::sprintf("(%d,%d)", static_cast<int>(x.first * 100.0f + 0.5f),
                                         static_cast<int>(x.second * 100.0f + 0.5f));
 }
 
@@ -1391,7 +1391,7 @@ std::string Config::getOptionValue(OptionID id, OptionValue value)
 		id == kOptionScreenSwitchCornerSize ||
 		id == kOptionScreenSwitchDelay ||
 		id == kOptionScreenSwitchTwoTap) {
-		return inputleap::string::sprintf("%d", value);
+		return bluebridge::string::sprintf("%d", value);
 	}
 	if (id == kOptionScreenSwitchCorners) {
 		std::string result("none");
@@ -1848,7 +1848,7 @@ bool ConfigReadContext::readLine(std::string& line)
 				if (!isgraph(line[i]) && line[i] != ' ' && line[i] != '\t') {
 					throw XConfigRead(*this,
 								"invalid character %{1}",
-								inputleap::string::sprintf("%#2x", line[i]));
+								bluebridge::string::sprintf("%#2x", line[i]));
 				}
 			}
 
@@ -2153,12 +2153,12 @@ IPlatformScreen::KeyInfo ConfigReadContext::parseKeystroke(const std::string& ke
     std::string s = keystroke;
 
 	KeyModifierMask mask;
-	if (!inputleap::KeyMap::parseModifiers(s, mask)) {
+	if (!bluebridge::KeyMap::parseModifiers(s, mask)) {
 		throw XConfigRead(*this, "unable to parse key modifiers");
 	}
 
 	KeyID key;
-	if (!inputleap::KeyMap::parseKey(s, key)) {
+	if (!bluebridge::KeyMap::parseKey(s, key)) {
 		throw XConfigRead(*this, "unable to parse key");
 	}
 
@@ -2174,7 +2174,7 @@ IPlatformScreen::ButtonInfo ConfigReadContext::parseMouse(const std::string& mou
     std::string s = mouse;
 
 	KeyModifierMask mask;
-	if (!inputleap::KeyMap::parseModifiers(s, mask)) {
+	if (!bluebridge::KeyMap::parseModifiers(s, mask)) {
 		throw XConfigRead(*this, "unable to parse button modifiers");
 	}
 
@@ -2195,7 +2195,7 @@ KeyModifierMask ConfigReadContext::parseModifier(const std::string& modifiers) c
     std::string s = modifiers;
 
 	KeyModifierMask mask;
-	if (!inputleap::KeyMap::parseModifiers(s, mask)) {
+	if (!bluebridge::KeyMap::parseModifiers(s, mask)) {
 		throw XConfigRead(*this, "unable to parse modifiers");
 	}
 
@@ -2225,7 +2225,7 @@ std::string ConfigReadContext::concatArgs(const ArgList& args)
 //
 
 XConfigRead::XConfigRead(const ConfigReadContext& context, const std::string& error) :
-	m_error(inputleap::string::sprintf("line %d: %s",
+	m_error(bluebridge::string::sprintf("line %d: %s",
 							context.getLineNumber(), error.c_str()))
 {
 	// do nothing
@@ -2233,8 +2233,8 @@ XConfigRead::XConfigRead(const ConfigReadContext& context, const std::string& er
 
 XConfigRead::XConfigRead(const ConfigReadContext& context, const char* errorFmt,
                          const std::string& arg) :
-	m_error(inputleap::string::sprintf("line %d: ", context.getLineNumber()) +
-							inputleap::string::format(errorFmt, arg.c_str()))
+	m_error(bluebridge::string::sprintf("line %d: ", context.getLineNumber()) +
+							bluebridge::string::format(errorFmt, arg.c_str()))
 {
 	// do nothing
 }
@@ -2249,4 +2249,4 @@ std::string XConfigRead::getWhat() const noexcept
 	return format("XConfigRead", "read error: %{1}", m_error.c_str());
 }
 
-} // namespace inputleap
+} // namespace bluebridge

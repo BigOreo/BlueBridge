@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -23,7 +23,7 @@
 #define WINDOWS_LEAN_AND_MEAN
 #include <Windows.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 class MSWindowsUtil {
 public:
@@ -48,4 +48,4 @@ public:
     static void createDirectory(const std::string& path, bool stripLast = false);
 };
 
-} // namespace inputleap
+} // namespace bluebridge

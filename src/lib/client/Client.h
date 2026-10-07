@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,23 +20,23 @@
 
 #include "base/Fwd.h"
 #include "base/EventTarget.h"
-#include "inputleap/Fwd.h"
-#include "inputleap/IClient.h"
-#include "inputleap/Clipboard.h"
-#include "inputleap/DragInformation.h"
-#include "inputleap/INode.h"
-#include "inputleap/ClientArgs.h"
+#include "bluebridge/Fwd.h"
+#include "bluebridge/IClient.h"
+#include "bluebridge/Clipboard.h"
+#include "bluebridge/DragInformation.h"
+#include "bluebridge/INode.h"
+#include "bluebridge/ClientArgs.h"
 #include "net/Fwd.h"
 #include "net/NetworkAddress.h"
 #include "base/EventTypes.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 class ServerProxy;
 class IStream;
 class Thread;
 
-/// This class implements the top-level client algorithms for InputLeap.
+/// This class implements the top-level client algorithms for BlueBridge.
 class Client : public IClient, public INode, public EventTarget {
 public:
     class FailInfo {
@@ -54,7 +54,7 @@ public:
     */
     Client(IEventQueue* events, const std::string& name,
            const NetworkAddress& address, ISocketFactory* socketFactory,
-           inputleap::Screen* screen, ClientArgs const& args);
+           bluebridge::Screen* screen, ClientArgs const& args);
 
     ~Client();
 
@@ -194,8 +194,8 @@ private:
     std::string m_name;
     NetworkAddress m_serverAddress;
     ISocketFactory* m_socketFactory;
-    inputleap::Screen* m_screen;
-    inputleap::IStream* m_stream;
+    bluebridge::Screen* m_screen;
+    bluebridge::IStream* m_stream;
     EventQueueTimer* m_timer;
     ServerProxy* m_server;
     bool m_ready;
@@ -219,4 +219,4 @@ private:
     size_t m_maximumClipboardSize;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

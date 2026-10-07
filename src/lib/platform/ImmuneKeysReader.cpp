@@ -1,5 +1,5 @@
 /*
-* InputLeap -- mouse and keyboard sharing utility
+* BlueBridge -- mouse and keyboard sharing utility
 * Copyright (C) 2018 Deuauche Open Source Group
 *
 * This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include <fstream>
 
-namespace inputleap {
+namespace bluebridge {
 
 const std::size_t AllocatedLineSize = 1024;
 const char CommentChar = '#';
@@ -54,4 +54,4 @@ static void add_key(const char * const buffer, std::vector<DWORD> &keys)
     return true;
 }
 
-} // namespace inputleap
+} // namespace bluebridge

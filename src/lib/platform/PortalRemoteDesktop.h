@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 #define XDP_OUTPUT_NONE (XdpOutputType)0
 #endif
 
-namespace inputleap {
+namespace bluebridge {
 
 class PortalRemoteDesktop {
 public:
@@ -69,4 +69,4 @@ private:
     guint session_iteration_ = 0; /// The number of successful sessions we've had already
 };
 
-} // namespace inputleap
+} // namespace bluebridge

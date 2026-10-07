@@ -1,5 +1,5 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
+    BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) 2021 InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include <gtest/gtest.h>
 #include "test/global/TestUtils.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 TEST(SecureUtilsTest, FormatSslFingerprintHexWithSeparators)
 {
@@ -70,4 +70,4 @@ TEST(SecureUtilsTest, CreateFingerprintRandomArt)
               "+-----------------+");
 }
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -9,7 +9,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>InputLeap</string>
+   <string>BlueBridge</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -367,7 +367,7 @@
   </widget>
   <action name="m_pActionAbout">
    <property name="text">
-    <string>&amp;About InputLeap...</string>
+    <string>&amp;About BlueBridge...</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -486,7 +486,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../res/InputLeap.qrc"/>
+  <include location="../res/BlueBridge.qrc"/>
  </resources>
  <connections>
   <connection>

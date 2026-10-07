@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -22,7 +22,7 @@
 #include <Windows.h>
 #include <string>
 
-namespace inputleap {
+namespace bluebridge {
 
 MSWindowsDebugOutputter::MSWindowsDebugOutputter()
 {
@@ -59,4 +59,4 @@ MSWindowsDebugOutputter::flush()
 {
 }
 
-} // namespace inputleap
+} // namespace bluebridge

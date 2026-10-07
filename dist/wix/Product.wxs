@@ -16,19 +16,19 @@
 			<ComponentRef Id="RegistryEntries"/>
 		</Feature>
 		<DirectoryRef Id="TARGETDIR">
-			<Component Guid="7CF3564D-1F8E-4D3D-9781-E1EE22D5BD67" Id="RegistryEntries">
+			<Component Guid="451AB6DC-DB9E-4C03-8DA6-42CAE6C39294" Id="RegistryEntries">
 				<RegistryKey ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes" Key="Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" Root="HKLM">
-                    <RegistryValue Name="[INSTALLFOLDER]input-leaps.exe" Type="string" Value="~ HIGHDPIAWARE WIN7RTM"/>
+                    <RegistryValue Name="[INSTALLFOLDER]bluebridge-server.exe" Type="string" Value="~ HIGHDPIAWARE WIN7RTM"/>
 				</RegistryKey>
 				<!-- Windows 8 and later only -->
 				<Condition><![CDATA[Installed OR (VersionNT >= 602)]]></Condition>
 			</Component>
 		</DirectoryRef>
-        <Icon Id="input-leap.ico" SourceFile="$(var.ResPath)/input-leap.ico"/>
+        <Icon Id="bluebridge.ico" SourceFile="$(var.ResPath)/bluebridge.ico"/>
 		<WixVariable Id="WixUILicenseRtf" Value="$(var.ResPath)\License.rtf"/>
 		<WixVariable Id="WixUIBannerBmp" Value="$(var.ResPath)\banner.bmp"/>
 		<WixVariable Id="WixUIDialogBmp" Value="$(var.ResPath)\dialog.bmp"/>
-        <Property Id="ARPPRODUCTICON" Value="input-leap.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="bluebridge.ico"/>
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"/>
 		<Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable"/>
 		<CustomAction ExeCommand="" FileKey="GuiProgram" Id="StartGui" Return="asyncNoWait"/>
@@ -49,24 +49,24 @@
 	</Fragment>
 	<Fragment>
 		<ComponentGroup Directory="INSTALLFOLDER" Id="ProductComponents">
-			<Component Guid="EC9AD3B0-277C-4157-B5C8-5FD5B6A5F4AD" Id="Core">
-                <File KeyPath="yes" Source="$(var.BinPath)/input-leapd.exe"/>
-                <ServiceInstall Description="Controls the $(var.Name) foreground processes." DisplayName="$(var.Name)" ErrorControl="normal" Id="ServiceInstall" Name="InputLeap" Start="auto" Type="ownProcess">
+			<Component Guid="2A157087-45E1-461B-B8F1-0D1E3694A69A" Id="Core">
+                <File KeyPath="yes" Source="$(var.BinPath)/bluebridge-service.exe"/>
+                <ServiceInstall Description="Controls the $(var.Name) foreground processes." DisplayName="$(var.Name)" ErrorControl="normal" Id="ServiceInstall" Name="BlueBridge" Start="auto" Type="ownProcess">
 					<util:ServiceConfig FirstFailureActionType="restart" ResetPeriodInDays="1" RestartServiceDelayInSeconds="1" SecondFailureActionType="restart" ThirdFailureActionType="restart"/>
 				</ServiceInstall>
-                <ServiceControl Id="ServiceControl" Name="InputLeap" Remove="uninstall" Start="install" Stop="both"/>
-                <File Source="$(var.BinPath)/input-leaps.exe">
+                <ServiceControl Id="ServiceControl" Name="BlueBridge" Remove="uninstall" Start="install" Stop="both"/>
+                <File Source="$(var.BinPath)/bluebridge-server.exe">
 					<fire:FirewallException Id="ServerFirewallException" IgnoreFailure="yes" Name="$(var.Name)" Scope="any"/>
 				</File>
-                <File Source="$(var.BinPath)/input-leapc.exe"/>
+                <File Source="$(var.BinPath)/bluebridge-client.exe"/>
 				<File Source="$(var.OpenSSLBinPath)/libeay32.dll"/>
 				<File Source="$(var.OpenSSLBinPath)/ssleay32.dll"/>
 				<File Source="$(var.OpenSSLBinPath)/openssl.exe"/>
-                <File Source="$(var.ResPath)/openssl/input-leap.conf"/>
+                <File Source="$(var.ResPath)/openssl/bluebridge.conf"/>
 			</Component>
-			<Component Guid="BAC8149B-6287-45BF-9C27-43D71ED40214" Id="Gui">
-                <File Id="GuiProgram" KeyPath="yes" Source="$(var.BinPath)/input-leap.exe">
-                    <Shortcut Advertise="yes" Directory="ProgramMenuFolder" Icon="input-leap.ico" Id="GuiShortcut" Name="$(var.Name)"/>
+			<Component Guid="7860DD17-205C-474C-9D05-E8BE8884142F" Id="Gui">
+                <File Id="GuiProgram" KeyPath="yes" Source="$(var.BinPath)/bluebridge.exe">
+                    <Shortcut Advertise="yes" Directory="ProgramMenuFolder" Icon="bluebridge.ico" Id="GuiShortcut" Name="$(var.Name)"/>
 					<fire:FirewallException Id="GuiFirewallException" IgnoreFailure="yes" Name="$(var.Name)" Scope="any"/>
 				</File>
 				<?if $(var.Configuration) = "Debug" ?>
@@ -91,7 +91,7 @@
 			</Component>
 		</ComponentGroup>
 		<ComponentGroup Directory="PlatformsDir" Id="ProductQtPluginComponents">
-			<Component Guid="684EFA14-856B-440E-A5E6-E90E04E36B41" Id="QtPlatformPlugin">
+			<Component Guid="3FFFB446-9D12-4AD9-9879-7543B323A9BD" Id="QtPlatformPlugin">
 				<?if $(var.Configuration) = "Debug" ?>
 				<File Source="$(var.QtPlatformPath)\qwindowsd.dll"/>
 				<?else ?>

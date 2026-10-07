@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,11 +19,11 @@
 #include "server/ClientProxy1_6.h"
 #include "ClientConnectionByStream.h"
 
-#include "inputleap/ProtocolUtil.h"
-#include "inputleap/ClipboardChunk.h"
-#include "inputleap/Exceptions.h"
-#include "inputleap/FileChunk.h"
-#include "inputleap/StreamChunker.h"
+#include "bluebridge/ProtocolUtil.h"
+#include "bluebridge/ClipboardChunk.h"
+#include "bluebridge/Exceptions.h"
+#include "bluebridge/FileChunk.h"
+#include "bluebridge/StreamChunker.h"
 #include "server/Server.h"
 #include "io/IStream.h"
 #include "base/Log.h"
@@ -32,7 +32,7 @@
 
 #include <cstring>
 
-namespace inputleap {
+namespace bluebridge {
 
 ClientProxy1_6::ClientProxy1_6(const std::string& name,
                                std::unique_ptr<IClientConnection> backend,
@@ -545,4 +545,4 @@ ClientProxy1_6::ClientClipboard::ClientClipboard() :
     // do nothing
 }
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -42,8 +42,9 @@ set(GUI_SOURCE_FILES
     src/LogWindow.cpp
     src/main.cpp
     src/MainWindow.cpp
+    src/MainWindowHome.cpp
     src/NewScreenWidget.cpp
-    src/QInputLeapApplication.cpp
+    src/QBlueBridgeApplication.cpp
     src/QUtility.cpp
     src/Screen.cpp
     src/ScreenSettingsDialog.cpp
@@ -83,7 +84,7 @@ set(GUI_HEADER_FILES
     src/MainWindow.h
     src/NewScreenWidget.h
     src/ProcessorArch.h
-    src/QInputLeapApplication.h
+    src/QBlueBridgeApplication.h
     src/QUtility.h
     src/Screen.h
     src/ScreenSettingsDialog.h
@@ -179,23 +180,23 @@ endif()
 set_source_files_properties("src/DisplayIsValid.cpp" PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE)
 
 if (WIN32)
-    set (GUI_RC_FILES res/win/InputLeap.rc)
-    set_property(SOURCE res/win/InputLeap.rc PROPERTY COMPILE_FLAGS /nologo)
+    set (GUI_RC_FILES res/win/BlueBridge.rc)
+    set_property(SOURCE res/win/BlueBridge.rc PROPERTY COMPILE_FLAGS /nologo)
 endif()
 
-add_executable (input-leap WIN32
+add_executable (bluebridge WIN32
     ${GUI_COMMON_SOURCE_FILES}
     ${GUI_COMMON_HEADER_FILES}
     ${GUI_SOURCE_FILES}
     ${GUI_HEADER_FILES}
     ${GUI_UI_FILES}
     ${GUI_RC_FILES}
-    res/InputLeap.qrc
+    res/BlueBridge.qrc
 )
 
 include_directories (./src)
 
-target_link_libraries(input-leap
+target_link_libraries(bluebridge
     net
     arch
     base
@@ -205,33 +206,33 @@ target_link_libraries(input-leap
     Qt${QT_DEFAULT_MAJOR_VERSION}::Network
 )
 
-target_link_libraries(input-leap OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(bluebridge OpenSSL::SSL OpenSSL::Crypto)
 
-target_compile_definitions (input-leap PRIVATE -DINPUTLEAP_VERSION_STAGE="${INPUTLEAP_VERSION_STAGE}")
-target_compile_definitions (input-leap PRIVATE -DINPUTLEAP_REVISION="${INPUTLEAP_REVISION}")
+target_compile_definitions (bluebridge PRIVATE -DBLUEBRIDGE_VERSION_STAGE="${BLUEBRIDGE_VERSION_STAGE}")
+target_compile_definitions (bluebridge PRIVATE -DBLUEBRIDGE_REVISION="${BLUEBRIDGE_REVISION}")
 
 if (BUILD_MSWINDOWS)
     include_directories ($ENV{BONJOUR_SDK_HOME}/Include)
     find_library (DNSSD_LIB dnssd.lib
                   HINTS ENV BONJOUR_SDK_HOME
                   PATH_SUFFIXES "Lib/x64")
-    set_target_properties (input-leap PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCMT")
-    target_link_libraries (input-leap ${DNSSD_LIB} Bthprops Ws2_32)
+    set_target_properties (bluebridge PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCMT")
+    target_link_libraries (bluebridge ${DNSSD_LIB} Bthprops Ws2_32)
 endif()
 if (BUILD_CARBON)
     find_library(APPSERVICES_LIB ApplicationServices)
-    target_link_libraries(input-leap ${APPSERVICES_LIB})
+    target_link_libraries(bluebridge ${APPSERVICES_LIB})
 endif()
 if (BUILD_XWINDOWS OR BUILD_LIBEI)
-    target_link_libraries (input-leap dns_sd Threads::Threads)
+    target_link_libraries (bluebridge dns_sd Threads::Threads)
 endif()
 
-target_link_libraries (input-leap common)
+target_link_libraries (bluebridge common)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    install(TARGETS input-leap DESTINATION ${INPUTLEAP_BUNDLE_BINARY_DIR})
+    install(TARGETS bluebridge DESTINATION ${BLUEBRIDGE_BUNDLE_BINARY_DIR})
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
-    install (TARGETS input-leap DESTINATION bin)
+    install (TARGETS bluebridge DESTINATION bin)
 elseif(WIN32)
     set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION .)
     if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
@@ -240,12 +241,12 @@ elseif(WIN32)
     set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
     include(InstallRequiredSystemLibraries)
     add_custom_command(
-        TARGET input-leap POST_BUILD
+        TARGET bluebridge POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/qtDeploy"
         COMMAND ${QT_DEPLOY_TOOL} --no-compiler-runtime --no-system-d3d-compiler
-            --dir "${CMAKE_BINARY_DIR}/qtDeploy" $<TARGET_FILE:input-leap>
+            --dir "${CMAKE_BINARY_DIR}/qtDeploy" $<TARGET_FILE:bluebridge>
     )
-    install(TARGETS input-leap DESTINATION .)
+    install(TARGETS bluebridge DESTINATION .)
     install(
         DIRECTORY ${CMAKE_BINARY_DIR}/qtDeploy/
         DESTINATION .
@@ -253,7 +254,7 @@ elseif(WIN32)
     )
 endif()
 
-if(INPUTLEAP_BUILD_TESTS)
+if(BLUEBRIDGE_BUILD_TESTS)
     set(GUI_TEST_SOURCE_FILES
         test/BluetoothAddressTests.cpp
         test/KeySequenceTests.cpp

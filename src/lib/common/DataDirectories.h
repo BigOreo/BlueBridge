@@ -1,5 +1,5 @@
 /*
-* InputLeap -- mouse and keyboard sharing utility
+* BlueBridge -- mouse and keyboard sharing utility
 * Copyright (C) 2018 Debauchee Open Source Group
 *
 * This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include "io/filesystem.h"
 
-namespace inputleap {
+namespace bluebridge {
 
 class DataDirectories
 {
@@ -47,4 +47,4 @@ private:
     static fs::path _systemconfig;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

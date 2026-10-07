@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,9 +19,9 @@
 #pragma once
 
 #include "server/InputFilter.h"
-#include "inputleap/option_types.h"
-#include "inputleap/protocol_types.h"
-#include "inputleap/IPlatformScreen.h"
+#include "bluebridge/option_types.h"
+#include "bluebridge/protocol_types.h"
+#include "bluebridge/IPlatformScreen.h"
 #include "net/NetworkAddress.h"
 #include "base/Fwd.h"
 #include "base/String.h"
@@ -31,11 +31,11 @@
 #include <map>
 #include <set>
 
-namespace inputleap { class Config; }
+namespace bluebridge { class Config; }
 
 namespace std {
 template <>
-struct iterator_traits<inputleap::Config> {
+struct iterator_traits<bluebridge::Config> {
     typedef std::string value_type;
     typedef ptrdiff_t                    difference_type;
     typedef bidirectional_iterator_tag    iterator_category;
@@ -44,7 +44,7 @@ struct iterator_traits<inputleap::Config> {
 };
 }
 
-namespace inputleap {
+namespace bluebridge {
 
 class Config;
 class ConfigReadContext;
@@ -143,8 +143,8 @@ private:
     public:
         ScreenOptions m_options;
     };
-    typedef std::map<std::string, Cell, inputleap::string::CaselessCmp> CellMap;
-    typedef std::map<std::string, std::string, inputleap::string::CaselessCmp> NameMap;
+    typedef std::map<std::string, Cell, bluebridge::string::CaselessCmp> CellMap;
+    typedef std::map<std::string, std::string, bluebridge::string::CaselessCmp> NameMap;
 
 public:
     typedef Cell::const_iterator link_const_iterator;
@@ -530,4 +530,4 @@ private:
     std::string m_error;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

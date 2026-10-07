@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,7 +19,7 @@
 #include "platform/XWindowsScreenSaver.h"
 
 #include "platform/XWindowsUtil.h"
-#include "inputleap/IPlatformScreen.h"
+#include "bluebridge/IPlatformScreen.h"
 #include "base/Log.h"
 #include "base/Event.h"
 #include "base/IEventQueue.h"
@@ -29,7 +29,7 @@
 #include <X11/Xmd.h>
 #include <X11/extensions/dpms.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 XWindowsScreenSaver::XWindowsScreenSaver(IXWindowsImpl* impl, Display* display,
                                          Window window, const EventTarget* event_target,
@@ -560,4 +560,4 @@ XWindowsScreenSaver::isDPMSActivated() const
     }
 }
 
-} // namespace inputleap
+} // namespace bluebridge

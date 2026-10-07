@@ -1,4 +1,4 @@
-# InputLeap -- mouse and keyboard sharing utility
+# BlueBridge -- mouse and keyboard sharing utility
 # Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2009 Nick Bolton
 #
@@ -61,7 +61,7 @@ if (UNIX)
     )
 endif()
 
-if(INPUTLEAP_ADD_HEADERS)
+if(BLUEBRIDGE_ADD_HEADERS)
     list(APPEND sources ${headers})
 endif()
 

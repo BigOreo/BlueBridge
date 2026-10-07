@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
-# InputLeap -- mouse and keyboard sharing utility
-# Copyright (C) InputLeap contributors
+# BlueBridge -- mouse and keyboard sharing utility
+# Copyright (C) BlueBridge contributors
 #
 # This package is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -87,9 +87,9 @@ def make_profile(path):
     certificate's fingerprint in the trusted fingerprint file format."""
     ssl_dir = os.path.join(path, "SSL")
     os.makedirs(os.path.join(ssl_dir, "Fingerprints"))
-    pem = os.path.join(ssl_dir, "InputLeap.pem")
+    pem = os.path.join(ssl_dir, "BlueBridge.pem")
     subprocess.run(["openssl", "req", "-x509", "-nodes", "-newkey", "rsa:2048",
-                    "-days", "1", "-subj", "/CN=InputLeap",
+                    "-days", "1", "-subj", "/CN=BlueBridge",
                     "-keyout", pem, "-out", pem + ".crt"],
                    check=True, capture_output=True)
     with open(pem, "a") as out, open(pem + ".crt") as crt:
@@ -212,7 +212,7 @@ def run(bin_dir, work, port):
 
         step("starting the server and the client")
         address = "127.0.0.1:%d" % port
-        server = subprocess.Popen([os.path.join(bin_dir, "input-leaps"), "-f", "--no-tray",
+        server = subprocess.Popen([os.path.join(bin_dir, "bluebridge-server"), "-f", "--no-tray",
                                    "--display", SERVER_DISPLAY, "--name", "server",
                                    "--config", config, "--address", address,
                                    "--profile-dir", server_profile,
@@ -221,7 +221,7 @@ def run(bin_dir, work, port):
         procs.append(server)
         wait_for("the server to listen",
                  lambda: "started server" in read_file(server_log))
-        client = subprocess.Popen([os.path.join(bin_dir, "input-leapc"), "-f", "--no-tray",
+        client = subprocess.Popen([os.path.join(bin_dir, "bluebridge-client"), "-f", "--no-tray",
                                    "--display", CLIENT_DISPLAY, "--name", "client",
                                    "--profile-dir", client_profile,
                                    "--debug", "DEBUG", "--log", client_log, address],
@@ -308,7 +308,7 @@ def run(bin_dir, work, port):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--bin-dir", required=True,
-                        help="directory with input-leaps and input-leapc")
+                        help="directory with bluebridge-server and bluebridge-client")
     parser.add_argument("--port", type=int, default=24890)
     parser.add_argument("--keep", action="store_true",
                         help="keep the work directory with the logs")

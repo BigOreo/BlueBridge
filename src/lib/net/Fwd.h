@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@
 
 #pragma once
 
-namespace inputleap {
+namespace bluebridge {
 
 // FingerprintData.h
 struct FingerprintData;
@@ -58,4 +58,4 @@ class TCPSocket;
 // TCPSocketFactory.h
 class TCPSocketFactory;
 
-} // namespace inputleap
+} // namespace bluebridge

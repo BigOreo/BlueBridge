@@ -1,4 +1,4 @@
-# InputLeap -- mouse and keyboard sharing utility
+# BlueBridge -- mouse and keyboard sharing utility
 # Copyright (C) 2018 Debauchee Open Source Group
 # Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2009 Nick Bolton
@@ -16,14 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.21)
-project(InputLeap C CXX)
+project(BlueBridge C CXX)
 
-option(INPUTLEAP_BUILD_GUI "Build the GUI" ON)
-option(INPUTLEAP_BUILD_TESTS "Build the tests" ON)
-option(INPUTLEAP_USE_EXTERNAL_GTEST "Use external installation of Google Test framework" OFF)
-option(INPUTLEAP_BUILD_X11 "Build with XWindows support" ON)
-option(INPUTLEAP_BUILD_LIBEI "Build with libei support" OFF)
-option(INPUTLEAP_BUILD_GULRAK_FILESYSTEM "Use internal filesystem library" OFF)
+option(BLUEBRIDGE_BUILD_GUI "Build the GUI" ON)
+option(BLUEBRIDGE_BUILD_TESTS "Build the tests" ON)
+option(BLUEBRIDGE_USE_EXTERNAL_GTEST "Use external installation of Google Test framework" OFF)
+option(BLUEBRIDGE_BUILD_X11 "Build with XWindows support" ON)
+option(BLUEBRIDGE_BUILD_LIBEI "Build with libei support" OFF)
+option(BLUEBRIDGE_BUILD_GULRAK_FILESYSTEM "Use internal filesystem library" OFF)
 set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -55,9 +55,9 @@ endif()
 
 # Add headers to source list
 if (${CMAKE_GENERATOR} STREQUAL "Unix Makefiles")
-    set(INPUTLEAP_ADD_HEADERS FALSE)
+    set(BLUEBRIDGE_ADD_HEADERS FALSE)
 else()
-    set(INPUTLEAP_ADD_HEADERS TRUE)
+    set(BLUEBRIDGE_ADD_HEADERS TRUE)
 endif()
 
 set (libs)
@@ -68,7 +68,7 @@ if (HAVE_WFORMAT)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat")
 endif()
 
-if (INPUTLEAP_BUILD_GUI)
+if (BLUEBRIDGE_BUILD_GUI)
     if (QT_DEFAULT_MAJOR_VERSION EQUAL 5)
         set(REQUIRED_QT_VERSION 5.9)
     elseif (QT_DEFAULT_MAJOR_VERSION EQUAL 6)
@@ -87,7 +87,7 @@ if (INPUTLEAP_BUILD_GUI)
         find_program(QT_DEPLOY_TOOL ${deployqtapp} HINTS "${_qt_bin_dir}")
     endif()
 endif()
-add_definitions(-DINPUTLEAP_USE_GULRAK_FILESYSTEM=$<BOOL:${INPUTLEAP_BUILD_GULRAK_FILESYSTEM}>)
+add_definitions(-DBLUEBRIDGE_USE_GULRAK_FILESYSTEM=$<BOOL:${BLUEBRIDGE_BUILD_GULRAK_FILESYSTEM}>)
 if (UNIX)
     if (NOT APPLE)
         set (CMAKE_POSITION_INDEPENDENT_CODE TRUE)
@@ -153,13 +153,13 @@ if (UNIX)
             link_directories("/usr/X11R6/lib")
         endif()
 
-        if(INPUTLEAP_BUILD_GUI AND ${PKG_CONFIG_FOUND})
+        if(BLUEBRIDGE_BUILD_GUI AND ${PKG_CONFIG_FOUND})
             pkg_check_modules (AVAHI_COMPAT REQUIRED avahi-compat-libdns_sd)
             include_directories (BEFORE SYSTEM ${AVAHI_COMPAT_INCLUDE_DIRS})
             set (CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES};${AVAHI_COMPAT_INCLUDE_DIRS}")
         endif ()
 
-        if (INPUTLEAP_BUILD_X11)
+        if (BLUEBRIDGE_BUILD_X11)
             pkg_check_modules (XLIB REQUIRED x11 xext xrandr xinerama xtst xi)
             pkg_check_modules (ICE REQUIRED ice sm)
             include_directories (${XLIB_INCLUDE_DIRS} ${ICE_INCLUDE_DIRS})
@@ -169,7 +169,7 @@ if (UNIX)
             set (HAVE_X11 1)
         endif()
 
-        if (INPUTLEAP_BUILD_LIBEI)
+        if (BLUEBRIDGE_BUILD_LIBEI)
             pkg_check_modules(LIBEI REQUIRED "libei-1.0 >= 0.99.1")
             pkg_check_modules(LIBXKBCOMMON REQUIRED xkbcommon)
             pkg_check_modules(GLIB2 REQUIRED glib-2.0 gio-2.0)
@@ -196,7 +196,7 @@ if (UNIX)
         endif()
 
         check_include_files ("dns_sd.h" HAVE_DNSSD)
-        if(INPUTLEAP_BUILD_GUI AND NOT HAVE_DNSSD)
+        if(BLUEBRIDGE_BUILD_GUI AND NOT HAVE_DNSSD)
             message (FATAL_ERROR "Missing header: dns_sd.h")
         endif()
     endif()
@@ -214,15 +214,15 @@ if (UNIX)
         add_definitions (-DWINAPI_CARBON=1 -D_THREAD_SAFE)
         set (BUILD_CARBON 1)
     else()
-        if(INPUTLEAP_BUILD_X11)
+        if(BLUEBRIDGE_BUILD_X11)
             add_definitions (-DWINAPI_XWINDOWS=1)
             set (BUILD_XWINDOWS 1)
         endif()
-        if(INPUTLEAP_BUILD_LIBEI)
+        if(BLUEBRIDGE_BUILD_LIBEI)
             add_definitions(-DWINAPI_LIBEI=1)
             set(BUILD_LIBEI 1)
         endif()
-        if(NOT INPUTLEAP_BUILD_X11 AND NOT INPUTLEAP_BUILD_LIBEI)
+        if(NOT BLUEBRIDGE_BUILD_X11 AND NOT BLUEBRIDGE_BUILD_LIBEI)
             message(FATAL_ERROR "One of X11 or libei is required")
         endif()
     endif()
@@ -240,7 +240,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         /DWIN32
         /D_WINDOWS
         /D_CRT_SECURE_NO_WARNINGS
-        /DINPUTLEAP_VERSION=\"${INPUTLEAP_VERSION}\"
+        /DBLUEBRIDGE_VERSION=\"${BLUEBRIDGE_VERSION}\"
         /D_XKEYCHECK_H
     )
     set (BUILD_MSWINDOWS 1)
@@ -289,32 +289,32 @@ endmacro (configure_files)
 # Make a bundle for mac os
 if (APPLE)
     set (CMAKE_INSTALL_RPATH "@loader_path/../Libraries;@loader_path/../Frameworks")
-    set(INPUTLEAP_BUNDLE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dist/macos/bundle)
-    set(INPUTLEAP_BUNDLE_DIR ${CMAKE_BINARY_DIR}/bundle)
-    set(INPUTLEAP_BUNDLE_APP_DIR ${INPUTLEAP_BUNDLE_DIR}/InputLeap.app)
-    set(INPUTLEAP_BUNDLE_BINARY_DIR ${INPUTLEAP_BUNDLE_APP_DIR}/Contents/MacOS)
+    set(BLUEBRIDGE_BUNDLE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dist/macos/bundle)
+    set(BLUEBRIDGE_BUNDLE_DIR ${CMAKE_BINARY_DIR}/bundle)
+    set(BLUEBRIDGE_BUNDLE_APP_DIR ${BLUEBRIDGE_BUNDLE_DIR}/BlueBridge.app)
+    set(BLUEBRIDGE_BUNDLE_BINARY_DIR ${BLUEBRIDGE_BUNDLE_APP_DIR}/Contents/MacOS)
 
-    configure_files(${INPUTLEAP_BUNDLE_SOURCE_DIR} ${INPUTLEAP_BUNDLE_DIR})
+    configure_files(${BLUEBRIDGE_BUNDLE_SOURCE_DIR} ${BLUEBRIDGE_BUNDLE_DIR})
 
-    add_custom_target(InputLeap_MacOS ALL
+    add_custom_target(BlueBridge_MacOS ALL
                       bash build_dist.sh
-                      DEPENDS input-leap input-leaps input-leapc
-                      WORKING_DIRECTORY ${INPUTLEAP_BUNDLE_DIR})
+                      DEPENDS bluebridge bluebridge-server bluebridge-client
+                      WORKING_DIRECTORY ${BLUEBRIDGE_BUNDLE_DIR})
 elseif (UNIX AND NOT APPLE)
-    install(FILES doc/input-leapc.1 doc/input-leaps.1 DESTINATION share/man/man1)
+    install(FILES doc/bluebridge-client.1 doc/bluebridge-server.1 DESTINATION share/man/man1)
 
-    install(FILES res/io.github.input_leap.input-leap.appdata.xml DESTINATION share/metainfo)
+    install(FILES res/io.github.bigoreo.bluebridge.appdata.xml DESTINATION share/metainfo)
 
     configure_files (${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm ${CMAKE_BINARY_DIR}/rpm)
-    install(FILES res/io.github.input_leap.input-leap.svg DESTINATION share/icons/hicolor/scalable/apps)
-    install(FILES res/io.github.input_leap.input-leap.desktop DESTINATION share/applications)
+    install(FILES res/io.github.bigoreo.bluebridge.svg DESTINATION share/icons/hicolor/scalable/apps)
+    install(FILES res/io.github.bigoreo.bluebridge.desktop DESTINATION share/applications)
 endif()
 
 #
 # Windows Installer
 #
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-        set(INPUTLEAP_WIX_VERSION "${INPUTLEAP_VERSION_MAJOR}.${INPUTLEAP_VERSION_MINOR}.${INPUTLEAP_VERSION_PATCH}")
+        set(BLUEBRIDGE_WIX_VERSION "${BLUEBRIDGE_VERSION_MAJOR}.${BLUEBRIDGE_VERSION_MINOR}.${BLUEBRIDGE_VERSION_PATCH}")
         message (STATUS "Configuring the wix installer")
         configure_files (${CMAKE_CURRENT_SOURCE_DIR}/dist/wix ${CMAKE_BINARY_DIR}/installer-wix)
         message (STATUS "Configuring the inno installer")

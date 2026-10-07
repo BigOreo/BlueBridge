@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2018 Debauchee Open Source Group
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
@@ -26,12 +26,12 @@
 #include "platform/MSWindowsEventQueueBuffer.h"
 #include "platform/MSWindowsKeyState.h"
 #include "platform/MSWindowsScreenSaver.h"
-#include "inputleap/Clipboard.h"
-#include "inputleap/KeyMap.h"
-#include "inputleap/XScreen.h"
-#include "inputleap/App.h"
-#include "inputleap/ArgsBase.h"
-#include "inputleap/ClientApp.h"
+#include "bluebridge/Clipboard.h"
+#include "bluebridge/KeyMap.h"
+#include "bluebridge/XScreen.h"
+#include "bluebridge/App.h"
+#include "bluebridge/ArgsBase.h"
+#include "bluebridge/ClientApp.h"
 #include "mt/Thread.h"
 #include "arch/win32/ArchMiscWindows.h"
 #include "arch/Arch.h"
@@ -81,7 +81,7 @@
 #define PBT_APMRESUMEAUTOMATIC    0x0012
 #endif
 
-namespace inputleap {
+namespace bluebridge {
 
 HINSTANCE MSWindowsScreen::s_windowInstance = nullptr;
 MSWindowsScreen* MSWindowsScreen::s_screen  = nullptr;
@@ -136,7 +136,7 @@ MSWindowsScreen::MSWindowsScreen(
 
         updateScreenShape();
         m_class       = createWindowClass();
-        m_window      = createWindow(m_class, "InputLeap");
+        m_window      = createWindow(m_class, "BlueBridge");
         forceShowCursor();
         LOG_DEBUG("screen shape: %d,%d %dx%d %s", m_x, m_y, m_w, m_h, m_multimon ? "(multi-monitor)" : "");
         LOG_DEBUG("window is 0x%08x", m_window);
@@ -305,7 +305,7 @@ bool MSWindowsScreen::canLeave() {
   POINT pos;
   if (!GetCursorPos(&pos)) {
     LOG_DEBUG ("unable to leave screen as windows security has disabled critical functions");
-    // unable to get position this means inputleap will break if the cursor
+    // unable to get position this means bluebridge will break if the cursor
     // leaves the screen
     return false;
   }
@@ -531,8 +531,8 @@ void MSWindowsScreen::warpCursor(std::int32_t x, std::int32_t y)
 
     // remove all input events before and including warp
     MSG msg;
-    while (PeekMessage(&msg, nullptr, INPUTLEAP_MSG_INPUT_FIRST,
-                                INPUTLEAP_MSG_INPUT_LAST, PM_REMOVE)) {
+    while (PeekMessage(&msg, nullptr, BLUEBRIDGE_MSG_INPUT_FIRST,
+                                BLUEBRIDGE_MSG_INPUT_LAST, PM_REMOVE)) {
         // do nothing
     }
 
@@ -615,11 +615,11 @@ std::uint32_t MSWindowsScreen::registerHotKey(KeyID key, KeyModifierMask mask)
     else {
         m_oldHotKeyIDs.push_back(id);
         m_hotKeys.erase(id);
-        LOG_WARN("failed to register hotkey %s (id=%04x mask=%04x)", inputleap::KeyMap::formatKey(key, mask).c_str(), key, mask);
+        LOG_WARN("failed to register hotkey %s (id=%04x mask=%04x)", bluebridge::KeyMap::formatKey(key, mask).c_str(), key, mask);
         return 0;
     }
 
-    LOG_DEBUG("registered hotkey %s (id=%04x mask=%04x) as id=%d", inputleap::KeyMap::formatKey(key, mask).c_str(), key, mask, id);
+    LOG_DEBUG("registered hotkey %s (id=%04x mask=%04x) as id=%d", bluebridge::KeyMap::formatKey(key, mask).c_str(), key, mask, id);
     return id;
 }
 
@@ -818,7 +818,7 @@ MSWindowsScreen::createWindowClass() const
     classInfo.hCursor = nullptr;
     classInfo.hbrBackground = nullptr;
     classInfo.lpszMenuName = nullptr;
-    classInfo.lpszClassName = "InputLeap";
+    classInfo.lpszClassName = "BlueBridge";
     classInfo.hIconSm = nullptr;
     return RegisterClassEx(&classInfo);
 }
@@ -933,10 +933,10 @@ MSWindowsScreen::onPreDispatch(HWND hwnd,
 {
     // handle event
     switch (message) {
-    case INPUTLEAP_MSG_SCREEN_SAVER:
+    case BLUEBRIDGE_MSG_SCREEN_SAVER:
         return onScreensaver(wParam != 0);
 
-    case INPUTLEAP_MSG_DEBUG:
+    case BLUEBRIDGE_MSG_DEBUG:
         LOG_DEBUG1("hook: 0x%08x 0x%08x", wParam, lParam);
         return true;
     }
@@ -956,22 +956,22 @@ MSWindowsScreen::onPreDispatchPrimary(HWND,
 
     // handle event
     switch (message) {
-    case INPUTLEAP_MSG_MARK:
+    case BLUEBRIDGE_MSG_MARK:
         return onMark(static_cast<std::uint32_t>(wParam));
 
-    case INPUTLEAP_MSG_KEY:
+    case BLUEBRIDGE_MSG_KEY:
         return onKey(wParam, lParam);
 
-    case INPUTLEAP_MSG_MOUSE_BUTTON:
+    case BLUEBRIDGE_MSG_MOUSE_BUTTON:
         return onMouseButton(wParam, lParam);
 
-    case INPUTLEAP_MSG_MOUSE_MOVE:
+    case BLUEBRIDGE_MSG_MOUSE_MOVE:
         return onMouseMove(static_cast<std::int32_t>(wParam), static_cast<std::int32_t>(lParam));
 
-    case INPUTLEAP_MSG_MOUSE_WHEEL:
+    case BLUEBRIDGE_MSG_MOUSE_WHEEL:
         return onMouseWheel(static_cast<std::int32_t>(lParam), static_cast<std::int32_t>(wParam));
 
-    case INPUTLEAP_MSG_PRE_WARP:
+    case BLUEBRIDGE_MSG_PRE_WARP:
         {
             // save position to compute delta of next motion
             saveMousePosition(static_cast<std::int32_t>(wParam), static_cast<std::int32_t>(lParam));
@@ -983,13 +983,13 @@ MSWindowsScreen::onPreDispatchPrimary(HWND,
             // event.
             MSG msg;
             do {
-                GetMessage(&msg, nullptr, INPUTLEAP_MSG_MOUSE_MOVE,
-                                        INPUTLEAP_MSG_POST_WARP);
-            } while (msg.message != INPUTLEAP_MSG_POST_WARP);
+                GetMessage(&msg, nullptr, BLUEBRIDGE_MSG_MOUSE_MOVE,
+                                        BLUEBRIDGE_MSG_POST_WARP);
+            } while (msg.message != BLUEBRIDGE_MSG_POST_WARP);
         }
         return true;
 
-    case INPUTLEAP_MSG_POST_WARP:
+    case BLUEBRIDGE_MSG_POST_WARP:
         LOG_WARN("unmatched post warp");
         return true;
 
@@ -1290,7 +1290,7 @@ MSWindowsScreen::onMouseButton(WPARAM wParam, LPARAM lParam)
 }
 
 // here's how mouse movements are sent across the network to a client:
-//   1. InputLeap checks the mouse position on server screen
+//   1. BlueBridge checks the mouse position on server screen
 //   2. records the delta (current x,y minus last x,y)
 //   3. records the current x,y as "last" (so we can calc delta next time)
 //   4. on the server, puts the cursor back to the center of the screen
@@ -1382,14 +1382,14 @@ MSWindowsScreen::onScreensaver(bool activated)
     // send SC_SCREENSAVE until the screen saver starts, even if
     // the screen saver is disabled!
     MSG msg;
-    if (PeekMessage(&msg, nullptr, INPUTLEAP_MSG_SCREEN_SAVER,
-                        INPUTLEAP_MSG_SCREEN_SAVER, PM_NOREMOVE)) {
+    if (PeekMessage(&msg, nullptr, BLUEBRIDGE_MSG_SCREEN_SAVER,
+                        BLUEBRIDGE_MSG_SCREEN_SAVER, PM_NOREMOVE)) {
         return true;
     }
 
     if (activated) {
         if (!m_screensaverActive &&
-            m_screensaver->checkStarted(INPUTLEAP_MSG_SCREEN_SAVER, FALSE, 0)) {
+            m_screensaver->checkStarted(BLUEBRIDGE_MSG_SCREEN_SAVER, FALSE, 0)) {
             m_screensaverActive = true;
             sendEvent(EventType::PRIMARY_SCREEN_SAVER_ACTIVATED);
 
@@ -1468,7 +1468,7 @@ MSWindowsScreen::onClipboardChange()
 void MSWindowsScreen::warpCursorNoFlush(std::int32_t x, std::int32_t y)
 {
     // send an event that we can recognize before the mouse warp
-    PostThreadMessage(GetCurrentThreadId(), INPUTLEAP_MSG_PRE_WARP, x, y);
+    PostThreadMessage(GetCurrentThreadId(), BLUEBRIDGE_MSG_PRE_WARP, x, y);
 
     // warp mouse.  hopefully this inserts a mouse motion event
     // between the previous message and the following message.
@@ -1513,10 +1513,10 @@ void MSWindowsScreen::warpCursorNoFlush(std::int32_t x, std::int32_t y)
     // chance of undesired behavior.  we'll also check for very
     // large motions that look suspiciously like about half width
     // or height of the screen.
-    inputleap::this_thread_sleep(0.0);
+    bluebridge::this_thread_sleep(0.0);
 
     // send an event that we can recognize after the mouse warp
-    PostThreadMessage(GetCurrentThreadId(), INPUTLEAP_MSG_POST_WARP, 0, 0);
+    PostThreadMessage(GetCurrentThreadId(), BLUEBRIDGE_MSG_POST_WARP, 0, 0);
 }
 
 void
@@ -1526,7 +1526,7 @@ MSWindowsScreen::nextMark()
     ++m_mark;
 
     // mark point in message queue where the mark was changed
-    PostThreadMessage(GetCurrentThreadId(), INPUTLEAP_MSG_MARK, m_mark, 0);
+    PostThreadMessage(GetCurrentThreadId(), BLUEBRIDGE_MSG_MARK, m_mark, 0);
 }
 
 bool
@@ -1844,15 +1844,15 @@ std::string& MSWindowsScreen::getDraggingFilename()
             SWP_SHOWWINDOW);
 
         // TODO: fake these keys properly
-        inputleap::this_thread_sleep(.05f); // A tiny sleep here makes the DragEnter event on m_dropWindow trigger much more consistently
+        bluebridge::this_thread_sleep(.05f); // A tiny sleep here makes the DragEnter event on m_dropWindow trigger much more consistently
         fakeKeyDown(kKeyEscape, 8192, 1);
         fakeKeyUp(1);
         fakeMouseButton(kButtonLeft, false);
 
         std::string filename;
-        DOUBLE timeout = inputleap::current_time_seconds() + .5f;
-        while (inputleap::current_time_seconds() < timeout) {
-            inputleap::this_thread_sleep(.05f);
+        DOUBLE timeout = bluebridge::current_time_seconds() + .5f;
+        while (bluebridge::current_time_seconds() < timeout) {
+            bluebridge::this_thread_sleep(.05f);
             filename = m_dropTarget->getDraggingFilename();
             if (!filename.empty()) {
                 break;
@@ -1929,4 +1929,4 @@ MSWindowsScreen::isModifierRepeat(KeyModifierMask oldState, KeyModifierMask stat
     return result;
 }
 
-} // namespace inputleap
+} // namespace bluebridge

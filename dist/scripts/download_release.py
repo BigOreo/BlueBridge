@@ -13,7 +13,7 @@ import yaml
 
 def get_all_workflow_artifacts(s, run_id):
     r = s.get(
-        f"https://api.github.com/repos/input-leap/input-leap/actions/runs/{run_id}/artifacts"
+        f"https://api.github.com/repos/bluebridge/bluebridge/actions/runs/{run_id}/artifacts"
     )
     return {a["name"]: a["archive_download_url"] for a in r.json()["artifacts"]}
 
@@ -46,49 +46,49 @@ def main():
     received_artifacts = get_all_workflow_artifacts(s, workflow_run_id)
 
     artifacts_config = {
-        "input-leap-deb-debian-12": (
-            "input-leap_.*_amd64.deb",
-            f"InputLeap_{version}_debian12_amd64.deb",
+        "bluebridge-deb-debian-12": (
+            "bluebridge_.*_amd64.deb",
+            f"BlueBridge_{version}_debian12_amd64.deb",
         ),
-        "input-leap-deb-ubuntu-20-04": (
-            "input-leap_.*_amd64.deb",
-            f"InputLeap_{version}_ubuntu_20-04_amd64.deb",
+        "bluebridge-deb-ubuntu-20-04": (
+            "bluebridge_.*_amd64.deb",
+            f"BlueBridge_{version}_ubuntu_20-04_amd64.deb",
         ),
-        "input-leap-deb-ubuntu-22-04": (
-            "input-leap_.*_amd64.deb",
-            f"InputLeap_{version}_ubuntu_22-04_amd64.deb",
+        "bluebridge-deb-ubuntu-22-04": (
+            "bluebridge_.*_amd64.deb",
+            f"BlueBridge_{version}_ubuntu_22-04_amd64.deb",
         ),
-        "input-leap-deb-ubuntu-24-04": (
-            "input-leap_.*_amd64.deb",
-            f"InputLeap_{version}_ubuntu_24-04_amd64.deb",
+        "bluebridge-deb-ubuntu-24-04": (
+            "bluebridge_.*_amd64.deb",
+            f"BlueBridge_{version}_ubuntu_24-04_amd64.deb",
         ),
-        "input-leap-deb-ubuntu-24-10": (
-            "input-leap_.*_amd64.deb",
-            f"InputLeap_{version}_ubuntu_24-10_amd64.deb",
+        "bluebridge-deb-ubuntu-24-10": (
+            "bluebridge_.*_amd64.deb",
+            f"BlueBridge_{version}_ubuntu_24-10_amd64.deb",
         ),
-        "input-leap-rpms-fedora": (
-            "x86_64/input-leap-.*.fc40.x86_64.rpm",
-            f"InputLeap_{version}_fedora_fc40_x86_64.rpm",
+        "bluebridge-rpms-fedora": (
+            "x86_64/bluebridge-.*.fc40.x86_64.rpm",
+            f"BlueBridge_{version}_fedora_fc40_x86_64.rpm",
         ),
-        "input-leap-flatpak-x86_64": (
-            "input-leap.flatpak",
-            f"InputLeap_{version}_linux_x86_64.flatpak",
+        "bluebridge-flatpak-x86_64": (
+            "bluebridge.flatpak",
+            f"BlueBridge_{version}_linux_x86_64.flatpak",
         ),
         "macOS-Apple_Silicon-installer": (
-            "InputLeap-.*-release.dmg",
-            f"InputLeap_{version}_macos_AppleSilicon.dmg",
+            "BlueBridge-.*-release.dmg",
+            f"BlueBridge_{version}_macos_AppleSilicon.dmg",
         ),
         "macOS-x86_64-installer": (
-            "InputLeap-.*-release.dmg",
-            f"InputLeap_{version}_macos_x86_64.dmg",
+            "BlueBridge-.*-release.dmg",
+            f"BlueBridge_{version}_macos_x86_64.dmg",
         ),
         "windows-installer-Windows Qt5": (
-            "InputLeapSetup-.*-release.exe",
-            f"InputLeap_{version}_windows_qt5.exe",
+            "BlueBridgeSetup-.*-release.exe",
+            f"BlueBridge_{version}_windows_qt5.exe",
         ),
         "windows-installer-Windows Qt6": (
-            "InputLeapSetup-.*-release.exe",
-            f"InputLeap_{version}_windows_qt6.exe",
+            "BlueBridgeSetup-.*-release.exe",
+            f"BlueBridge_{version}_windows_qt6.exe",
         ),
     }
 

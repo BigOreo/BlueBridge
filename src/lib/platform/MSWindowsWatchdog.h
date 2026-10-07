@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2009 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "platform/MSWindowsSession.h"
 #include "base/Fwd.h"
-#include "inputleap/Exceptions.h"
+#include "bluebridge/Exceptions.h"
 #include "arch/IArchMultithread.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -28,7 +28,7 @@
 #include <string>
 #include <list>
 
-namespace inputleap {
+namespace bluebridge {
 
 class Thread;
 class IpcLogOutputter;
@@ -93,4 +93,4 @@ public:
     virtual std::string getWhat() const noexcept { return what(); }
 };
 
-} // namespace inputleap
+} // namespace bluebridge

@@ -1,5 +1,5 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
+    BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-namespace inputleap {
+namespace bluebridge {
 
 std::string format_ssl_fingerprint(const std::vector<std::uint8_t>& fingerprint,
                                    bool separator = true);
@@ -37,4 +37,4 @@ void generate_pem_self_signed_cert(const std::string& path);
 
 std::string create_fingerprint_randomart(const std::vector<std::uint8_t>& dgst_raw);
 
-} // namespace inputleap
+} // namespace bluebridge

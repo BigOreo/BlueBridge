@@ -1,5 +1,5 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
+    BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include <utility>
 
-namespace inputleap {
+namespace bluebridge {
 
 // this implements a common pattern of executing an action at the end of function
 
@@ -55,4 +55,4 @@ inline final_action<Callable> finally(Callable&& callable) noexcept
     return final_action<Callable>(std::forward<Callable>(callable));
 }
 
-} // namespace inputleap
+} // namespace bluebridge

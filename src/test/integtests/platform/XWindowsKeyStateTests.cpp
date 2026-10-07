@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2011 Nick Bolton
  *
@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define INPUTLEAP_TEST_ENV
+#define BLUEBRIDGE_TEST_ENV
 
 #include "config.h"
 #include "XWindowsTestsCommon.h"
 
-#include "test/mock/inputleap/MockKeyMap.h"
-#include "test/mock/inputleap/MockEventQueue.h"
+#include "test/mock/bluebridge/MockKeyMap.h"
+#include "test/mock/bluebridge/MockEventQueue.h"
 #include "platform/XWindowsKeyState.h"
 #include "base/Log.h"
 
@@ -36,7 +36,7 @@
 #include <gmock/gmock.h>
 #include <errno.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 class XWindowsKeyStateTests : public ::testing::Test
 {
@@ -148,13 +148,13 @@ TEST_F(XWindowsKeyStateTests, pollActiveModifiers_shiftKeyDownThenUp_masksAreCor
 
     KeyCode key = XKeysymToKeycode(display_util_.display(), XK_Shift_L);
 
-    // fake shift key down (without using InputLeap)
+    // fake shift key down (without using BlueBridge)
     XTestFakeKeyEvent(display_util_.display(), key, true, CurrentTime);
 
     // function under test (1st call)
     KeyModifierMask modDown = keyState.pollActiveModifiers();
 
-    // fake shift key up (without using InputLeap)
+    // fake shift key up (without using BlueBridge)
     XTestFakeKeyEvent(display_util_.display(), key, false, CurrentTime);
 
     // function under test (2nd call)
@@ -216,4 +216,4 @@ TEST_F(XWindowsKeyStateTests, pollActiveGroup_xkb_areEqual)
     }
 }
 
-} // namespace inputleap
+} // namespace bluebridge

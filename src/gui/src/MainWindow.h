@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "inputleap/AppRole.h"
+#include "bluebridge/AppRole.h"
 #include "AppConnectionState.h"
 
 #include <QMainWindow>
@@ -48,6 +48,12 @@ class QPushButton;
 class QTextEdit;
 class QComboBox;
 class QListWidget;
+class QFrame;
+class QHBoxLayout;
+class QPushButton;
+class QScrollArea;
+class QStackedWidget;
+class QVBoxLayout;
 class QTabWidget;
 class QCheckBox;
 class QRadioButton;
@@ -56,11 +62,17 @@ class QMessageBox;
 class QAbstractButton;
 
 class LogDialog;
-class QInputLeapApplication;
+class QBlueBridgeApplication;
 class SetupWizard;
 class ZeroconfService;
 class QComboBox;
 class QListWidget;
+class QFrame;
+class QHBoxLayout;
+class QPushButton;
+class QScrollArea;
+class QStackedWidget;
+class QVBoxLayout;
 class QLabel;
 class QLineEdit;
 class QToolButton;
@@ -74,7 +86,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    friend class QInputLeapApplication;
+    friend class QBlueBridgeApplication;
     friend class SetupWizard;
 
     public:
@@ -182,6 +194,9 @@ public slots:
         void selectBluetoothServer(int index);
         void applyBluetoothServerStatus(int generation, const QMap<QString, bool>& running);
         void updateStartButton();
+        void buildHomeLayout();
+        void updateHome();
+        void trackConnectedClients(const QString& line);
         ConnectionMode connection_mode() const { return m_ConnectionMode; }
         bool server_accepts_bluetooth() const;
 
@@ -213,7 +228,7 @@ public slots:
         bool m_fingerprint_expanded = false;
 
         ConnectionMode m_ConnectionMode = ConnectionMode::Network;
-        inputleap::MachinePolicy m_policy;
+        bluebridge::MachinePolicy m_policy;
         QLabel* m_pLabelManaged = nullptr;
         QWidget* m_pConnectionModeRow = nullptr;
         QLabel* m_pLabelConnectionMode = nullptr;
@@ -234,6 +249,30 @@ public slots:
         QLineEdit* m_pLineEditServerBluetooth = nullptr;
         int m_BluetoothServerScan = 0;
         QLabel* m_pLabelClientBluetoothHint = nullptr;
+
+        // home screen, see MainWindowHome.cpp
+        QScrollArea* m_pHomeScroll = nullptr;
+        QStackedWidget* m_pHomePages = nullptr;
+        QPushButton* m_pNavHome = nullptr;
+        QPushButton* m_pNavArrange = nullptr;
+        QLabel* m_pSidebarNote = nullptr;
+        QPushButton* m_pRoleServer = nullptr;
+        QPushButton* m_pRoleClient = nullptr;
+        QLabel* m_pLabelThisComputer = nullptr;
+        QFrame* m_pHero = nullptr;
+        QLabel* m_pHeroTitle = nullptr;
+        QLabel* m_pHeroText = nullptr;
+        QHBoxLayout* m_pHeroButtonSlot = nullptr;
+        QFrame* m_pNetworkTile = nullptr;
+        QLabel* m_pLabelNetworkAddress = nullptr;
+        QToolButton* m_pButtonCopyNetworkAddress = nullptr;
+        QFrame* m_pBluetoothTile = nullptr;
+        QListWidget* m_pListConnected = nullptr;
+        QLabel* m_pLabelNoneConnected = nullptr;
+        QLabel* m_pLinkArrange = nullptr;
+        QLabel* m_pClientTitle = nullptr;
+        QVBoxLayout* m_pClientButtonSlot = nullptr;
+        QStringList m_ConnectedClients;
 
 private slots:
     void on_m_pCheckBoxAutoConfig_toggled(bool checked);

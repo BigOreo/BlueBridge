@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -22,17 +22,17 @@
 #include "server/ClientProxyUnknown.h"
 #include "server/PrimaryClient.h"
 #include "server/ClientListener.h"
-#include "inputleap/FileChunk.h"
-#include "inputleap/IPlatformScreen.h"
-#include "inputleap/DropHelper.h"
-#include "inputleap/option_types.h"
-#include "inputleap/protocol_types.h"
-#include "inputleap/XScreen.h"
-#include "inputleap/Exceptions.h"
-#include "inputleap/StreamChunker.h"
-#include "inputleap/KeyState.h"
-#include "inputleap/Screen.h"
-#include "inputleap/PacketStreamFilter.h"
+#include "bluebridge/FileChunk.h"
+#include "bluebridge/IPlatformScreen.h"
+#include "bluebridge/DropHelper.h"
+#include "bluebridge/option_types.h"
+#include "bluebridge/protocol_types.h"
+#include "bluebridge/XScreen.h"
+#include "bluebridge/Exceptions.h"
+#include "bluebridge/StreamChunker.h"
+#include "bluebridge/KeyState.h"
+#include "bluebridge/Screen.h"
+#include "bluebridge/PacketStreamFilter.h"
 #include "net/TCPSocket.h"
 #include "net/IDataSocket.h"
 #include "net/IListenSocket.h"
@@ -52,12 +52,12 @@
 #include <ctime>
 #include <stdexcept>
 
-namespace inputleap {
+namespace bluebridge {
 
 Server::Server(
 		Config& config,
 		PrimaryClient* primaryClient,
-		inputleap::Screen* screen,
+		bluebridge::Screen* screen,
 		IEventQueue* events,
 		ServerArgs const& args) :
 	m_mock(false),
@@ -1774,8 +1774,8 @@ void Server::send_drag_info_thread(BaseClientProxy* newScreen)
 
 #if defined(__APPLE__)
 	// on mac it seems that after faking a LMB up, system would signal back
-    // to InputLeap a mouse up event, which doesn't happen on windows. as a
-    // result, InputLeap would send dragging file to client twice. This variable
+    // to BlueBridge a mouse up event, which doesn't happen on windows. as a
+    // result, BlueBridge would send dragging file to client twice. This variable
 	// is used to ignore the first file sending.
 	m_ignoreFileTransfer = true;
 #endif
@@ -2006,7 +2006,7 @@ void Server::write_to_drop_dir_thread()
 	LOG_DEBUG("starting write to drop dir thread");
 
 	while (m_screen->isFakeDraggingStarted()) {
-		inputleap::this_thread_sleep(.1f);
+		bluebridge::this_thread_sleep(.1f);
 	}
 
 	DropHelper::writeToDir(m_screen->getDropTarget(), m_fakeDragFileList,
@@ -2252,4 +2252,4 @@ void Server::dragInfoReceived(std::uint32_t fileNum, std::string content)
 	m_screen->startDraggingFiles(m_fakeDragFileList);
 }
 
-} // namespace inputleap
+} // namespace bluebridge

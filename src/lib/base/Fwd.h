@@ -1,4 +1,4 @@
-/*  InputLeap -- mouse and keyboard sharing utility
+/*  BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@
 
 #pragma once
 
-namespace inputleap {
+namespace bluebridge {
 
 // Event.h
 class EventDataBase;
@@ -59,4 +59,4 @@ class SimpleEventQueueBuffer;
 // Stopwatch.h
 class Stopwatch;
 
-} // namespace inputleap
+} // namespace bluebridge

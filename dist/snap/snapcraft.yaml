@@ -1,21 +1,21 @@
-name: input-leap
+name: bluebridge
 base: core18
 version: master
 version-script: git describe --tags | sed "s/^v//"
-adopt-info: appstream-flathub
+adopt-info: bluebridge
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
-icon: res/input-leap.svg
+icon: res/bluebridge.svg
 license: GPL-2.0
 
 apps:
-  input-leap:
-    command: desktop-launch input-leap #first run might take longer
+  bluebridge:
+    command: desktop-launch bluebridge #first run might take longer
     environment:
       # Fallback to XWayland if running in a Wayland session.
       DISABLE_WAYLAND: 1
-    desktop: usr/share/applications/input-leap.desktop
-    common-id: io.github.input_leap.input-leap
+    desktop: usr/share/applications/bluebridge.desktop
+    common-id: io.github.bigoreo.bluebridge
     plugs: &plugs
       - desktop
       - desktop-legacy
@@ -28,11 +28,11 @@ apps:
       - unity7
       - wayland
       - x11
-  input-leapc:
-    command: desktop-launch input-leapc
+  bluebridge-client:
+    command: desktop-launch bluebridge-client
     plugs: *plugs
-  input-leaps:
-    command: desktop-launch input-leaps
+  bluebridge-server:
+    command: desktop-launch bluebridge-server
     plugs: *plugs
 
 parts:
@@ -41,9 +41,10 @@ parts:
     source-subdir: qt
     plugin: make
 
-  input-leap:
+  bluebridge:
     source: .
     source-type: git
+    parse-info: [res/io.github.bigoreo.bluebridge.appdata.xml]
     plugin: cmake
     configflags:
       - "-DQT_DEFAULT_MAJOR_VERSION=5"
@@ -81,10 +82,6 @@ parts:
   fix-icon:
     plugin: nil
     override-build:
-      sed -i 's|Icon=input-leap|Icon=/usr/share/icons/hicolor/scalable/apps/input-leap.svg|' $SNAPCRAFT_STAGE/usr/share/applications/input-leap.desktop
-    after: [input-leap]
+      sed -i 's|Icon=bluebridge|Icon=/usr/share/icons/hicolor/scalable/apps/bluebridge.svg|' $SNAPCRAFT_STAGE/usr/share/applications/bluebridge.desktop
+    after: [bluebridge]
 
-  appstream-flathub:
-    plugin: dump
-    source: https://github.com/flathub/com.github.input-leap.input-leap.git
-    parse-info: [io.github.input_leap.input-leap.appdata.xml]

@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -18,7 +18,7 @@
 
 #include "platform/XKBUtil.h"
 
-#include "inputleap/key_types.h"
+#include "bluebridge/key_types.h"
 
 #include <cstddef>
 
@@ -58,7 +58,7 @@
 #define XK_Ydiaeresis          0x13be
 #endif
 
-namespace inputleap {
+namespace bluebridge {
 
 /*
     * This table maps keysym values into the corresponding ISO 10646
@@ -1487,4 +1487,4 @@ XKBUtil::initKeyMaps()
     }
 }
 
-} // namespace inputleap
+} // namespace bluebridge

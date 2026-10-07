@@ -1,6 +1,6 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
-    Copyright (C) InputLeap contributors
+    BlueBridge -- mouse and keyboard sharing utility
+    Copyright (C) BlueBridge contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 #include <QStyleFactory>
 #include <QWidget>
 
-namespace inputleap {
+namespace bluebridge {
 namespace theme {
 
 namespace {
@@ -145,6 +145,64 @@ QListWidget#serverList::item:selected {
     color: #0F1B2D;
 }
 QListWidget#serverList::item:hover:!selected { background: #F4F6F9; }
+QWidget#homeContent, QScrollArea { background: #F4F6F9; }
+QWidget#sidebar { background: #FFFFFF; border-right: 1px solid #DCE3EC; }
+QLabel[role="wordmark"] { font-family: "Sora"; font-weight: 700; font-size: 18px; color: #0F1B2D; }
+QPushButton[nav="true"] {
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    padding: 9px 12px;
+    color: #3A4A61;
+    min-height: 22px;
+}
+QPushButton[nav="true"]:hover { background: #F4F6F9; }
+QPushButton[nav="true"]:checked { background: #E8EFFF; color: #0F1B2D; font-weight: 600; }
+QFrame#roleSwitch { background: #E3E8EF; border-radius: 12px; }
+QPushButton[segment="true"] {
+    background: transparent;
+    border: 0;
+    border-radius: 9px;
+    padding: 8px 16px;
+    color: #3A4A61;
+    min-height: 22px;
+}
+QPushButton[segment="true"]:checked { background: #FFFFFF; color: #0F1B2D; font-weight: 600; }
+QPushButton[segment="true"]:disabled { color: #9AA8BB; }
+QFrame[card="true"] { background: #FFFFFF; border: 1px solid #DCE3EC; border-radius: 16px; }
+QFrame[tile="true"] { background: #F4F6F9; border: 0; border-radius: 12px; }
+QLabel[role="cardTitle"] { font-family: "Sora"; font-weight: 600; font-size: 16px; color: #0F1B2D; }
+QLabel[role="pageTitle"] { font-family: "Sora"; font-weight: 700; font-size: 20px; color: #0F1B2D; }
+QLabel[role="muted"] { color: #5B6B82; }
+QLabel[role="strong"] { font-weight: 600; color: #0F1B2D; }
+QLabel[role="address"] { font-size: 16px; font-weight: 500; color: #0F1B2D; }
+QLabel[role="stepNumber"] {
+    background: #E8EFFF;
+    color: #1846C2;
+    border-radius: 15px;
+    font-weight: 600;
+}
+QFrame#hero { background: #0B1424; border: 0; border-radius: 18px; }
+QFrame#hero QLabel { background: transparent; color: #FFFFFF; }
+QLabel[role="heroTitle"] { font-family: "Sora"; font-weight: 700; font-size: 22px; }
+QFrame#hero QLabel[role="heroText"] { color: #C3CEDD; }
+QFrame#hero QPushButton[primary="false"] {
+    background: transparent;
+    color: #FFFFFF;
+    border: 1px solid #3A4A61;
+}
+QFrame#hero QPushButton[primary="false"]:hover { background: #16223A; }
+QPushButton#m_pButtonToggleStart { padding: 8px 22px; font-size: 14px; }
+QListWidget#clientList { background: transparent; border: 0; outline: 0; }
+QListWidget#clientList::item {
+    background: #F4F6F9;
+    border: 0;
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin: 2px 0;
+    color: #0F1B2D;
+}
 QToolTip {
     background: #0F1B2D;
     color: #FFFFFF;
@@ -186,4 +244,4 @@ void set_primary(QWidget* button, bool primary)
 }
 
 } // namespace theme
-} // namespace inputleap
+} // namespace bluebridge

@@ -1,5 +1,5 @@
 /*
-    InputLeap -- mouse and keyboard sharing utility
+    BlueBridge -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-namespace inputleap {
+namespace bluebridge {
 
 class FingerprintDatabase {
 public:
@@ -47,4 +47,4 @@ private:
     std::vector<FingerprintData> fingerprints_;
 };
 
-} // namespace inputleap
+} // namespace bluebridge

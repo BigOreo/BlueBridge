@@ -1,4 +1,4 @@
-# InputLeap -- mouse and keyboard sharing utility
+# BlueBridge -- mouse and keyboard sharing utility
 # Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2009 Nick Bolton
 #
@@ -49,7 +49,7 @@ set_source_files_properties(
 list(APPEND sources ${mswin_sources} ${carbon_sources} ${xwin_sources} ${ei_sources} ${xkb_sources})
 list(APPEND headers ${mswin_headers} ${carbon_headers} ${xwin_headers} ${ei_headers} ${xkb_headers})
 
-if(INPUTLEAP_ADD_HEADERS)
+if(BLUEBRIDGE_ADD_HEADERS)
     list(APPEND sources ${headers})
 endif()
 

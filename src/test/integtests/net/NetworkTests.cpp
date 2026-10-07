@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -18,19 +18,19 @@
 // TODO: fix, tests failing intermittently on mac.
 #ifndef WINAPI_CARBON
 
-#define INPUTLEAP_TEST_ENV
+#define BLUEBRIDGE_TEST_ENV
 
 #include "test/mock/server/MockConfig.h"
 #include "test/mock/server/MockPrimaryClient.h"
-#include "test/mock/inputleap/MockScreen.h"
+#include "test/mock/bluebridge/MockScreen.h"
 #include "test/mock/server/MockInputFilter.h"
 #include "test/global/TestEventQueue.h"
 #include "server/Server.h"
 #include "server/ClientListener.h"
 #include "server/ClientProxy.h"
 #include "client/Client.h"
-#include "inputleap/FileChunk.h"
-#include "inputleap/StreamChunker.h"
+#include "bluebridge/FileChunk.h"
+#include "bluebridge/StreamChunker.h"
 #include "net/SocketMultiplexer.h"
 #include "net/NetworkAddress.h"
 #include "net/TCPSocketFactory.h"
@@ -44,7 +44,7 @@
 #include <iostream>
 #include <stdio.h>
 
-namespace inputleap {
+namespace bluebridge {
 
 using ::testing::_;
 using ::testing::NiceMock;
@@ -521,6 +521,6 @@ void getCursorPos(std::int32_t& x, std::int32_t& y)
     y = 0;
 }
 
-} // namespace inputleap
+} // namespace bluebridge
 
 #endif // WINAPI_CARBON

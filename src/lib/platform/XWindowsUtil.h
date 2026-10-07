@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -24,7 +24,7 @@
 
 #include <string>
 
-namespace inputleap {
+namespace bluebridge {
 
 //! X11 utility functions
 class XWindowsUtil {
@@ -155,4 +155,4 @@ private:
                             XEvent* xevent, XPointer arg);
 };
 
-} // namespace inputleap
+} // namespace bluebridge

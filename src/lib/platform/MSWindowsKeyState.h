@@ -1,5 +1,5 @@
 /*
- * InputLeap -- mouse and keyboard sharing utility
+ * BlueBridge -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -19,14 +19,14 @@
 #pragma once
 
 #include "base/Fwd.h"
-#include "inputleap/KeyState.h"
+#include "bluebridge/KeyState.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 #include <vector>
 
-namespace inputleap {
+namespace bluebridge {
 
 class MSWindowsDesks;
 
@@ -38,7 +38,7 @@ class MSWindowsKeyState : public KeyState {
 public:
     MSWindowsKeyState(MSWindowsDesks* desks, const void* event_target, IEventQueue* events);
     MSWindowsKeyState(MSWindowsDesks* desks, const void* event_target, IEventQueue* events,
-                      inputleap::KeyMap& keyMap);
+                      bluebridge::KeyMap& keyMap);
 	virtual ~MSWindowsKeyState();
 
 	//! @name manipulators
@@ -160,7 +160,7 @@ public:
 
 protected:
 	// KeyState overrides
-	virtual void		getKeyMap(inputleap::KeyMap& keyMap);
+	virtual void		getKeyMap(bluebridge::KeyMap& keyMap);
 	virtual void		fakeKey(const Keystroke& keystroke);
 	virtual KeyModifierMask&
 						getActiveModifiersRValue();
@@ -174,11 +174,11 @@ private:
 	bool				getGroups(GroupList&) const;
     void setWindowGroup(std::int32_t group);
 
-	KeyID				getIDForKey(inputleap::KeyMap::KeyItem& item,
+	KeyID				getIDForKey(bluebridge::KeyMap::KeyItem& item,
 							KeyButton button, UINT virtualKey,
 							PBYTE keyState, HKL hkl) const;
 
-	void				addKeyEntry(inputleap::KeyMap& keyMap, inputleap::KeyMap::KeyItem& item);
+	void				addKeyEntry(bluebridge::KeyMap& keyMap, bluebridge::KeyMap::KeyItem& item);
 
 	void				init();
 
@@ -231,4 +231,4 @@ private:
 	static const KeyID	s_virtualKey[];
 };
 
-} // namespace inputleap
+} // namespace bluebridge

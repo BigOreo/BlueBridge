@@ -1,10 +1,10 @@
-To recreate the generated part of input-leapc manpage use a command like:
-  help2man -N --output=input-leapc.1 --name='InputLeap Keyboard/Mouse Client' /path/to/input-leapc
+To recreate the generated part of bluebridge-client manpage use a command like:
+  help2man -N --output=bluebridge-client.1 --name='BlueBridge Keyboard/Mouse Client' /path/to/bluebridge-client
 
-And for input-leaps:
-  help2man -N --output=input-leaps.1 --name='InputLeap Keyboard/Mouse Server' /path/to/input-leaps
+And for bluebridge-server:
+  help2man -N --output=bluebridge-server.1 --name='BlueBridge Keyboard/Mouse Server' /path/to/bluebridge-server
 
 After that manually fixup:
- * replace your home directory with $HOME in input-leaps.1
+ * replace your home directory with $HOME in bluebridge-server.1
  * revert formatting of FILES and COPYRIGHT sections to match formatting of existing version.
  * add note referencing this file for instructions to the first line.

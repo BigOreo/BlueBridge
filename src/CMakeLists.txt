@@ -1,4 +1,4 @@
-# InputLeap -- mouse and keyboard sharing utility
+# BlueBridge -- mouse and keyboard sharing utility
 # Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2011 Nick Bolton
 #
@@ -26,12 +26,12 @@ if (WIN32)
     add_subdirectory(daemon)
 endif()
 
-if(INPUTLEAP_BUILD_TESTS)
+if(BLUEBRIDGE_BUILD_TESTS)
     include(../cmake/gtest.cmake)
     add_subdirectory(test/integtests)
     add_subdirectory(test/unittests)
 endif()
 
-if(INPUTLEAP_BUILD_GUI)
+if(BLUEBRIDGE_BUILD_GUI)
     add_subdirectory(gui)
 endif()
