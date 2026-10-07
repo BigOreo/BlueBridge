@@ -1,0 +1,1 @@
+Windows: clicking Stop now stops the server or client when it runs through the background service. The service looked for the old program names (InputLeaps.exe, InputLeapc.exe), so it never found the running program and connected computers kept working.
