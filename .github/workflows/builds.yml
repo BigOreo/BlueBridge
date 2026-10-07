@@ -485,6 +485,15 @@ jobs:
           path: .\build\installer-inno\bin
           if-no-files-found: error
 
+      # Install, check the service, firewall rule and a TLS connection between
+      # the installed server and client, then uninstall and check the cleanup.
+      - name: Test the Installer
+        if: env.B_BUILD_TYPE == 'Release'
+        run: |
+          $setup = Get-ChildItem .\build\installer-inno\bin\*.exe | Select-Object -First 1
+          powershell -ExecutionPolicy Bypass -File .\input-leap\src\test\smoke\windows_installer.ps1 -Installer $setup.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
   flatpak:
     runs-on: ubuntu-latest
     container:
