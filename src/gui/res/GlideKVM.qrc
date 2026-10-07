@@ -11,6 +11,8 @@
         <file>icons/app/glidekvm-48.png</file>
         <file>icons/app/glidekvm-64.png</file>
         <file>icons/app/glidekvm-128.png</file>
+        <file>icons/app/glidekvm-small-64.png</file>
+        <file>icons/app/glidekvm-small-96.png</file>
         <file>image/about.png</file>
         <file>lang/gui_ar.qm</file>
         <file>lang/gui_bg-BG.qm</file>

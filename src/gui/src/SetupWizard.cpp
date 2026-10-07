@@ -52,7 +52,7 @@ SetupWizard::SetupWizard(MainWindow& mainWindow, bool startMain) :
 
     // the same look on every platform, with the app icon in the header
     setWizardStyle(QWizard::ModernStyle);
-    setPixmap(QWizard::LogoPixmap, QPixmap(":/res/icons/256x256/glidekvm.png")
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/res/icons/app/glidekvm-small-96.png")
                                        .scaled(56, 56, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QFont choiceFont = ui_->m_pServerRadioButton->font();

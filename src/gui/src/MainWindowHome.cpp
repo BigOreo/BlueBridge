@@ -233,7 +233,11 @@ void MainWindow::buildHomeLayout()
     brandLayout->setContentsMargins(8, 0, 0, 16);
     brandLayout->setSpacing(10);
     auto* logo = new QLabel(brand);
-    logo->setPixmap(QIcon(":/res/icons/app/glidekvm-64.png").pixmap(30, 30));
+    QIcon small_icon(QStringLiteral(":/res/icons/app/glidekvm-32.png"));
+    small_icon.addFile(QStringLiteral(":/res/icons/app/glidekvm-48.png"));
+    small_icon.addFile(QStringLiteral(":/res/icons/app/glidekvm-small-64.png"));
+    small_icon.addFile(QStringLiteral(":/res/icons/app/glidekvm-small-96.png"));
+    logo->setPixmap(small_icon.pixmap(30, 30));
     auto* wordmark = new QLabel(tr("GlideKVM"), brand);
     wordmark->setProperty("role", "wordmark");
     brandLayout->addWidget(logo);
@@ -350,7 +354,7 @@ void MainWindow::buildHomeLayout()
     heroLayout->setContentsMargins(26, 22, 26, 22);
     heroLayout->setSpacing(18);
     auto* heroIcon = new QLabel(m_pHero);
-    heroIcon->setPixmap(QIcon(":/res/icons/256x256/glidekvm.png").pixmap(52, 52));
+    heroIcon->setPixmap(small_icon.pixmap(52, 52));
     heroIcon->setFixedSize(52, 52);
     auto* heroText = new QVBoxLayout();
     heroText->setSpacing(4);
