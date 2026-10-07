@@ -13,7 +13,7 @@ import yaml
 
 def get_all_workflow_artifacts(s, run_id):
     r = s.get(
-        f"https://api.github.com/repos/bluebridge/bluebridge/actions/runs/{run_id}/artifacts"
+        f"https://api.github.com/repos/glidekvm/glidekvm/actions/runs/{run_id}/artifacts"
     )
     return {a["name"]: a["archive_download_url"] for a in r.json()["artifacts"]}
 
@@ -46,49 +46,49 @@ def main():
     received_artifacts = get_all_workflow_artifacts(s, workflow_run_id)
 
     artifacts_config = {
-        "bluebridge-deb-debian-12": (
-            "bluebridge_.*_amd64.deb",
-            f"BlueBridge_{version}_debian12_amd64.deb",
+        "glidekvm-deb-debian-12": (
+            "glidekvm_.*_amd64.deb",
+            f"GlideKVM_{version}_debian12_amd64.deb",
         ),
-        "bluebridge-deb-ubuntu-20-04": (
-            "bluebridge_.*_amd64.deb",
-            f"BlueBridge_{version}_ubuntu_20-04_amd64.deb",
+        "glidekvm-deb-ubuntu-20-04": (
+            "glidekvm_.*_amd64.deb",
+            f"GlideKVM_{version}_ubuntu_20-04_amd64.deb",
         ),
-        "bluebridge-deb-ubuntu-22-04": (
-            "bluebridge_.*_amd64.deb",
-            f"BlueBridge_{version}_ubuntu_22-04_amd64.deb",
+        "glidekvm-deb-ubuntu-22-04": (
+            "glidekvm_.*_amd64.deb",
+            f"GlideKVM_{version}_ubuntu_22-04_amd64.deb",
         ),
-        "bluebridge-deb-ubuntu-24-04": (
-            "bluebridge_.*_amd64.deb",
-            f"BlueBridge_{version}_ubuntu_24-04_amd64.deb",
+        "glidekvm-deb-ubuntu-24-04": (
+            "glidekvm_.*_amd64.deb",
+            f"GlideKVM_{version}_ubuntu_24-04_amd64.deb",
         ),
-        "bluebridge-deb-ubuntu-24-10": (
-            "bluebridge_.*_amd64.deb",
-            f"BlueBridge_{version}_ubuntu_24-10_amd64.deb",
+        "glidekvm-deb-ubuntu-24-10": (
+            "glidekvm_.*_amd64.deb",
+            f"GlideKVM_{version}_ubuntu_24-10_amd64.deb",
         ),
-        "bluebridge-rpms-fedora": (
-            "x86_64/bluebridge-.*.fc40.x86_64.rpm",
-            f"BlueBridge_{version}_fedora_fc40_x86_64.rpm",
+        "glidekvm-rpms-fedora": (
+            "x86_64/glidekvm-.*.fc40.x86_64.rpm",
+            f"GlideKVM_{version}_fedora_fc40_x86_64.rpm",
         ),
-        "bluebridge-flatpak-x86_64": (
-            "bluebridge.flatpak",
-            f"BlueBridge_{version}_linux_x86_64.flatpak",
+        "glidekvm-flatpak-x86_64": (
+            "glidekvm.flatpak",
+            f"GlideKVM_{version}_linux_x86_64.flatpak",
         ),
         "macOS-Apple_Silicon-installer": (
-            "BlueBridge-.*-release.dmg",
-            f"BlueBridge_{version}_macos_AppleSilicon.dmg",
+            "GlideKVM-.*-release.dmg",
+            f"GlideKVM_{version}_macos_AppleSilicon.dmg",
         ),
         "macOS-x86_64-installer": (
-            "BlueBridge-.*-release.dmg",
-            f"BlueBridge_{version}_macos_x86_64.dmg",
+            "GlideKVM-.*-release.dmg",
+            f"GlideKVM_{version}_macos_x86_64.dmg",
         ),
         "windows-installer-Windows Qt5": (
-            "BlueBridgeSetup-.*-release.exe",
-            f"BlueBridge_{version}_windows_qt5.exe",
+            "GlideKVMSetup-.*-release.exe",
+            f"GlideKVM_{version}_windows_qt5.exe",
         ),
         "windows-installer-Windows Qt6": (
-            "BlueBridgeSetup-.*-release.exe",
-            f"BlueBridge_{version}_windows_qt6.exe",
+            "GlideKVMSetup-.*-release.exe",
+            f"GlideKVM_{version}_windows_qt6.exe",
         ),
     }
 

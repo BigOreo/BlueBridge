@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -16,13 +16,13 @@
 
 #include "ClientConnectionLoggingWrapper.h"
 #include "base/Log.h"
-#include "bluebridge/ClipboardChunk.h"
-#include "bluebridge/FileChunk.h"
-#include "bluebridge/ProtocolUtil.h"
-#include "bluebridge/protocol_types.h"
+#include "glidekvm/ClipboardChunk.h"
+#include "glidekvm/FileChunk.h"
+#include "glidekvm/ProtocolUtil.h"
+#include "glidekvm/protocol_types.h"
 #include "io/IStream.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 ClientConnectionLoggingWrapper::ClientConnectionLoggingWrapper(
         const std::string& name, std::unique_ptr<IClientConnection> conn) :
@@ -216,4 +216,4 @@ void ClientConnectionLoggingWrapper::close()
     conn_->close();
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

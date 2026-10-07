@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -25,14 +25,14 @@
 #include <sstream>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 ArchDaemonWindows*        ArchDaemonWindows::s_daemon = nullptr;
 
 ArchDaemonWindows::ArchDaemonWindows() :
 m_daemonThreadID(0)
 {
-    m_quitMessage = RegisterWindowMessage("BlueBridgeDaemonExit");
+    m_quitMessage = RegisterWindowMessage("GlideKVMDaemonExit");
 }
 
 ArchDaemonWindows::~ArchDaemonWindows()
@@ -199,7 +199,7 @@ ArchDaemonWindows::uninstallDaemon(const char* name)
 
     // give windows a chance to remove the service before
     // we check if it still exists.
-    bluebridge::this_thread_sleep(1);
+    glidekvm::this_thread_sleep(1);
 
     // handle failure.  ignore error if service isn't installed anymore.
     if (!okay && isDaemonInstalled(name)) {
@@ -681,4 +681,4 @@ ArchDaemonWindows::uninstallDaemon()
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

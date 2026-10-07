@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2005 Chris Schoeneman
  *
@@ -19,14 +19,14 @@
 #include "server/InputFilter.h"
 #include "server/Server.h"
 #include "server/PrimaryClient.h"
-#include "bluebridge/KeyMap.h"
+#include "glidekvm/KeyMap.h"
 #include "base/EventQueue.h"
 #include "base/Log.h"
 
 #include <cstdlib>
 #include <cstring>
 
-namespace bluebridge {
+namespace glidekvm {
 
 // -----------------------------------------------------------------------------
 // Input Filter Condition Classes
@@ -92,8 +92,8 @@ InputFilter::KeystrokeCondition::clone() const
 
 std::string InputFilter::KeystrokeCondition::format() const
 {
-    return bluebridge::string::sprintf("keystroke(%s)",
-                            bluebridge::KeyMap::formatKey(m_key, m_mask).c_str());
+    return glidekvm::string::sprintf("keystroke(%s)",
+                            glidekvm::KeyMap::formatKey(m_key, m_mask).c_str());
 }
 
 InputFilter::EFilterStatus
@@ -171,11 +171,11 @@ InputFilter::MouseButtonCondition::clone() const
 
 std::string InputFilter::MouseButtonCondition::format() const
 {
-    std::string key = bluebridge::KeyMap::formatKey(kKeyNone, m_mask);
+    std::string key = glidekvm::KeyMap::formatKey(kKeyNone, m_mask);
     if (!key.empty()) {
         key += "+";
     }
-    return bluebridge::string::sprintf("mousebutton(%s%d)", key.c_str(), m_button);
+    return glidekvm::string::sprintf("mousebutton(%s%d)", key.c_str(), m_button);
 }
 
 InputFilter::EFilterStatus
@@ -227,7 +227,7 @@ InputFilter::ScreenConnectedCondition::clone() const
 
 std::string InputFilter::ScreenConnectedCondition::format() const
 {
-    return bluebridge::string::sprintf("connect(%s)", m_screen.c_str());
+    return glidekvm::string::sprintf("connect(%s)", m_screen.c_str());
 }
 
 InputFilter::EFilterStatus
@@ -277,7 +277,7 @@ std::string InputFilter::LockCursorToScreenAction::format() const
 {
     static const char* s_mode[] = { "off", "on", "toggle" };
 
-    return bluebridge::string::sprintf("lockCursorToScreen(%s)", s_mode[m_mode]);
+    return glidekvm::string::sprintf("lockCursorToScreen(%s)", s_mode[m_mode]);
 }
 
 void
@@ -314,7 +314,7 @@ InputFilter::SwitchToScreenAction::clone() const
 
 std::string InputFilter::SwitchToScreenAction::format() const
 {
-    return bluebridge::string::sprintf("switchToScreen(%s)", m_screen.c_str());
+    return glidekvm::string::sprintf("switchToScreen(%s)", m_screen.c_str());
 }
 
 void
@@ -343,7 +343,7 @@ InputFilter::ToggleScreenAction::clone() const
 
 std::string InputFilter::ToggleScreenAction::format() const
 {
-    return bluebridge::string::sprintf("toggleScreen");
+    return glidekvm::string::sprintf("toggleScreen");
 }
 
 void
@@ -380,7 +380,7 @@ std::string InputFilter::SwitchInDirectionAction::format() const
         "down"
     };
 
-    return bluebridge::string::sprintf("switchInDirection(%s)", s_names[m_direction]);
+    return glidekvm::string::sprintf("switchInDirection(%s)", s_names[m_direction]);
 }
 
 void
@@ -429,10 +429,10 @@ std::string InputFilter::KeyboardBroadcastAction::format() const
     static const char* s_name = "keyboardBroadcast";
 
     if (m_screens.empty() || m_screens[0] == '*') {
-        return bluebridge::string::sprintf("%s(%s)", s_name, s_mode[m_mode]);
+        return glidekvm::string::sprintf("%s(%s)", s_name, s_mode[m_mode]);
     }
     else {
-        return bluebridge::string::sprintf("%s(%s,%.*s)", s_name, s_mode[m_mode],
+        return glidekvm::string::sprintf("%s(%s,%.*s)", s_name, s_mode[m_mode],
                             m_screens.size() - 2,
                             m_screens.c_str() + 1);
     }
@@ -479,16 +479,16 @@ std::string InputFilter::KeystrokeAction::format() const
     const char* type = formatName();
 
     if (info_.screens_.empty()) {
-        return bluebridge::string::sprintf("%s(%s)", type,
-                            bluebridge::KeyMap::formatKey(info_.m_key, info_.m_mask).c_str());
+        return glidekvm::string::sprintf("%s(%s)", type,
+                            glidekvm::KeyMap::formatKey(info_.m_key, info_.m_mask).c_str());
     }
     else if (info_.screens_ == "*") {
-        return bluebridge::string::sprintf("%s(%s,*)", type,
-                            bluebridge::KeyMap::formatKey(info_.m_key, info_.m_mask).c_str());
+        return glidekvm::string::sprintf("%s(%s,*)", type,
+                            glidekvm::KeyMap::formatKey(info_.m_key, info_.m_mask).c_str());
     }
     else {
-        return bluebridge::string::sprintf("%s(%s,%s)", type,
-                            bluebridge::KeyMap::formatKey(info_.m_key, info_.m_mask).c_str(),
+        return glidekvm::string::sprintf("%s(%s,%s)", type,
+                            glidekvm::KeyMap::formatKey(info_.m_key, info_.m_mask).c_str(),
                             info_.screens_.c_str());
     }
 }
@@ -538,8 +538,8 @@ std::string InputFilter::MouseButtonAction::format() const
 {
     const char* type = formatName();
 
-    std::string key = bluebridge::KeyMap::formatKey(kKeyNone, button_info_.m_mask);
-    return bluebridge::string::sprintf("%s(%s%s%d)", type,
+    std::string key = glidekvm::KeyMap::formatKey(kKeyNone, button_info_.m_mask);
+    return glidekvm::string::sprintf("%s(%s%s%d)", type,
                             key.c_str(), key.empty() ? "" : "+",
                             button_info_.m_button);
 }
@@ -953,4 +953,4 @@ bool are_rules_equal(const std::vector<InputFilter::Rule>& rules1,
     return list1 == list2;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,8 +20,8 @@
 
 #include "config.h"
 
-#include "bluebridge/PlatformScreen.h"
-#include "bluebridge/KeyMap.h"
+#include "glidekvm/PlatformScreen.h"
+#include "glidekvm/KeyMap.h"
 #include "XWindowsImpl.h"
 
 #include <X11/Xlib.h>
@@ -29,7 +29,7 @@
 #include <set>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class XWindowsClipboard;
 class XWindowsKeyState;
@@ -260,11 +260,11 @@ private:
     int m_xrandrEventBase;
 
     IEventQueue* m_events;
-    bluebridge::KeyMap m_keyMap;
+    glidekvm::KeyMap m_keyMap;
 
     // pointer to (singleton) screen.  this is only needed by
     // ioErrorHandler().
     static XWindowsScreen*    s_screen;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

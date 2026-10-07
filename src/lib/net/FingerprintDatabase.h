@@ -1,5 +1,5 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
+    GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class FingerprintDatabase {
 public:
@@ -47,4 +47,4 @@ private:
     std::vector<FingerprintData> fingerprints_;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

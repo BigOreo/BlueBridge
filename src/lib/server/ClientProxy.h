@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -23,7 +23,7 @@
 #include "base/EventTypes.h"
 #include <memory>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Generic proxy for client
 class ClientProxy : public BaseClientProxy {
@@ -50,4 +50,4 @@ private:
     std::unique_ptr<IClientConnection> conn_;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

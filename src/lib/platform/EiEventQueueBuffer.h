@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #include "base/IEventQueueBuffer.h"
 #include "mt/Thread.h"
 #include "platform/EiScreen.h"
-#include "bluebridge/IScreen.h"
+#include "glidekvm/IScreen.h"
 
 #include <libei.h>
 
@@ -29,7 +29,7 @@
 #include <memory>
 #include <mutex>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Event queue buffer for Ei
 class EiEventQueueBuffer : public IEventQueueBuffer {
@@ -52,4 +52,4 @@ private:
     mutable std::mutex mutex_;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

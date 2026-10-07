@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -30,7 +30,7 @@
 #define CLOG (Log::getInstance())
 #define BYE "\nTry `%s --help' for more information."
 
-namespace bluebridge {
+namespace glidekvm {
 
 class Thread;
 
@@ -106,7 +106,7 @@ public:
     preceded by the filename and line number.  If \c file is nullptr then
     neither the file nor the line are printed.
     */
-    BLUEBRIDGE_ATTRIBUTE_PRINTF(5, 6)
+    GLIDEKVM_ATTRIBUTE_PRINTF(5, 6)
     void print(ELevel priority,
                const char* file, int line,
                const char* format, ...);
@@ -185,4 +185,4 @@ which includes the filename and line number.
 #define LOG_DEBUG4(...) LOG(kDEBUG4, __VA_ARGS__)
 #define LOG_DEBUG5(...) LOG(kDEBUG5, __VA_ARGS__)
 
-} // namespace bluebridge
+} // namespace glidekvm

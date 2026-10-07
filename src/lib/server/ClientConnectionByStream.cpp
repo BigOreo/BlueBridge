@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -16,13 +16,13 @@
 
 #include "ClientConnectionByStream.h"
 #include "base/Log.h"
-#include "bluebridge/ClipboardChunk.h"
-#include "bluebridge/FileChunk.h"
-#include "bluebridge/ProtocolUtil.h"
-#include "bluebridge/protocol_types.h"
+#include "glidekvm/ClipboardChunk.h"
+#include "glidekvm/FileChunk.h"
+#include "glidekvm/ProtocolUtil.h"
+#include "glidekvm/protocol_types.h"
 #include "io/IStream.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 ClientConnectionByStream::ClientConnectionByStream(std::unique_ptr<IStream> stream) :
     stream_{std::move(stream)}
@@ -153,4 +153,4 @@ void ClientConnectionByStream::close()
     stream_->close();
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

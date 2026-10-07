@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "base/Unicode.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 XWindowsClipboardTextConverter::XWindowsClipboardTextConverter(
                 Display* display, const char* name) :
@@ -78,4 +78,4 @@ std::string XWindowsClipboardTextConverter::toIClipboard(const std::string& data
     return utf8;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,4 +1,4 @@
-# BlueBridge -- mouse and keyboard sharing utility
+# GlideKVM -- mouse and keyboard sharing utility
 # Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2009 Nick Bolton
 #
@@ -15,17 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 set(sources
-    bluebridge-server.cpp
+    glidekvm-server.cpp
 )
 
 if (BUILD_MSWINDOWS)
     file(GLOB mswin_headers "MSWindows*.h")
     file(GLOB mswin_sources "MSWindows*.cpp")
     list(APPEND sources
-        bluebridge-server.exe.manifest
-        bluebridge-server.rc
+        glidekvm-server.exe.manifest
+        glidekvm-server.rc
     )
-    set_property(SOURCE bluebridge-server.rc PROPERTY COMPILE_FLAGS /nologo)
+    set_property(SOURCE glidekvm-server.rc PROPERTY COMPILE_FLAGS /nologo)
 endif()
 if (BUILD_CARBON)
     file(GLOB carbon_headers "OSX*.h")
@@ -43,18 +43,18 @@ endif()
 list(APPEND sources ${mswin_sources} ${carbon_sources} ${xwin_sources} ${ei_sources})
 list(APPEND headers ${mswin_headers} ${carbon_headers} ${xwin_headers} ${ei_headers})
 
-if(BLUEBRIDGE_ADD_HEADERS)
+if(GLIDEKVM_ADD_HEADERS)
     list(APPEND sources ${headers})
 endif()
 
-add_executable(bluebridge-server ${sources})
-target_link_libraries(bluebridge-server
+add_executable(glidekvm-server ${sources})
+target_link_libraries(glidekvm-server
     arch base client common io mt net ipc platform server synlib ${libs} OpenSSL::SSL OpenSSL::Crypto)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    install(TARGETS bluebridge-server DESTINATION ${BLUEBRIDGE_BUNDLE_BINARY_DIR})
+    install(TARGETS glidekvm-server DESTINATION ${GLIDEKVM_BUNDLE_BINARY_DIR})
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    install (TARGETS bluebridge-server DESTINATION bin)
+    install (TARGETS glidekvm-server DESTINATION bin)
 else()
-    install (TARGETS bluebridge-server DESTINATION .)
+    install (TARGETS glidekvm-server DESTINATION .)
 endif()

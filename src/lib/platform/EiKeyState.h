@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -18,13 +18,13 @@
 
 #include "base/Fwd.h"
 #include "platform/EiScreen.h"
-#include "bluebridge/KeyState.h"
+#include "glidekvm/KeyState.h"
 
 struct xkb_context;
 struct xkb_keymap;
 struct xkb_state;
 
-namespace bluebridge {
+namespace glidekvm {
 
 /// A key state for Ei
 class EiKeyState : public KeyState {
@@ -59,4 +59,4 @@ private:
     xkb_state* xkb_state_ = nullptr;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

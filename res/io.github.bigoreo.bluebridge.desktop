@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=BlueBridge
-Comment=Keyboard and mouse sharing solution
-Exec=bluebridge
-Icon=io.github.bigoreo.bluebridge
-Terminal=false
-Categories=Network
-Keywords=keyboard;mouse;sharing;network;share;

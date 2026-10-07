@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include "bluebridge/IScreenSaver.h"
+#include "glidekvm/IScreenSaver.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class Thread;
 
@@ -89,4 +89,4 @@ private:
     bool m_active;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

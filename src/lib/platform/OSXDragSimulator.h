@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -21,11 +21,11 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 void runCocoaApp();
 void stopCocoaLoop();
 void fakeDragging(const char* str, int cursorX, int cursorY);
 CFStringRef getCocoaDropTarget();
 
-} // namespace bluebridge
+} // namespace glidekvm

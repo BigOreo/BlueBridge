@@ -1,6 +1,6 @@
 #include "MSWindowsHookResource.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 WindowsHookResource::WindowsHookResource() :
     _hook(nullptr)
@@ -34,4 +34,4 @@ bool WindowsHookResource::unset()
 bool WindowsHookResource::is_set() const { return _hook != nullptr; }
 WindowsHookResource::operator HHOOK() const { return _hook; }
 
-} // namespace bluebridge
+} // namespace glidekvm

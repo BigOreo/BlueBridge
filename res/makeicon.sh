@@ -1,22 +1,22 @@
 #!/bin/sh
-ICNS_BASE=../dist/macos/bundle/BlueBridge.app/Contents/Resources
+ICNS_BASE=../dist/macos/bundle/GlideKVM.app/Contents/Resources
 if ! which magick >/dev/null 2>&1; then
     echo "Need ImageMagick for this"
     exit 10
 fi
 cd "$(dirname "$0")" || exit $?
-if [ ! -r bluebridge.png ]; then
-    echo "Use inkscape (or another vector graphics editor) to create bluebridge.png from bluebridge.svg first"
+if [ ! -r glidekvm.png ]; then
+    echo "Use inkscape (or another vector graphics editor) to create glidekvm.png from glidekvm.svg first"
     exit 10
 fi
 rm -rf work || exit $?
 mkdir -p work || exit $?
 for s in 16 24 32 48 64 128 256 512 1024; do
-    magick convert bluebridge.png -resize "${s}x${s}" -depth 8 "work/${s}.png" || exit $?
+    magick convert glidekvm.png -resize "${s}x${s}" -depth 8 "work/${s}.png" || exit $?
 done
 # windows icon
-magick convert work/{16,24,32,48,64,128}.png bluebridge.png bluebridge.ico || exit $?
+magick convert work/{16,24,32,48,64,128}.png glidekvm.png glidekvm.ico || exit $?
 # macos icon
-png2icns "$ICNS_BASE/BlueBridge.icns" work/{16,32,256,512,1024}.png || exit $?
+png2icns "$ICNS_BASE/GlideKVM.icns" work/{16,32,256,512,1024}.png || exit $?
 rm -rf work
 echo Done

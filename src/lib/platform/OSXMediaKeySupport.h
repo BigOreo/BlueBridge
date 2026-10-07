@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2016 Symless.
  *
  * This package is free software; you can redistribute it and/or
@@ -20,12 +20,12 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <Carbon/Carbon.h>
 
-#include "bluebridge/key_types.h"
+#include "glidekvm/key_types.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 bool fakeNativeMediaKey(KeyID id);
 bool isMediaKeyEvent(CGEventRef event);
 bool getMediaKeyEventInfo(CGEventRef event, KeyID* keyId, bool* down, bool* isRepeat);
 
-} // namespace bluebridge
+} // namespace glidekvm

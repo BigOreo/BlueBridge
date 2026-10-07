@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -20,7 +20,7 @@
 
 #include "platform/XWindowsClipboard.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Convert to/from some text encoding
 class XWindowsClipboardAnyBitmapConverter :
@@ -59,4 +59,4 @@ protected:
                                        std::uint32_t& depth) const = 0;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -22,7 +22,7 @@
 
 //! Interface for architecture dependent daemonizing
 /*!
-This interface defines the operations required by BlueBridge for installing
+This interface defines the operations required by GlideKVM for installing
 uninstalling daeamons and daemonizing a process.  Each architecture must
 implement this interface.
 */

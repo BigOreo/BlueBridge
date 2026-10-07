@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -19,7 +19,7 @@
 // TODO: fix, tests failing intermittently on mac.
 #ifndef WINAPI_CARBON
 
-#define BLUEBRIDGE_TEST_ENV
+#define GLIDEKVM_TEST_ENV
 
 #include "test/global/TestEventQueue.h"
 #include "ipc/IpcServer.h"
@@ -38,7 +38,7 @@
 
 #define TEST_IPC_PORT 24802
 
-namespace bluebridge {
+namespace glidekvm {
 
 class IpcTests : public ::testing::Test
 {
@@ -207,6 +207,6 @@ void IpcTests::sendMessageToClient_client_handle_message_received(const Event& e
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm
 
 #endif // WINAPI_CARBON

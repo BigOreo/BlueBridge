@@ -95,10 +95,10 @@ def main():
         return render(small_svg if size <= 32 else app_svg, size)
 
     # Qt resources
-    save_png(app_icon(256), "src", "gui", "res", "icons", "256x256", "bluebridge.png")
+    save_png(app_icon(256), "src", "gui", "res", "icons", "256x256", "glidekvm.png")
     # window icons: title bars and the taskbar pick the closest size
     for size in (16, 24, 32, 48, 64, 128):
-        save_png(app_icon(size), "src", "gui", "res", "icons", "app", f"bluebridge-{size}.png")
+        save_png(app_icon(size), "src", "gui", "res", "icons", "app", f"glidekvm-{size}.png")
     save_png(app_icon(180), "src", "gui", "res", "image", "about.png")
     states = {
         "connected": dict(tile=BLUE, dot=AMBER),
@@ -107,10 +107,10 @@ def main():
     }
     for name, style in states.items():
         save_png(render(tray_svg(**style), 128),
-                 "src", "gui", "res", "icons", "128x128", f"bluebridge-{name}.png")
+                 "src", "gui", "res", "icons", "128x128", f"glidekvm-{name}.png")
         save_png(render(mask_svg(dot=style.get("dot") is not None,
                                  dashed=style.get("dashed", False)), 128),
-                 "src", "gui", "res", "icons", "128x128", f"bluebridge-{name}-mask.png")
+                 "src", "gui", "res", "icons", "128x128", f"glidekvm-{name}-mask.png")
 
     # interface icons (24-unit grid, drawn at 48 px)
     os.makedirs(path("src", "gui", "res", "icons", "48x48"), exist_ok=True)
@@ -128,19 +128,19 @@ def main():
     # Windows icon: every size Explorer and the taskbar ask for
     sizes = [16, 20, 24, 32, 40, 48, 64, 128, 256]
     largest = app_icon(256)
-    largest.save(path("res", "bluebridge.ico"), format="ICO",
+    largest.save(path("res", "glidekvm.ico"), format="ICO",
                  sizes=[(s, s) for s in sizes],
                  append_images=[app_icon(s) for s in sizes[:-1]])
 
     # macOS
     big = app_icon(1024)
-    for icns in (("src", "gui", "res", "mac", "QBlueBridge.icns"),
-                 ("dist", "macos", "bundle", "BlueBridge.app", "Contents", "Resources",
-                  "BlueBridge.icns")):
+    for icns in (("src", "gui", "res", "mac", "QGlideKVM.icns"),
+                 ("dist", "macos", "bundle", "GlideKVM.app", "Contents", "Resources",
+                  "GlideKVM.icns")):
         big.save(path(*icns), format="ICNS")
 
     # Linux desktop icon
-    with open(path("res", "io.github.bigoreo.bluebridge.svg"), "w", encoding="utf-8") as f:
+    with open(path("res", "io.github.bigoreo.glidekvm.svg"), "w", encoding="utf-8") as f:
         f.write(app_svg)
 
     # Inno Setup wizard images at 100%, 150% and 200% scaling

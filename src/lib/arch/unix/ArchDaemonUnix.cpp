@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -33,7 +33,7 @@
 extern char** NXArgv;
 #endif
 
-namespace bluebridge {
+namespace glidekvm {
 
 ArchDaemonUnix::ArchDaemonUnix()
 {
@@ -49,21 +49,21 @@ ArchDaemonUnix::~ArchDaemonUnix()
 #ifdef __APPLE__
 
 // In Mac OS X, fork()'d child processes can't use most APIs (the frameworks
-// that BlueBridge uses in fact prevent it and make the process just up and die),
+// that GlideKVM uses in fact prevent it and make the process just up and die),
 // so need to exec a copy of the program that doesn't fork so isn't limited.
 int
 execSelfNonDaemonized()
 {
     char** selfArgv = NXArgv;
 
-    setenv("_BLUEBRIDGE_DAEMONIZED", "", 1);
+    setenv("_GLIDEKVM_DAEMONIZED", "", 1);
 
     execvp(selfArgv[0], selfArgv);
     return 0;
 }
 
 bool alreadyDaemonized() {
-    return std::getenv("_BLUEBRIDGE_DAEMONIZED") != nullptr;
+    return std::getenv("_GLIDEKVM_DAEMONIZED") != nullptr;
 }
 
 #endif
@@ -133,4 +133,4 @@ ArchDaemonUnix::daemonize(const char* name, DaemonFunc func)
     return func(1, &name);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

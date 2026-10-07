@@ -3,8 +3,8 @@
     <name>AboutDialog</name>
     <message>
         <location filename="res/AboutDialog.ui" line="38"/>
-        <source>About BlueBridge</source>
-        <translation type="finished">Sobre o BlueBridge</translation>
+        <source>About GlideKVM</source>
+        <translation type="finished">Sobre o GlideKVM</translation>
     </message>
     <message utf8="true">
         <location filename="res/AboutDialog.ui" line="53"/>
@@ -12,8 +12,8 @@
 Keyboard and mouse sharing application. Cross platform and open source.&lt;br /&gt;&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-BlueBridge is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
-BlueBridge is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
+GlideKVM is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
+GlideKVM is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
 The InputLeap GUI is based on QSynergy by Volker Lanz.&lt;br /&gt;&lt;br /&gt;
 Visit our website for help and info (symless.com).
 &lt;/p&gt;</source>
@@ -21,8 +21,8 @@ Visit our website for help and info (symless.com).
 Keyboard and mouse sharing application. Cross platform and open source.&lt;br /&gt;&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-BlueBridge is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
-BlueBridge is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
+GlideKVM is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
+GlideKVM is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
 The InputLeap GUI is based on QSynergy by Volker Lanz.&lt;br /&gt;&lt;br /&gt;
 Visit our website for help and info (symless.com).
 &lt;/p&gt;</oldsource>
@@ -202,9 +202,9 @@ Visit our website for help and info (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="364"/>
-        <source>&lt;p&gt;Your version of BlueBridge is out of date. Version &lt;b&gt;%1&lt;/b&gt; is now available to &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</source>
+        <source>&lt;p&gt;Your version of GlideKVM is out of date. Version &lt;b&gt;%1&lt;/b&gt; is now available to &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</source>
         <oldsource>&lt;p&gt;Version %1 is now available, &lt;a href=&quot;%2&quot;&gt;visit website&lt;/a&gt;.&lt;/p&gt;</oldsource>
-        <translation type="finished">&lt;p&gt;A sua versão do BlueBridge está desatualizada. Versão &lt;b&gt;%1&lt;/b&gt; está disponível para &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation type="finished">&lt;p&gt;A sua versão do GlideKVM está desatualizada. Versão &lt;b&gt;%1&lt;/b&gt; está disponível para &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="577"/>
@@ -218,13 +218,13 @@ Visit our website for help and info (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="596"/>
-        <source>BlueBridge client not found</source>
-        <translation type="finished">Cliente BlueBridge não foi encontrado.</translation>
+        <source>GlideKVM client not found</source>
+        <translation type="finished">Cliente GlideKVM não foi encontrado.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="597"/>
-        <source>The executable for the BlueBridge client does not exist.</source>
-        <translation type="finished">O executável para o cliente do BlueBridge não existe.</translation>
+        <source>The executable for the GlideKVM client does not exist.</source>
+        <translation type="finished">O executável para o cliente do GlideKVM não existe.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="625"/>
@@ -233,8 +233,8 @@ Visit our website for help and info (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="626"/>
-        <source>Please fill in a hostname for the BlueBridge client to connect to.</source>
-        <translation type="finished">Por favor, preencha um nome do servidor para o cliente BlueBridge se conectar.</translation>
+        <source>Please fill in a hostname for the GlideKVM client to connect to.</source>
+        <translation type="finished">Por favor, preencha um nome do servidor para o cliente GlideKVM se conectar.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="646"/>
@@ -243,8 +243,8 @@ Visit our website for help and info (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="646"/>
-        <source>The temporary configuration file required to start BlueBridge can not be written.</source>
-        <translation type="finished">O arquivo temporário de configuração, necessário para iniciar o BlueBridge, não pode ser gravado.</translation>
+        <source>The temporary configuration file required to start GlideKVM can not be written.</source>
+        <translation type="finished">O arquivo temporário de configuração, necessário para iniciar o GlideKVM, não pode ser gravado.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="659"/>
@@ -253,28 +253,28 @@ Visit our website for help and info (symless.com).
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="660"/>
-        <source>You have not filled in a valid configuration file for the BlueBridge server. Do you want to browse for the configuration file now?</source>
-        <translation type="finished">Você não preencheu um arquivo de configuração válido para o servidor do BlueBridge. Você quer procurá-lo agora?</translation>
+        <source>You have not filled in a valid configuration file for the GlideKVM server. Do you want to browse for the configuration file now?</source>
+        <translation type="finished">Você não preencheu um arquivo de configuração válido para o servidor do GlideKVM. Você quer procurá-lo agora?</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="688"/>
-        <source>BlueBridge server not found</source>
-        <translation type="finished">Servidor do BlueBridge não foi encontrado</translation>
+        <source>GlideKVM server not found</source>
+        <translation type="finished">Servidor do GlideKVM não foi encontrado</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="689"/>
-        <source>The executable for the BlueBridge server does not exist.</source>
-        <translation type="finished">O executável para o servidor do BlueBridge não existe.</translation>
+        <source>The executable for the GlideKVM server does not exist.</source>
+        <translation type="finished">O executável para o servidor do GlideKVM não existe.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="764"/>
-        <source>BlueBridge terminated with an error</source>
-        <translation type="finished">BlueBridge terminou com um erro</translation>
+        <source>GlideKVM terminated with an error</source>
+        <translation type="finished">GlideKVM terminou com um erro</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="764"/>
-        <source>BlueBridge terminated unexpectedly with an exit code of %1.&lt;br&gt;&lt;br&gt;Please see the log output for details.</source>
-        <translation type="finished">BlueBridge fechou inesperadamente retornando o código %1.&lt;br&gt;&lt;br&gt;Por favor veja o log para detalhes.</translation>
+        <source>GlideKVM terminated unexpectedly with an exit code of %1.&lt;br&gt;&lt;br&gt;Please see the log output for details.</source>
+        <translation type="finished">GlideKVM fechou inesperadamente retornando o código %1.&lt;br&gt;&lt;br&gt;Por favor veja o log para detalhes.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="783"/>
@@ -322,18 +322,18 @@ Do you want to install Bonjour?</source>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="815"/>
-        <source>BlueBridge is starting.</source>
-        <translation type="finished">BlueBridge foi iniciado.</translation>
+        <source>GlideKVM is starting.</source>
+        <translation type="finished">GlideKVM foi iniciado.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="809"/>
-        <source>BlueBridge is running.</source>
-        <translation type="finished">BlueBridge esta rodando.</translation>
+        <source>GlideKVM is running.</source>
+        <translation type="finished">GlideKVM esta rodando.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="819"/>
-        <source>BlueBridge is not running.</source>
-        <translation type="finished">BlueBridge não esta rodando.</translation>
+        <source>GlideKVM is not running.</source>
+        <translation type="finished">GlideKVM não esta rodando.</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="870"/>
@@ -344,17 +344,17 @@ Do you want to install Bonjour?</source>
         <location filename="src/MainWindow.cpp" line="1146"/>
         <location filename="src/MainWindow.cpp" line="1225"/>
         <location filename="src/MainWindow.cpp" line="1269"/>
-        <source>BlueBridge</source>
-        <translation type="finished">BlueBridge</translation>
+        <source>GlideKVM</source>
+        <translation type="finished">GlideKVM</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="987"/>
-        <source>Browse for a BlueBridge config file</source>
-        <translation type="finished">Selecionar um arquivo de configuração BlueBridge</translation>
+        <source>Browse for a GlideKVM config file</source>
+        <translation type="finished">Selecionar um arquivo de configuração GlideKVM</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="408"/>
-        <source>BlueBridge is now connected, You can close the config window. BlueBridge will remain connected in the background.</source>
+        <source>GlideKVM is now connected, You can close the config window. GlideKVM will remain connected in the background.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -393,8 +393,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     <name>MainWindow</name>
     <message>
         <location filename="res/MainWindow.ui" line="26"/>
-        <source>BlueBridge</source>
-        <translation type="finished">BlueBridge</translation>
+        <source>GlideKVM</source>
+        <translation type="finished">GlideKVM</translation>
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="90"/>
@@ -479,8 +479,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="390"/>
-        <source>&amp;About BlueBridge...</source>
-        <translation type="finished">Sobre o BlueBridge...</translation>
+        <source>&amp;About GlideKVM...</source>
+        <translation type="finished">Sobre o GlideKVM...</translation>
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="398"/>
@@ -599,8 +599,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     <name>PluginWizardPage</name>
     <message>
         <location filename="res/PluginWizardPage.ui" line="14"/>
-        <source>Setup BlueBridge</source>
-        <translation type="finished">Configurar BlueBridge</translation>
+        <source>Setup GlideKVM</source>
+        <translation type="finished">Configurar GlideKVM</translation>
     </message>
     <message>
         <location filename="res/PluginWizardPage.ui" line="101"/>
@@ -653,13 +653,13 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="60"/>
-        <source>BlueBridge Configurations (*.sgc)</source>
-        <translation type="finished">Configurações do BlueBridge (*.sgc)</translation>
+        <source>GlideKVM Configurations (*.sgc)</source>
+        <translation type="finished">Configurações do GlideKVM (*.sgc)</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="67"/>
-        <source>BlueBridge Configurations (*.conf)</source>
-        <translation type="finished">Configurações do BlueBridge (*.conf)</translation>
+        <source>GlideKVM Configurations (*.conf)</source>
+        <translation type="finished">Configurações do GlideKVM (*.conf)</translation>
     </message>
     <message>
         <location filename="src/main.cpp" line="119"/>
@@ -892,8 +892,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="res/ServerConfigDialog.ui" line="60"/>
-        <source>Configure the layout of your BlueBridge server configuration.</source>
-        <translation type="finished">Configure a disposição na sua configuração do servidor BlueBridge.</translation>
+        <source>Configure the layout of your GlideKVM server configuration.</source>
+        <translation type="finished">Configure a disposição na sua configuração do servidor GlideKVM.</translation>
     </message>
     <message>
         <location filename="res/ServerConfigDialog.ui" line="73"/>
@@ -1051,16 +1051,16 @@ Clique duplo numa tela para editar as suas configurações.</translation>
     </message>
     <message>
         <location filename="src/SettingsDialog.cpp" line="151"/>
-        <source>Elevate BlueBridge</source>
-        <translation type="finished">Elevar privilégios de execução do BlueBridge</translation>
+        <source>Elevate GlideKVM</source>
+        <translation type="finished">Elevar privilégios de execução do GlideKVM</translation>
     </message>
     <message>
         <location filename="src/SettingsDialog.cpp" line="152"/>
-        <source>Are you sure you want to Elevate BlueBridge?
+        <source>Are you sure you want to Elevate GlideKVM?
 
-This allows BlueBridge to interact with elevated processes and the UAC dialog, but can cause problems with non-elevated processes. Elevate BlueBridge only if you really need to.</source>
-        <translation type="finished">Você quer elevar os privilegios de execução do BlueBridge?
-Isso permite ao BlueBridge interagir com processos privilegiados e com o UAC, mas pode causar problemas com processos sem privilégios. Eleve os privilégios de execução somente se você realmente precisar.</translation>
+This allows GlideKVM to interact with elevated processes and the UAC dialog, but can cause problems with non-elevated processes. Elevate GlideKVM only if you really need to.</source>
+        <translation type="finished">Você quer elevar os privilegios de execução do GlideKVM?
+Isso permite ao GlideKVM interagir com processos privilegiados e com o UAC, mas pode causar problemas com processos sem privilégios. Eleve os privilégios de execução somente se você realmente precisar.</translation>
     </message>
 </context>
 <context>
@@ -1175,8 +1175,8 @@ Isso permite ao BlueBridge interagir com processos privilegiados e com o UAC, ma
     <name>SetupWizard</name>
     <message>
         <location filename="src/SetupWizard.cpp" line="72"/>
-        <source>Setup BlueBridge</source>
-        <translation type="finished">Configurar BlueBridge</translation>
+        <source>Setup GlideKVM</source>
+        <translation type="finished">Configurar GlideKVM</translation>
     </message>
     <message>
         <location filename="src/SetupWizard.cpp" line="113"/>
@@ -1193,8 +1193,8 @@ Isso permite ao BlueBridge interagir com processos privilegiados e com o UAC, ma
     <name>SetupWizard</name>
     <message>
         <location filename="res/SetupWizard.ui" line="26"/>
-        <source>Setup BlueBridge</source>
-        <translation type="finished">Configurar BlueBridge</translation>
+        <source>Setup GlideKVM</source>
+        <translation type="finished">Configurar GlideKVM</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="30"/>
@@ -1203,13 +1203,13 @@ Isso permite ao BlueBridge interagir com processos privilegiados e com o UAC, ma
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="39"/>
-        <source>Thanks for installing BlueBridge!</source>
-        <translation type="finished">Obrigado por instalar o BlueBridge!</translation>
+        <source>Thanks for installing GlideKVM!</source>
+        <translation type="finished">Obrigado por instalar o GlideKVM!</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="114"/>
-        <source>BlueBridge lets you easily share your mouse and keyboard between multiple computers on your desk, and it's Free and Open Source. Just move your mouse off the edge of one computer's screen on to another. You can even share all of your clipboards. All you need is a network connection. BlueBridge is cross-platform (works on Windows, Mac OS X and Linux).</source>
-        <translation type="finished">BlueBridge permite que você compartilhe seu mouse e teclado facilmente entre vários computadores na sua área de trabalho, além de ser gratuito e de código aberto. Basta mover o mouse para fora da borda da tela de um computador para outro. Você pode até mesmo compartilhar todas as suas áreas de transferência. Tudo que você precisa é de uma conexão de rede. BlueBridge é multiplataforma (funciona em Windows, Mac OS X e Linux).</translation>
+        <source>GlideKVM lets you easily share your mouse and keyboard between multiple computers on your desk, and it's Free and Open Source. Just move your mouse off the edge of one computer's screen on to another. You can even share all of your clipboards. All you need is a network connection. GlideKVM is cross-platform (works on Windows, Mac OS X and Linux).</source>
+        <translation type="finished">GlideKVM permite que você compartilhe seu mouse e teclado facilmente entre vários computadores na sua área de trabalho, além de ser gratuito e de código aberto. Basta mover o mouse para fora da borda da tela de um computador para outro. Você pode até mesmo compartilhar todas as suas áreas de transferência. Tudo que você precisa é de uma conexão de rede. GlideKVM é multiplataforma (funciona em Windows, Mac OS X e Linux).</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="125"/>
@@ -1390,8 +1390,8 @@ Server response:
     </message>
     <message>
         <location filename="src/ZeroconfService.cpp" line="140"/>
-        <source>BlueBridge</source>
-        <translation type="finished">BlueBridge</translation>
+        <source>GlideKVM</source>
+        <translation type="finished">GlideKVM</translation>
     </message>
     <message>
         <location filename="src/ZeroconfService.cpp" line="141"/>

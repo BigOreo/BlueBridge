@@ -1,1 +1,0 @@
-The program files, the background service, the settings and policy registry keys, the data folders, the Linux and Mac package names and the app ID are now all BlueBridge too. Settings from earlier test builds are not carried over.

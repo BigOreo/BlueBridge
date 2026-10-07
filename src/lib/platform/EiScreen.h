@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -18,8 +18,8 @@
 
 #include "config.h"
 
-#include "bluebridge/PlatformScreen.h"
-#include "bluebridge/KeyMap.h"
+#include "glidekvm/PlatformScreen.h"
+#include "glidekvm/KeyMap.h"
 #include <set>
 #include <mutex>
 #include <vector>
@@ -31,7 +31,7 @@ struct ei_event;
 struct ei_seat;
 struct ei_device;
 
-namespace bluebridge {
+namespace glidekvm {
 
 class EiClipboard;
 class EiKeyState;
@@ -197,4 +197,4 @@ private:
     HotKeyMap hotkeys_;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

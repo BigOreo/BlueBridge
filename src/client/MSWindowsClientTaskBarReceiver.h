@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -19,10 +19,10 @@
 #pragma once
 
 #include "base/Fwd.h"
-#include "bluebridge/ClientTaskBarReceiver.h"
+#include "glidekvm/ClientTaskBarReceiver.h"
 #include "common/win32/winapi.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Implementation of ClientTaskBarReceiver for Microsoft Windows
 class MSWindowsClientTaskBarReceiver : public ClientTaskBarReceiver {
@@ -62,4 +62,4 @@ private:
     static const UINT    s_stateToIconID[];
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -22,7 +22,7 @@
 
 #define ARCH_TASKBAR ArchTaskBarXWindows
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! X11 implementation of IArchTaskBar
 class ArchTaskBarXWindows : public IArchTaskBar {
@@ -36,4 +36,4 @@ public:
     void updateReceiver(IArchTaskBarReceiver*) override;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

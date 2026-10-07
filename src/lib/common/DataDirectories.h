@@ -1,5 +1,5 @@
 /*
-* BlueBridge -- mouse and keyboard sharing utility
+* GlideKVM -- mouse and keyboard sharing utility
 * Copyright (C) 2018 Debauchee Open Source Group
 *
 * This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include "io/filesystem.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 class DataDirectories
 {
@@ -47,4 +47,4 @@ private:
     static fs::path _systemconfig;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

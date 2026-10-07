@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -21,7 +21,7 @@
 #include "arch/IArchMultithread.h"
 #include <functional>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Thread handle
 /*!
@@ -198,4 +198,4 @@ private:
     ArchThread m_thread;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

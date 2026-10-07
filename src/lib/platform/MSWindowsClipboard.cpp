@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -26,7 +26,7 @@
 #include "arch/win32/ArchMiscWindows.h"
 #include "base/Log.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 UINT                    MSWindowsClipboard::s_ownershipFormat = 0;
 
@@ -84,7 +84,7 @@ MSWindowsClipboard::clear()
         return false;
     }
 
-    // mark clipboard as being owned by BlueBridge
+    // mark clipboard as being owned by GlideKVM
     HGLOBAL data = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, 1);
     if (nullptr == SetClipboardData(getOwnershipFormat(), data)) {
         LOG_DEBUG("failed to set clipboard data");
@@ -206,7 +206,7 @@ bool MSWindowsClipboard::is_owned_by_us()
 {
     // create ownership format if we haven't yet
     if (s_ownershipFormat == 0) {
-        s_ownershipFormat = RegisterClipboardFormat(TEXT("BlueBridgeOwnership"));
+        s_ownershipFormat = RegisterClipboardFormat(TEXT("GlideKVMOwnership"));
     }
     return (IsClipboardFormatAvailable(getOwnershipFormat()) != 0);
 }
@@ -216,11 +216,11 @@ MSWindowsClipboard::getOwnershipFormat()
 {
     // create ownership format if we haven't yet
     if (s_ownershipFormat == 0) {
-        s_ownershipFormat = RegisterClipboardFormat(TEXT("BlueBridgeOwnership"));
+        s_ownershipFormat = RegisterClipboardFormat(TEXT("GlideKVMOwnership"));
     }
 
     // return the format
     return s_ownershipFormat;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

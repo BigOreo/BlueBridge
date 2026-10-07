@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
-    <?define Name="BlueBridge" ?>
-    <?define Version="@BLUEBRIDGE_WIX_VERSION@" ?>
+    <?define Name="GlideKVM" ?>
+    <?define Version="@GLIDEKVM_WIX_VERSION@" ?>
     <?define QtVersion="@QT_VERSION@" ?>
-    <?define Author="BlueBridge contributors" ?>
+    <?define Author="GlideKVM contributors" ?>
     <?define BinPath="@CMAKE_RUNTIME_OUTPUT_DIRECTORY@/$(var.Configuration)" ?>
     <?define ResPath="@CMAKE_CURRENT_SOURCE_DIR@/res" ?>
     <?define ExtPath="@CMAKE_CURRENT_SOURCE_DIR@/ext" ?>

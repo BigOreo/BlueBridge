@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,9 +20,9 @@
 
 #include "platform/IMSWindowsClipboardFacade.h"
 
-#include "bluebridge/IClipboard.h"
+#include "glidekvm/IClipboard.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 class MSWindowsClipboardFacade : public IMSWindowsClipboardFacade
 {
@@ -30,4 +30,4 @@ public:
     virtual void write(HANDLE win32Data, UINT win32Format);
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

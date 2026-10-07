@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -242,6 +242,6 @@ QString KeySequence::keyToString(int key)
 #else
         return QString("\\u%1").arg(QChar(key).toLower().unicode(), 4, 16, QChar('0'));
 #endif
-    // give up, BlueBridge probably won't handle this
+    // give up, GlideKVM probably won't handle this
     return "";
 }

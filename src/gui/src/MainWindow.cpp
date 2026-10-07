@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -75,14 +75,14 @@ namespace {
 
 static const QString allFilesFilter(QObject::tr("All files (*.*)"));
 #if defined(Q_OS_WIN)
-static const char APP_CONFIG_NAME[] = "bluebridge.sgc";
-static const QString APP_CONFIG_FILTER(QObject::tr("BlueBridge Configurations (*.sgc)"));
+static const char APP_CONFIG_NAME[] = "glidekvm.sgc";
+static const QString APP_CONFIG_FILTER(QObject::tr("GlideKVM Configurations (*.sgc)"));
 // Bonjour used to be downloaded from binaries.symless.com, which no longer
 // serves it. Point users at Apple's official installer instead.
 static const char bonjourDownloadUrl[] = "https://support.apple.com/kb/DL999";
 #else
-static const char APP_CONFIG_NAME[] = "bluebridge.conf";
-static const QString APP_CONFIG_FILTER(QObject::tr("BlueBridge Configurations (*.conf)"));
+static const char APP_CONFIG_NAME[] = "glidekvm.conf";
+static const QString APP_CONFIG_FILTER(QObject::tr("GlideKVM Configurations (*.conf)"));
 #endif
 static const QString APP_CONFIG_OPEN_FILTER(APP_CONFIG_FILTER + ";;" + allFilesFilter);
 static const QString APP_CONFIG_SAVE_FILTER(APP_CONFIG_FILTER);
@@ -92,18 +92,18 @@ const char* icon_file_for_connection_state(AppConnectionState state)
 #if defined(Q_OS_MAC)
     switch (state) {
         default:
-        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/bluebridge-disconnected-mask.png";
-        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/bluebridge-disconnected-mask.png";
-        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/bluebridge-connected-mask.png";
-        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/bluebridge-transfering-mask.png";
+        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/glidekvm-disconnected-mask.png";
+        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/glidekvm-disconnected-mask.png";
+        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/glidekvm-connected-mask.png";
+        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/glidekvm-transfering-mask.png";
     }
 #else
     switch (state) {
         default:
-        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/bluebridge-disconnected.png";
-        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/bluebridge-disconnected.png";
-        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/bluebridge-connected.png";
-        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/bluebridge-transfering.png";
+        case AppConnectionState::DISCONNECTED: return ":/res/icons/128x128/glidekvm-disconnected.png";
+        case AppConnectionState::CONNECTING:   return ":/res/icons/128x128/glidekvm-disconnected.png";
+        case AppConnectionState::CONNECTED:    return ":/res/icons/128x128/glidekvm-connected.png";
+        case AppConnectionState::TRANSFERRING: return ":/res/icons/128x128/glidekvm-transfering.png";
     }
 #endif
 }
@@ -112,14 +112,14 @@ const char* icon_name_for_connection_state(AppConnectionState state)
 {
     switch (state) {
         default:
-        case AppConnectionState::DISCONNECTED: return "bluebridge-disconnected";
-        case AppConnectionState::CONNECTING: return "bluebridge-disconnected";
-        case AppConnectionState::CONNECTED: return "bluebridge-connected";
-        case AppConnectionState::TRANSFERRING: return "bluebridge-transfering";
+        case AppConnectionState::DISCONNECTED: return "glidekvm-disconnected";
+        case AppConnectionState::CONNECTING: return "glidekvm-disconnected";
+        case AppConnectionState::CONNECTED: return "glidekvm-connected";
+        case AppConnectionState::TRANSFERRING: return "glidekvm-transfering";
     }
 }
 
-static const char* APP_LARGE_ICON = ":/res/icons/256x256/bluebridge.png";
+static const char* APP_LARGE_ICON = ":/res/icons/256x256/glidekvm.png";
 
 // Draws the icons for the connection mode toggle. They are painted rather
 // than loaded so they stay sharp at any scale and follow the palette.
@@ -188,7 +188,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     m_pLogWindow(new LogWindow(nullptr))
 {
     // explicitly unset DeleteOnClose so the window can be show and hidden
-    // repeatedly until BlueBridge is finished
+    // repeatedly until GlideKVM is finished
     setAttribute(Qt::WA_DeleteOnClose, false);
     // mark the windows as sort of "dialog" window so that tiling window
     // managers will float it by default (X11)
@@ -197,12 +197,12 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     ui_->setupUi(this);
     setWindowIcon(QIcon(APP_LARGE_ICON));
     createMenuBar();
-    m_policy = bluebridge::read_machine_policy();
+    m_policy = glidekvm::read_machine_policy();
     if (m_policy.encryption_required() && !m_AppConfig->getCryptoEnabled()) {
         m_AppConfig->setCryptoEnabled(true);
     }
     setupConnectionModeUi();
-    bluebridge::theme::set_primary(ui_->m_pButtonToggleStart);
+    glidekvm::theme::set_primary(ui_->m_pButtonToggleStart);
     loadSettings();
     updateStartButton();
     initConnections();
@@ -288,8 +288,8 @@ void MainWindow::open()
     }
 
     // only start if user has previously started. this stops the gui from
-    // auto hiding before the user has configured BlueBridge (which of course
-    // confuses first time users, who think BlueBridge has crashed).
+    // auto hiding before the user has configured GlideKVM (which of course
+    // confuses first time users, who think GlideKVM has crashed).
     if (appConfig().startedBefore() && appConfig().getAutoStart()) {
         m_SuppressEmptyServerWarning = true;
         start_cmd_app();
@@ -319,7 +319,7 @@ void MainWindow::createTrayIcon()
 
     m_pTrayIcon = new QSystemTrayIcon(this);
     m_pTrayIcon->setContextMenu(m_pTrayIconMenu);
-    m_pTrayIcon->setToolTip("BlueBridge");
+    m_pTrayIcon->setToolTip("GlideKVM");
 
     connect(m_pTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayActivated);
 
@@ -331,7 +331,7 @@ void MainWindow::createTrayIcon()
 void MainWindow::retranslateMenuBar()
 {
 #ifndef Q_OS_DARWIN
-    main_menu_->setTitle(tr("&BlueBridge"));
+    main_menu_->setTitle(tr("&GlideKVM"));
     m_pMenuHelp->setTitle(tr("&Help"));
 #else
     m_pMenuHelp->setTitle(tr("&File"));
@@ -390,7 +390,7 @@ void MainWindow::loadSettings()
 
     auto mode = static_cast<ConnectionMode>(
                 settings().value("connectionMode", static_cast<int>(ConnectionMode::Network)).toInt());
-    if (!bluebridge::is_bluetooth_supported() || !m_policy.bluetooth_allowed()) {
+    if (!glidekvm::is_bluetooth_supported() || !m_policy.bluetooth_allowed()) {
         mode = ConnectionMode::Network;
     } else if (!m_policy.network_allowed()) {
         mode = ConnectionMode::Bluetooth;
@@ -534,9 +534,9 @@ void MainWindow::checkConnected(const QString& line)
 
         if (!appConfig().startedBefore() && isVisible()) {
                 QMessageBox::information(
-                    this, "BlueBridge",
-                    tr("BlueBridge is now connected. You can close the "
-                    "config window and BlueBridge will remain connected in "
+                    this, "GlideKVM",
+                    tr("GlideKVM is now connected. You can close the "
+                    "config window and GlideKVM will remain connected in "
                     "the background."));
 
             appConfig().setStartedBefore(true);
@@ -566,31 +566,31 @@ void MainWindow::checkFingerprint(const QString& line)
     auto match2 = fingerprintRegex.cap(2).toStdString();
 #endif
 
-    bluebridge::FingerprintData fingerprint_sha1 = {
-        bluebridge::fingerprint_type_to_string(bluebridge::FingerprintType::SHA1),
-        bluebridge::string::from_hex(match1)
+    glidekvm::FingerprintData fingerprint_sha1 = {
+        glidekvm::fingerprint_type_to_string(glidekvm::FingerprintType::SHA1),
+        glidekvm::string::from_hex(match1)
     };
 
-    bluebridge::FingerprintData fingerprint_sha256 = {
-        bluebridge::fingerprint_type_to_string(bluebridge::FingerprintType::SHA256),
-        bluebridge::string::from_hex(match2)
+    glidekvm::FingerprintData fingerprint_sha256 = {
+        glidekvm::fingerprint_type_to_string(glidekvm::FingerprintType::SHA256),
+        glidekvm::string::from_hex(match2)
     };
 
     bool is_client = app_role() == AppRole::Client;
 
     auto db_path = is_client
-            ? bluebridge::DataDirectories::trusted_servers_ssl_fingerprints_path()
-            : bluebridge::DataDirectories::trusted_clients_ssl_fingerprints_path();
+            ? glidekvm::DataDirectories::trusted_servers_ssl_fingerprints_path()
+            : glidekvm::DataDirectories::trusted_clients_ssl_fingerprints_path();
 
     auto db_dir = db_path.parent_path();
-    if (!bluebridge::fs::exists(db_dir)) {
-        bluebridge::fs::create_directories(db_dir);
+    if (!glidekvm::fs::exists(db_dir)) {
+        glidekvm::fs::create_directories(db_dir);
     }
 
     // We compare only SHA256 fingerprints, but show both SHA1 and SHA256 so that the users can
-    // still verify fingerprints on old BlueBridge servers. This way the only time when we are
+    // still verify fingerprints on old GlideKVM servers. This way the only time when we are
     // exposed to SHA1 vulnerabilities is when the user is reconnecting again.
-    bluebridge::FingerprintDatabase db;
+    glidekvm::FingerprintDatabase db;
     db.read(db_path);
     if (db.is_trusted(fingerprint_sha256)) {
         return;
@@ -662,9 +662,9 @@ void MainWindow::start_cmd_app()
         // is switched; this is because we may need to elevate or not
         // based on which desk the user is in (login always needs
         // elevation, where as default desk does not).
-        // Note that this is only enabled when BlueBridge is set to elevate
+        // Note that this is only enabled when GlideKVM is set to elevate
         // 'as needed' (e.g. on a UAC dialog popup) in order to prevent
-        // unnecessary restarts when BlueBridge was started elevated or
+        // unnecessary restarts when GlideKVM was started elevated or
         // when it is not allowed to elevate. In these cases restarting
         // the server is fruitless.
         if (appConfig().elevateMode() == ElevateAsNeeded) {
@@ -690,7 +690,7 @@ void MainWindow::start_cmd_app()
     // launched the process (e.g. when launched with elevation). setting the
     // profile dir on launch ensures it uses the same profile dir is used
     // no matter how its relaunched.
-    args << "--profile-dir" << QString::fromStdString("\"" + bluebridge::DataDirectories::profile().u8string() + "\"");
+    args << "--profile-dir" << QString::fromStdString("\"" + glidekvm::DataDirectories::profile().u8string() + "\"");
 #endif
 
     if ((app_role() == AppRole::Client && !clientArgs(args, app))
@@ -752,8 +752,8 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
     if (!QFile::exists(app))
     {
         show();
-        QMessageBox::warning(this, tr("BlueBridge client not found"),
-                             tr("The executable for the BlueBridge client does not exist."));
+        QMessageBox::warning(this, tr("GlideKVM client not found"),
+                             tr("The executable for the GlideKVM client does not exist."));
         return false;
     }
 
@@ -769,7 +769,7 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
     }
 
     if (connection_mode() == ConnectionMode::Bluetooth) {
-        QString serverAddress = bluebridge::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+        QString serverAddress = glidekvm::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
         if (serverAddress.isEmpty()) {
             show();
             if (!m_SuppressEmptyServerWarning) {
@@ -796,7 +796,7 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
         show();
         if (!m_SuppressEmptyServerWarning) {
             QMessageBox::warning(this, tr("Hostname is empty"),
-                             tr("Please fill in a hostname for the BlueBridge client to connect to."));
+                             tr("Please fill in a hostname for the GlideKVM client to connect to."));
         }
         return false;
     }
@@ -817,7 +817,7 @@ QString MainWindow::configFilename()
         if (!m_pTempConfigFile->open())
         {
             QMessageBox::critical(this, tr("Cannot write configuration file"),
-                                  tr("The temporary configuration file required to start BlueBridge can not be written."));
+                                  tr("The temporary configuration file required to start GlideKVM can not be written."));
             return "";
         }
 
@@ -831,7 +831,7 @@ QString MainWindow::configFilename()
         if (!QFile::exists(ui_->m_pLineEditConfigFile->text()))
         {
             if (QMessageBox::warning(this, tr("Configuration filename invalid"),
-                tr("You have not filled in a valid configuration file for the BlueBridge server. "
+                tr("You have not filled in a valid configuration file for the GlideKVM server. "
                         "Do you want to browse for the configuration file now?"), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes
                     || !on_m_pButtonBrowseConfigFile_clicked())
                 return "";
@@ -876,8 +876,8 @@ bool MainWindow::serverArgs(QStringList& args, QString& app)
 
     if (!QFile::exists(app))
     {
-        QMessageBox::warning(this, tr("BlueBridge server not found"),
-                             tr("The executable for the BlueBridge server does not exist."));
+        QMessageBox::warning(this, tr("GlideKVM server not found"),
+                             tr("The executable for the GlideKVM server does not exist."));
         return false;
     }
 
@@ -951,7 +951,7 @@ void MainWindow::stopDesktop()
         return;
     }
 
-    appendLogInfo("stopping BlueBridge desktop process");
+    appendLogInfo("stopping GlideKVM desktop process");
 
     if (cmd_app_process_->isOpen()) {
 #if SYSAPI_UNIX
@@ -992,14 +992,14 @@ void MainWindow::set_connection_state(AppConnectionState state)
     {
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
-        bluebridge::theme::set_primary(ui_->m_pButtonToggleStart, false);
+        glidekvm::theme::set_primary(ui_->m_pButtonToggleStart, false);
         ui_->m_pButtonReload->setEnabled(true);
     }
     else if (state == AppConnectionState::DISCONNECTED)
     {
         disconnect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStopCmdApp, &QAction::trigger);
         connect(ui_->m_pButtonToggleStart, &QPushButton::clicked, ui_->m_pActionStartCmdApp, &QAction::trigger);
-        bluebridge::theme::set_primary(ui_->m_pButtonToggleStart);
+        glidekvm::theme::set_primary(ui_->m_pButtonToggleStart);
         ui_->m_pButtonReload->setEnabled(false);
     }
 
@@ -1021,17 +1021,17 @@ void MainWindow::set_connection_state(AppConnectionState state)
             ui_->m_pLabelPadlock->hide();
         }
 
-        setStatus(tr("BlueBridge is running."));
+        setStatus(tr("GlideKVM is running."));
 
         break;
     }
     case AppConnectionState::CONNECTING:
         ui_->m_pLabelPadlock->hide();
-        setStatus(tr("BlueBridge is starting."));
+        setStatus(tr("GlideKVM is starting."));
         break;
     case AppConnectionState::DISCONNECTED:
         ui_->m_pLabelPadlock->hide();
-        setStatus(tr("BlueBridge is not running."));
+        setStatus(tr("GlideKVM is not running."));
         break;
     case AppConnectionState::TRANSFERRING:
         break;
@@ -1180,7 +1180,7 @@ void MainWindow::updateZeroconfService()
 void MainWindow::serverDetected(const QString name)
 {
     if (ui_->m_pComboServerList->findText(name) == -1) {
-        // Note: the first added item triggers startBlueBridge
+        // Note: the first added item triggers startGlideKVM
         ui_->m_pComboServerList->addItem(name);
     }
 
@@ -1204,12 +1204,12 @@ void MainWindow::updateSSLFingerprint()
         return;
     }
 
-    auto local_path = bluebridge::DataDirectories::local_ssl_fingerprints_path();
-    if (!bluebridge::fs::exists(local_path)) {
+    auto local_path = glidekvm::DataDirectories::local_ssl_fingerprints_path();
+    if (!glidekvm::fs::exists(local_path)) {
         return;
     }
 
-    bluebridge::FingerprintDatabase db;
+    glidekvm::FingerprintDatabase db;
     db.read(local_path);
     if (db.fingerprints().size() != 2) {
         return;
@@ -1217,18 +1217,18 @@ void MainWindow::updateSSLFingerprint()
 
     for (const auto& fingerprint : db.fingerprints()) {
         if (fingerprint.algorithm == "sha1") {
-            auto fingerprint_str = bluebridge::format_ssl_fingerprint(fingerprint.data);
+            auto fingerprint_str = glidekvm::format_ssl_fingerprint(fingerprint.data);
             ui_->label_sha1_fingerprint_full->setText(QString::fromStdString(fingerprint_str));
             continue;
         }
 
         if (fingerprint.algorithm == "sha256") {
-            auto fingerprint_str = bluebridge::format_ssl_fingerprint(fingerprint.data);
+            auto fingerprint_str = glidekvm::format_ssl_fingerprint(fingerprint.data);
             fingerprint_str.resize(40);
             fingerprint_str += " ...";
 
-            auto fingerprint_str_cols = bluebridge::format_ssl_fingerprint_columns(fingerprint.data);
-            auto fingerprint_randomart = bluebridge::create_fingerprint_randomart(fingerprint.data);
+            auto fingerprint_str_cols = glidekvm::format_ssl_fingerprint_columns(fingerprint.data);
+            auto fingerprint_randomart = glidekvm::create_fingerprint_randomart(fingerprint.data);
 
             ui_->m_pLabelLocalFingerprint->setText(QString::fromStdString(fingerprint_str));
             ui_->label_sha256_fingerprint_full->setText(QString::fromStdString(fingerprint_str_cols));
@@ -1259,7 +1259,7 @@ void MainWindow::on_m_pGroupServer_toggled(bool on)
 
 bool MainWindow::on_m_pButtonBrowseConfigFile_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Browse for a BlueBridge config file"), QString(), APP_CONFIG_OPEN_FILTER);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Browse for a GlideKVM config file"), QString(), APP_CONFIG_OPEN_FILTER);
 
     if (!fileName.isEmpty())
     {
@@ -1403,13 +1403,13 @@ void MainWindow::showBonjourMissingMessage()
 {
 #if defined(Q_OS_WIN)
     int r = QMessageBox::information(
-        this, tr("BlueBridge"),
+        this, tr("GlideKVM"),
         tr("Auto config requires the Bonjour service, which is not running "
            "on this computer.\n\n"
            "Auto config is optional: you can instead type the server's IP "
            "address or hostname on the client.\n\n"
            "To use auto config, install \"Bonjour Print Services for "
-           "Windows\" from Apple, then restart BlueBridge. "
+           "Windows\" from Apple, then restart GlideKVM. "
            "Open the download page now?"),
         QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
@@ -1654,13 +1654,13 @@ void MainWindow::setupConnectionModeUi()
     ui_->formLayout_3->addRow(m_pLabelClientBluetoothHint);
 
     connect(m_pLineEditServerBluetooth, &QLineEdit::editingFinished, this, [this]() {
-        QString normalized = bluebridge::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+        QString normalized = glidekvm::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
         if (!normalized.isEmpty()) {
             m_pLineEditServerBluetooth->setText(normalized);
         }
     });
 
-    const bool bluetoothSupported = bluebridge::is_bluetooth_supported();
+    const bool bluetoothSupported = glidekvm::is_bluetooth_supported();
     m_pLabelConnectionMode->setVisible(bluetoothSupported);
     m_pConnectionModeField->setVisible(bluetoothSupported);
     m_pConnectionModeRow->setVisible(m_policy.any());
@@ -1715,7 +1715,7 @@ void MainWindow::updateConnectionModeUi()
 
 bool MainWindow::server_accepts_bluetooth() const
 {
-    return bluebridge::is_bluetooth_supported() && m_policy.bluetooth_allowed();
+    return glidekvm::is_bluetooth_supported() && m_policy.bluetooth_allowed();
 }
 
 namespace {
@@ -1740,8 +1740,8 @@ void set_server_item_text(QListWidgetItem* item, const QString& status)
 void MainWindow::refreshPairedBluetoothServers()
 {
     const QString current =
-            bluebridge::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
-    const auto devices = bluebridge::paired_bluetooth_computers();
+            glidekvm::normalize_bluetooth_address(m_pLineEditServerBluetooth->text());
+    const auto devices = glidekvm::paired_bluetooth_computers();
 
     const QSignalBlocker blocker(m_pListBluetoothServers);
     m_pListBluetoothServers->clear();
@@ -1795,7 +1795,7 @@ void MainWindow::refreshPairedBluetoothServers()
     QThread* thread = QThread::create([self, generation, addresses]() {
         QMap<QString, bool> running;
         for (const auto& address : addresses) {
-            running[address] = bluebridge::is_server_running_on(address);
+            running[address] = glidekvm::is_server_running_on(address);
         }
         QMetaObject::invokeMethod(qApp, [self, generation, running]() {
             if (self) {
@@ -1841,7 +1841,7 @@ void MainWindow::selectBluetoothServer(int index)
 
 void MainWindow::updateLocalBluetoothAddress()
 {
-    QString address = bluebridge::local_bluetooth_address();
+    QString address = glidekvm::local_bluetooth_address();
     bool found = !address.isEmpty();
 
     if (found) {

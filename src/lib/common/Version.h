@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -21,7 +21,7 @@
 #include "common/common.h"
 
 // set version macro if not set yet
-#if !defined(BLUEBRIDGE_VERSION)
+#if !defined(GLIDEKVM_VERSION)
 #error Version was not set (should be passed to compiler).
 #endif
 

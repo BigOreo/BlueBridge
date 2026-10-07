@@ -1,1 +1,1 @@
-Windows installer: stop the BlueBridge service and any running BlueBridge processes before installing, and stop the server/client process on uninstall, so reinstalling or upgrading no longer fails with "Setup was unable to automatically close all applications".
+Windows installer: stop the GlideKVM service and any running GlideKVM processes before installing, and stop the server/client process on uninstall, so reinstalling or upgrading no longer fails with "Setup was unable to automatically close all applications".

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -20,10 +20,10 @@
 
 #include "server/ClientProxy.h"
 #include "base/Fwd.h"
-#include "bluebridge/Clipboard.h"
-#include "bluebridge/protocol_types.h"
+#include "glidekvm/Clipboard.h"
+#include "glidekvm/protocol_types.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 class Server;
 class IStream;
@@ -121,4 +121,4 @@ protected:
     Server* m_server;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

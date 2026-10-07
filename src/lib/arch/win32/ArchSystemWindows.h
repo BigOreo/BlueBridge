@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -22,7 +22,7 @@
 
 #define ARCH_SYSTEM ArchSystemWindows
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Win32 implementation of IArchSystem
 class ArchSystemWindows : public IArchSystem {
@@ -35,4 +35,4 @@ public:
     virtual void setting(const std::string& valueName, const std::string& valueString) const;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -44,7 +44,7 @@ set(GUI_SOURCE_FILES
     src/MainWindow.cpp
     src/MainWindowHome.cpp
     src/NewScreenWidget.cpp
-    src/QBlueBridgeApplication.cpp
+    src/QGlideKVMApplication.cpp
     src/QUtility.cpp
     src/Screen.cpp
     src/ScreenSettingsDialog.cpp
@@ -84,7 +84,7 @@ set(GUI_HEADER_FILES
     src/MainWindow.h
     src/NewScreenWidget.h
     src/ProcessorArch.h
-    src/QBlueBridgeApplication.h
+    src/QGlideKVMApplication.h
     src/QUtility.h
     src/Screen.h
     src/ScreenSettingsDialog.h
@@ -180,23 +180,23 @@ endif()
 set_source_files_properties("src/DisplayIsValid.cpp" PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE)
 
 if (WIN32)
-    set (GUI_RC_FILES res/win/BlueBridge.rc)
-    set_property(SOURCE res/win/BlueBridge.rc PROPERTY COMPILE_FLAGS /nologo)
+    set (GUI_RC_FILES res/win/GlideKVM.rc)
+    set_property(SOURCE res/win/GlideKVM.rc PROPERTY COMPILE_FLAGS /nologo)
 endif()
 
-add_executable (bluebridge WIN32
+add_executable (glidekvm WIN32
     ${GUI_COMMON_SOURCE_FILES}
     ${GUI_COMMON_HEADER_FILES}
     ${GUI_SOURCE_FILES}
     ${GUI_HEADER_FILES}
     ${GUI_UI_FILES}
     ${GUI_RC_FILES}
-    res/BlueBridge.qrc
+    res/GlideKVM.qrc
 )
 
 include_directories (./src)
 
-target_link_libraries(bluebridge
+target_link_libraries(glidekvm
     net
     arch
     base
@@ -206,33 +206,33 @@ target_link_libraries(bluebridge
     Qt${QT_DEFAULT_MAJOR_VERSION}::Network
 )
 
-target_link_libraries(bluebridge OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(glidekvm OpenSSL::SSL OpenSSL::Crypto)
 
-target_compile_definitions (bluebridge PRIVATE -DBLUEBRIDGE_VERSION_STAGE="${BLUEBRIDGE_VERSION_STAGE}")
-target_compile_definitions (bluebridge PRIVATE -DBLUEBRIDGE_REVISION="${BLUEBRIDGE_REVISION}")
+target_compile_definitions (glidekvm PRIVATE -DGLIDEKVM_VERSION_STAGE="${GLIDEKVM_VERSION_STAGE}")
+target_compile_definitions (glidekvm PRIVATE -DGLIDEKVM_REVISION="${GLIDEKVM_REVISION}")
 
 if (BUILD_MSWINDOWS)
     include_directories ($ENV{BONJOUR_SDK_HOME}/Include)
     find_library (DNSSD_LIB dnssd.lib
                   HINTS ENV BONJOUR_SDK_HOME
                   PATH_SUFFIXES "Lib/x64")
-    set_target_properties (bluebridge PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCMT")
-    target_link_libraries (bluebridge ${DNSSD_LIB} Bthprops Ws2_32)
+    set_target_properties (glidekvm PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCMT")
+    target_link_libraries (glidekvm ${DNSSD_LIB} Bthprops Ws2_32)
 endif()
 if (BUILD_CARBON)
     find_library(APPSERVICES_LIB ApplicationServices)
-    target_link_libraries(bluebridge ${APPSERVICES_LIB})
+    target_link_libraries(glidekvm ${APPSERVICES_LIB})
 endif()
 if (BUILD_XWINDOWS OR BUILD_LIBEI)
-    target_link_libraries (bluebridge dns_sd Threads::Threads)
+    target_link_libraries (glidekvm dns_sd Threads::Threads)
 endif()
 
-target_link_libraries (bluebridge common)
+target_link_libraries (glidekvm common)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    install(TARGETS bluebridge DESTINATION ${BLUEBRIDGE_BUNDLE_BINARY_DIR})
+    install(TARGETS glidekvm DESTINATION ${GLIDEKVM_BUNDLE_BINARY_DIR})
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
-    install (TARGETS bluebridge DESTINATION bin)
+    install (TARGETS glidekvm DESTINATION bin)
 elseif(WIN32)
     set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION .)
     if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
@@ -241,12 +241,12 @@ elseif(WIN32)
     set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
     include(InstallRequiredSystemLibraries)
     add_custom_command(
-        TARGET bluebridge POST_BUILD
+        TARGET glidekvm POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/qtDeploy"
         COMMAND ${QT_DEPLOY_TOOL} --no-compiler-runtime --no-system-d3d-compiler
-            --dir "${CMAKE_BINARY_DIR}/qtDeploy" $<TARGET_FILE:bluebridge>
+            --dir "${CMAKE_BINARY_DIR}/qtDeploy" $<TARGET_FILE:glidekvm>
     )
-    install(TARGETS bluebridge DESTINATION .)
+    install(TARGETS glidekvm DESTINATION .)
     install(
         DIRECTORY ${CMAKE_BINARY_DIR}/qtDeploy/
         DESTINATION .
@@ -254,7 +254,7 @@ elseif(WIN32)
     )
 endif()
 
-if(BLUEBRIDGE_BUILD_TESTS)
+if(GLIDEKVM_BUILD_TESTS)
     set(GUI_TEST_SOURCE_FILES
         test/BluetoothAddressTests.cpp
         test/KeySequenceTests.cpp

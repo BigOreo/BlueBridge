@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 #import <CoreData/CoreData.h>
 #import <Cocoa/Cocoa.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 CFStringRef
 getDraggedFileURL()
@@ -38,4 +38,4 @@ getDraggedFileURL()
 	return (CFStringRef)string;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

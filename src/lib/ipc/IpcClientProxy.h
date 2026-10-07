@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -27,7 +27,7 @@
 
 #include <mutex>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class IpcMessage;
 class IpcCommandMessage;
@@ -38,7 +38,7 @@ class IpcClientProxy : public EventTarget {
     friend class IpcServer;
 
 public:
-    IpcClientProxy(std::unique_ptr<bluebridge::IStream>&& stream, IEventQueue* events);
+    IpcClientProxy(std::unique_ptr<glidekvm::IStream>&& stream, IEventQueue* events);
     virtual ~IpcClientProxy();
 
 private:
@@ -51,7 +51,7 @@ private:
     void disconnect();
 
 private:
-    std::unique_ptr<bluebridge::IStream> stream_;
+    std::unique_ptr<glidekvm::IStream> stream_;
     EIpcClientType m_clientType;
     bool m_disconnecting;
     std::mutex m_readMutex;
@@ -59,4 +59,4 @@ private:
     IEventQueue* m_events;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

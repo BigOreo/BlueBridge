@@ -6,12 +6,12 @@
 # Exit on unset variables or pipe errors
 set -uo pipefail
 
-B_MACOS="BlueBridge.app/Contents/MacOS"
-B_VERSION="@BLUEBRIDGE_VERSION@"
+B_MACOS="GlideKVM.app/Contents/MacOS"
+B_VERSION="@GLIDEKVM_VERSION@"
 B_BINDIR="@CMAKE_RUNTIME_OUTPUT_DIRECTORY@"
 B_BUILDTYPE="@CMAKE_BUILD_TYPE@"
-B_BLUEBRIDGEC="BlueBridge.app/Contents/MacOS/bluebridge-client"
-B_BLUEBRIDGES="BlueBridge.app/Contents/MacOS/bluebridge-server"
+B_GLIDEKVMC="GlideKVM.app/Contents/MacOS/glidekvm-client"
+B_GLIDEKVMS="GlideKVM.app/Contents/MacOS/glidekvm-server"
 
 # Colorized output
 info() { tput bold; echo "$@"; tput sgr0 ; }
@@ -20,7 +20,7 @@ success() { tput bold; tput setaf 2; echo "$@"; tput sgr0 ; }
 warn() { tput bold; tput setaf 3; echo "$@"; tput sgr0 ; }
 
 info "Checking for bundle contents"
-if [ ! -d "BlueBridge.app/Contents" ]; then
+if [ ! -d "GlideKVM.app/Contents" ]; then
     error "Please make sure that the build completed successfully"
     error "before trying to create the installer."
     exit 1
@@ -40,16 +40,16 @@ DEPLOYQT=@QT_DEPLOY_TOOL@
 # Use macdeployqt to include libraries and create dmg
 if [ "$B_BUILDTYPE" = "Release" ]; then
     info "Building Release disk image (dmg)"
-    "$DEPLOYQT" BlueBridge.app -dmg \
-    -executable="$B_BLUEBRIDGEC" \
-    -executable="$B_BLUEBRIDGES" || exit 1
-    mv "BlueBridge.dmg" "BlueBridge-$B_VERSION.dmg" || exit 1
-    success "Created BlueBridge-$B_VERSION.dmg"
+    "$DEPLOYQT" GlideKVM.app -dmg \
+    -executable="$B_GLIDEKVMC" \
+    -executable="$B_GLIDEKVMS" || exit 1
+    mv "GlideKVM.dmg" "GlideKVM-$B_VERSION.dmg" || exit 1
+    success "Created GlideKVM-$B_VERSION.dmg"
 else
     warn "Disk image (dmg) only created for Release builds"
     info "Building debug bundle"
-    "$DEPLOYQT" BlueBridge.app -no-strip \
-    -executable="$B_BLUEBRIDGEC" \
-    -executable="$B_BLUEBRIDGES" || exit 1
+    "$DEPLOYQT" GlideKVM.app -no-strip \
+    -executable="$B_GLIDEKVMC" \
+    -executable="$B_GLIDEKVMS" || exit 1
     success "Bundle created successfully"
 fi

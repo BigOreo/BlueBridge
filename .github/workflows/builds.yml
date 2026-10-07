@@ -54,7 +54,7 @@ jobs:
         run: |
           apt-get update -y
           apt-get install -y gpg wget
-          # BlueBridge requires at least CMake 3.21.
+          # GlideKVM requires at least CMake 3.21.
           # This mirrors instructions at https://apt.kitware.com
           wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
             | gpg --dearmor - \
@@ -136,10 +136,10 @@ jobs:
                 libportal-dev
 
       # Code checkout steps
-      - name: Checkout bluebridge
+      - name: Checkout glidekvm
         uses: actions/checkout@v7
         with:
-          path: bluebridge
+          path: glidekvm
           submodules: recursive
           set-safe-directory: ${{ github.workspace }}
 
@@ -179,17 +179,17 @@ jobs:
           if [ "${{ env.B_BUILD_TYPE }}" = "Release" ]; then
             VERSION_DESC=release
           else
-            VERSION_DESC=$(git -C bluebridge log --pretty=format:'git-%cs-%h' -1)
+            VERSION_DESC=$(git -C glidekvm log --pretty=format:'git-%cs-%h' -1)
           fi
-          cmake -DCMAKE_BUILD_TYPE="${B_BUILD_TYPE}" -S bluebridge -B build \
+          cmake -DCMAKE_BUILD_TYPE="${B_BUILD_TYPE}" -S glidekvm -B build \
                 -DQT_DEFAULT_MAJOR_VERSION=${{ (matrix.os == 'ubuntu:20.04') && '5' || '6' }} \
                 -DCMAKE_CXX_FLAGS:STRING="-Wall -Wextra -Wno-unused-parameter" \
                 -DCMAKE_CXX_FLAGS_DEBUG:STRING="-g -Werror" \
                 -DCMAKE_UNITY_BUILD=1 \
-                -DBLUEBRIDGE_BUILD_LIBEI:BOOL=${{ (matrix.wayland != 'none') && '1' || '0' }} \
-                -DBLUEBRIDGE_BUILD_GULRAK_FILESYSTEM=${{ (matrix.os == 'ubuntu:20.04') && '1' || '0' }} \
-                -DBLUEBRIDGE_VERSION_DESC="$VERSION_DESC" \
-                -DCMAKE_INSTALL_PREFIX=bluebridge-${{ matrix.name }}
+                -DGLIDEKVM_BUILD_LIBEI:BOOL=${{ (matrix.wayland != 'none') && '1' || '0' }} \
+                -DGLIDEKVM_BUILD_GULRAK_FILESYSTEM=${{ (matrix.os == 'ubuntu:20.04') && '1' || '0' }} \
+                -DGLIDEKVM_VERSION_DESC="$VERSION_DESC" \
+                -DCMAKE_INSTALL_PREFIX=glidekvm-${{ matrix.name }}
           cmake --build build --parallel --target install
         env:
             VERBOSE: 1
@@ -207,33 +207,33 @@ jobs:
         if: env.B_BUILD_TYPE != 'Release'
         run: |
             apt-get install -y openssl python3-xlib xclip xvfb
-            python3 bluebridge/src/test/smoke/two_screens.py --bin-dir build/bin
+            python3 glidekvm/src/test/smoke/two_screens.py --bin-dir build/bin
 
       - name: Create Artifacts
         if: env.B_BUILD_TYPE != 'Release'
-        run: tar -cf bluebridge-${{matrix.name}}.tar.gz bluebridge-${{matrix.name}}
+        run: tar -cf glidekvm-${{matrix.name}}.tar.gz glidekvm-${{matrix.name}}
 
       - name: Upload Artifacts
         if: env.B_BUILD_TYPE != 'Release'
         uses: actions/upload-artifact@v7
         with:
-          name: bluebridge-${{matrix.name}}
-          path: bluebridge-${{matrix.name}}.tar.gz
+          name: glidekvm-${{matrix.name}}
+          path: glidekvm-${{matrix.name}}.tar.gz
           if-no-files-found: error
 
       - name: Build Debian package
         if: env.B_BUILD_TYPE == 'Release'
         run: |
-          cd bluebridge
+          cd glidekvm
           cp -r dist/debian debian
           if [ "${{ matrix.wayland }}" = "dist" ]; then
-            sed -i -e 's/-DBLUEBRIDGE_BUILD_LIBEI=0/-DBLUEBRIDGE_BUILD_LIBEI=1/g' debian/rules
+            sed -i -e 's/-DGLIDEKVM_BUILD_LIBEI=0/-DGLIDEKVM_BUILD_LIBEI=1/g' debian/rules
           fi
           if [ "${{ matrix.name }}" = "ubuntu-20-04" ]; then
             sed -i -e 's/QT_DEFAULT_MAJOR_VERSION=6/QT_DEFAULT_MAJOR_VERSION=5/g' debian/rules
           fi
           if [ "${{ env.B_BUILD_TYPE }}" = "Release" ]; then
-            sed -i -e 's/BLUEBRIDGE_VERSION_DESC=git/BLUEBRIDGE_VERSION_DESC=release/g' debian/rules
+            sed -i -e 's/GLIDEKVM_VERSION_DESC=git/GLIDEKVM_VERSION_DESC=release/g' debian/rules
           fi
 
           debuild -us -uc
@@ -242,8 +242,8 @@ jobs:
         if: env.B_BUILD_TYPE == 'Release'
         uses: actions/upload-artifact@v7
         with:
-          name: bluebridge-deb-${{matrix.name}}
-          path: bluebridge_*.deb
+          name: glidekvm-deb-${{matrix.name}}
+          path: glidekvm_*.deb
           if-no-files-found: error
 
   linux-rpm:
@@ -266,18 +266,18 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
         with:
-          path: bluebridge
+          path: glidekvm
           submodules: recursive
           set-safe-directory: ${{ github.workspace }}
 
       - name: Install dependencies
         run: |
           # Replace foo >= x with "foo >= x", print only what follows ^BuildRequires
-          sed -n 's/\(\S\+ [<>=]\+ [0-9]\+.\?[0-9]\?\)/"\1"/;{s/^BuildRequires: //p}' bluebridge/dist/rpm/bluebridge.spec.in | xargs ${{ matrix.installer }}
+          sed -n 's/\(\S\+ [<>=]\+ [0-9]\+.\?[0-9]\?\)/"\1"/;{s/^BuildRequires: //p}' glidekvm/dist/rpm/glidekvm.spec.in | xargs ${{ matrix.installer }}
 
       - name: prep tree
         run: |
-          cmake -S bluebridge -GNinja -B build -DCMAKE_UNITY_BUILD=1 -DBLUEBRIDGE_USE_EXTERNAL_GTEST=True
+          cmake -S glidekvm -GNinja -B build -DCMAKE_UNITY_BUILD=1 -DGLIDEKVM_USE_EXTERNAL_GTEST=True
           ninja -C build package_source
 
       - name: create target directory
@@ -285,16 +285,16 @@ jobs:
 
       - name:  build SRPM package
         run: |
-          rpmbuild -D "_sourcedir $PWD/build" -D "_srcrpmdir ${PWD}/rpms" -bs build/rpm/bluebridge.spec
+          rpmbuild -D "_sourcedir $PWD/build" -D "_srcrpmdir ${PWD}/rpms" -bs build/rpm/glidekvm.spec
 
       - name: build RPM package
         run: |
-          rpmbuild -D "_sourcedir $PWD/build" -D "_rpmdir $PWD/rpms" -bb build/rpm/bluebridge.spec
+          rpmbuild -D "_sourcedir $PWD/build" -D "_rpmdir $PWD/rpms" -bb build/rpm/glidekvm.spec
 
       - name: Archive RPM package
         uses: actions/upload-artifact@v7
         with:
-          name: bluebridge-rpms-${{ matrix.rpm_tag }}
+          name: glidekvm-rpms-${{ matrix.rpm_tag }}
           path: |
             rpms/**/*.rpm
 
@@ -370,19 +370,19 @@ jobs:
 
       - uses: actions/checkout@v7
         with:
-          path: bluebridge
+          path: glidekvm
           submodules: recursive
 
       - name: Setup the build
         run: |
-          cmake -DCMAKE_BUILD_TYPE="${B_BUILD_TYPE}" -S bluebridge -B build -G Ninja \
+          cmake -DCMAKE_BUILD_TYPE="${B_BUILD_TYPE}" -S glidekvm -B build -G Ninja \
                 -DCMAKE_UNITY_BUILD=1 \
                 -DOpenSSL_ROOT=${{env.OpenSSL_Install_Path}} \
                 -DCMAKE_OSX_SYSROOT=$(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
                 -DCMAKE_OSX_DEPLOYMENT_TARGET=${{matrix.min-macOS-version}} -DCMAKE_UNITY_BUILD=1 \
                 -DQT_DEFAULT_MAJOR_VERSION=$(echo ${{matrix.qt-version}} | cut -c -1) \
-                -DBLUEBRIDGE_VERSION_DESC=${{ (env.B_BUILD_TYPE == 'Release') && 'release' || 'git' }} \
-                -DBLUEBRIDGE_BUILD_GULRAK_FILESYSTEM=${{ matrix.qt-version == '5.15' && '1' || '0' }} \
+                -DGLIDEKVM_VERSION_DESC=${{ (env.B_BUILD_TYPE == 'Release') && 'release' || 'git' }} \
+                -DGLIDEKVM_BUILD_GULRAK_FILESYSTEM=${{ matrix.qt-version == '5.15' && '1' || '0' }} \
                 -DCMAKE_OSX_ARCHITECTURES="${{matrix.arch}}"
 
       - name: Run the build
@@ -398,13 +398,13 @@ jobs:
 
       - name: Archive debug app
         if: env.B_BUILD_TYPE != 'Release'
-        run: tar -czf BlueBridge-${{matrix.name}}.tar.gz -C build/bundle BlueBridge.app
+        run: tar -czf GlideKVM-${{matrix.name}}.tar.gz -C build/bundle GlideKVM.app
 
       - uses: actions/upload-artifact@v7
         if: env.B_BUILD_TYPE != 'Release'
         with:
           name: ${{ matrix.name }}-debug
-          path: ./BlueBridge*.tar.gz
+          path: ./GlideKVM*.tar.gz
           if-no-files-found: error
 
   win-build:
@@ -423,7 +423,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          path: bluebridge
+          path: glidekvm
           submodules: recursive
 
       - name: Download Bonjour SDK-like
@@ -452,11 +452,11 @@ jobs:
 
           cd build
 
-          cmake -S ..\bluebridge -G "$env:CMAKE_GEN" -A x64 -D CMAKE_BUILD_TYPE=$B_BUILD_TYPE `
+          cmake -S ..\glidekvm -G "$env:CMAKE_GEN" -A x64 -D CMAKE_BUILD_TYPE=$B_BUILD_TYPE `
             -DQT_DEFAULT_MAJOR_VERSION=${{matrix.qt-major}} `
-            -DBLUEBRIDGE_VERSION_DESC=${{ (env.B_BUILD_TYPE == 'Release') && 'release' || 'git' }} `
-            -DBLUEBRIDGE_BUILD_GULRAK_FILESYSTEM=${{ matrix.qt-major == '5' && '1' || '0' }} `
-            -DDNSSD_LIB="$env:BONJOUR_SDK_HOME\Lib\x64\dnssd.lib" -D CMAKE_INSTALL_PREFIX=bluebridge-install
+            -DGLIDEKVM_VERSION_DESC=${{ (env.B_BUILD_TYPE == 'Release') && 'release' || 'git' }} `
+            -DGLIDEKVM_BUILD_GULRAK_FILESYSTEM=${{ matrix.qt-major == '5' && '1' || '0' }} `
+            -DDNSSD_LIB="$env:BONJOUR_SDK_HOME\Lib\x64\dnssd.lib" -D CMAKE_INSTALL_PREFIX=glidekvm-install
         env:
           VS_PATH: ${{ matrix.os == 'windows-2019' && '%ProgramFiles(x86)%\Microsoft Visual Studio\2019' || '%ProgramFiles%\Microsoft Visual Studio\2022' }}
           CMAKE_GEN: ${{ matrix.os == 'windows-2019' && 'Visual Studio 16 2019' || 'Visual Studio 17 2022' }}
@@ -467,7 +467,7 @@ jobs:
           cmake --build build --config $env:B_BUILD_TYPE --target install
 
       - name: Create Archive
-        run: Compress-Archive -Path build\bluebridge-install\* -DestinationPath ${{ env.B_BUILD_TYPE }}.zip
+        run: Compress-Archive -Path build\glidekvm-install\* -DestinationPath ${{ env.B_BUILD_TYPE }}.zip
 
       - uses: actions/upload-artifact@v7
         with:
@@ -478,7 +478,7 @@ jobs:
       - name: Build the Installer
         if: env.B_BUILD_TYPE == 'Release'
         run: |
-          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /Qp .\build\installer-inno\bluebridge.iss
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /Qp .\build\installer-inno\glidekvm.iss
 
       - uses: actions/upload-artifact@v7
         if: env.B_BUILD_TYPE == 'Release'
@@ -493,7 +493,7 @@ jobs:
         if: env.B_BUILD_TYPE == 'Release'
         run: |
           $setup = Get-ChildItem .\build\installer-inno\bin\*.exe | Select-Object -First 1
-          powershell -ExecutionPolicy Bypass -File .\bluebridge\src\test\smoke\windows_installer.ps1 -Installer $setup.FullName
+          powershell -ExecutionPolicy Bypass -File .\glidekvm\src\test\smoke\windows_installer.ps1 -Installer $setup.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
   flatpak:
@@ -513,14 +513,14 @@ jobs:
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         name: "Build"
         with:
-          bundle: bluebridge.flatpak
-          manifest-path: dist/flatpak/io.github.bigoreo.bluebridge.yaml
+          bundle: glidekvm.flatpak
+          manifest-path: dist/flatpak/io.github.bigoreo.glidekvm.yaml
           cache-key: flatpak-builder-${{ github.sha }}
           upload-artifact: false
 
       - uses: actions/upload-artifact@v7
         if: env.B_BUILD_TYPE == 'Release'
         with:
-          name: bluebridge-flatpak-x86_64
-          path: bluebridge.flatpak
+          name: glidekvm-flatpak-x86_64
+          path: glidekvm.flatpak
           if-no-files-found: error

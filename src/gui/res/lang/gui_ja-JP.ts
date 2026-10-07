@@ -5,8 +5,8 @@
     <name>AboutDialog</name>
     <message>
         <location filename="res/AboutDialog.ui" line="38"/>
-        <source>About BlueBridge</source>
-        <translation>BlueBridge について</translation>
+        <source>About GlideKVM</source>
+        <translation>GlideKVM について</translation>
     </message>
     <message utf8="true">
         <location filename="res/AboutDialog.ui" line="53"/>
@@ -15,8 +15,8 @@ Keyboard and mouse sharing application. Cross platform and open source.&lt;br /&
 Copyright © 2018 Debauchee Open Source Group&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-BlueBridge is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
-BlueBridge is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
+GlideKVM is released under the GNU General Public License (GPLv2).&lt;br /&gt;&lt;br /&gt;
+GlideKVM is based on CosmoSynergy by Richard Lee and Adam Feder.&lt;br /&gt;
 The InputLeap GUI is based on QSynergy by Volker Lanz.
 &lt;/p&gt;</source>
         <translation>&lt;p&gt;
@@ -24,9 +24,9 @@ The InputLeap GUI is based on QSynergy by Volker Lanz.
 Copyright © 2018 Debauchee Open Source Group&lt;br /&gt;
 Copyright © 2012-2016 Symless Ltd.&lt;br /&gt;
 Copyright © 2002-2012 Chris Schoeneman, Nick Bolton, Volker Lanz.&lt;br /&gt;&lt;br /&gt;
-BlueBridge は GNU General Public (GPLv2) のライセンスで公開されています。&lt;br /&gt;&lt;br /&gt;
-BlueBridge のベースは CosmoSynergyで、これは Richard Lee と Adam Feder の開発です。&lt;br /&gt;
-BlueBridge の GUI のベースは QSynergy で、これは Volker Lanz 開発です。
+GlideKVM は GNU General Public (GPLv2) のライセンスで公開されています。&lt;br /&gt;&lt;br /&gt;
+GlideKVM のベースは CosmoSynergyで、これは Richard Lee と Adam Feder の開発です。&lt;br /&gt;
+GlideKVM の GUI のベースは QSynergy で、これは Volker Lanz 開発です。
 &lt;/p&gt;</translation>
     </message>
     <message>
@@ -213,9 +213,9 @@ BlueBridge の GUI のベースは QSynergy で、これは Volker Lanz 開発�
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="364"/>
-        <source>&lt;p&gt;Your version of BlueBridge is out of date. Version &lt;b&gt;%1&lt;/b&gt; is now available to &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</source>
+        <source>&lt;p&gt;Your version of GlideKVM is out of date. Version &lt;b&gt;%1&lt;/b&gt; is now available to &lt;a href=&quot;%2&quot;&gt;download&lt;/a&gt;.&lt;/p&gt;</source>
         <oldsource>&lt;p&gt;Version %1 is now available, &lt;a href=&quot;%2&quot;&gt;visit website&lt;/a&gt;.&lt;/p&gt;</oldsource>
-        <translation type="unfinished">&lt;p&gt;お使いの BlueBridge は最新版ではありません。 新しいバージョン &lt;b&gt;%1&lt;/b&gt; が&lt;a href=&quot;%2&quot;&gt;ダウンロード&lt;/a&gt;できます。&lt;/p&gt;</translation>
+        <translation type="unfinished">&lt;p&gt;お使いの GlideKVM は最新版ではありません。 新しいバージョン &lt;b&gt;%1&lt;/b&gt; が&lt;a href=&quot;%2&quot;&gt;ダウンロード&lt;/a&gt;できます。&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="577"/>
@@ -229,13 +229,13 @@ BlueBridge の GUI のベースは QSynergy で、これは Volker Lanz 開発�
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="596"/>
-        <source>BlueBridge client not found</source>
-        <translation>BlueBridge のクライアントが見つかりません</translation>
+        <source>GlideKVM client not found</source>
+        <translation>GlideKVM のクライアントが見つかりません</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="597"/>
-        <source>The executable for the BlueBridge client does not exist.</source>
-        <translation>BlueBridge のクライアントの実行ファイルが存在しません。</translation>
+        <source>The executable for the GlideKVM client does not exist.</source>
+        <translation>GlideKVM のクライアントの実行ファイルが存在しません。</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="625"/>
@@ -244,8 +244,8 @@ BlueBridge の GUI のベースは QSynergy で、これは Volker Lanz 開発�
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="626"/>
-        <source>Please fill in a hostname for the BlueBridge client to connect to.</source>
-        <translation>BlueBridge のクライアントが接続するホスト名を入力してください。</translation>
+        <source>Please fill in a hostname for the GlideKVM client to connect to.</source>
+        <translation>GlideKVM のクライアントが接続するホスト名を入力してください。</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="646"/>
@@ -254,8 +254,8 @@ BlueBridge の GUI のベースは QSynergy で、これは Volker Lanz 開発�
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="646"/>
-        <source>The temporary configuration file required to start BlueBridge can not be written.</source>
-        <translation>BlueBridge の開始に必要な一時的な構成ファイルに書き込めません。</translation>
+        <source>The temporary configuration file required to start GlideKVM can not be written.</source>
+        <translation>GlideKVM の開始に必要な一時的な構成ファイルに書き込めません。</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="659"/>
@@ -264,28 +264,28 @@ BlueBridge の GUI のベースは QSynergy で、これは Volker Lanz 開発�
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="660"/>
-        <source>You have not filled in a valid configuration file for the BlueBridge server. Do you want to browse for the configuration file now?</source>
-        <translation>BlueBridge のサーバー用の正しい構成ファイルではありません。構成ファイルを開きますか?</translation>
+        <source>You have not filled in a valid configuration file for the GlideKVM server. Do you want to browse for the configuration file now?</source>
+        <translation>GlideKVM のサーバー用の正しい構成ファイルではありません。構成ファイルを開きますか?</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="688"/>
-        <source>BlueBridge server not found</source>
-        <translation>BlueBridge のサーバーが見つかりません</translation>
+        <source>GlideKVM server not found</source>
+        <translation>GlideKVM のサーバーが見つかりません</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="689"/>
-        <source>The executable for the BlueBridge server does not exist.</source>
-        <translation>BlueBridge のサーバーの実行ファイルが存在しません。</translation>
+        <source>The executable for the GlideKVM server does not exist.</source>
+        <translation>GlideKVM のサーバーの実行ファイルが存在しません。</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="764"/>
-        <source>BlueBridge terminated with an error</source>
-        <translation>BlueBridge はエラーで終了しました</translation>
+        <source>GlideKVM terminated with an error</source>
+        <translation>GlideKVM はエラーで終了しました</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="764"/>
-        <source>BlueBridge terminated unexpectedly with an exit code of %1.&lt;br&gt;&lt;br&gt;Please see the log output for details.</source>
-        <translation>BlueBridge は予期しない終了コード %1 で終了しました。&lt;br&gt;&lt;br&gt;詳細はログの出力を参照してください。</translation>
+        <source>GlideKVM terminated unexpectedly with an exit code of %1.&lt;br&gt;&lt;br&gt;Please see the log output for details.</source>
+        <translation>GlideKVM は予期しない終了コード %1 で終了しました。&lt;br&gt;&lt;br&gt;詳細はログの出力を参照してください。</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="783"/>
@@ -337,18 +337,18 @@ Bonjour をインストールしますか?</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="815"/>
-        <source>BlueBridge is starting.</source>
-        <translation>BlueBridge 開始中...</translation>
+        <source>GlideKVM is starting.</source>
+        <translation>GlideKVM 開始中...</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="809"/>
-        <source>BlueBridge is running.</source>
-        <translation>BlueBridge 動作中</translation>
+        <source>GlideKVM is running.</source>
+        <translation>GlideKVM 動作中</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="819"/>
-        <source>BlueBridge is not running.</source>
-        <translation>BlueBridge は動作していません。</translation>
+        <source>GlideKVM is not running.</source>
+        <translation>GlideKVM は動作していません。</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="870"/>
@@ -359,18 +359,18 @@ Bonjour をインストールしますか?</translation>
         <location filename="src/MainWindow.cpp" line="1146"/>
         <location filename="src/MainWindow.cpp" line="1225"/>
         <location filename="src/MainWindow.cpp" line="1269"/>
-        <source>BlueBridge</source>
-        <translation>BlueBridge</translation>
+        <source>GlideKVM</source>
+        <translation>GlideKVM</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="987"/>
-        <source>Browse for a BlueBridge config file</source>
-        <translation type="unfinished">BlueBridge の構成ファイルを参照</translation>
+        <source>Browse for a GlideKVM config file</source>
+        <translation type="unfinished">GlideKVM の構成ファイルを参照</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="408"/>
-        <source>BlueBridge is now connected. You can close the config window and BlueBridge will remain connected in the background.</source>
-        <translation>ただいま BlueBridge は接続されました。設定ウインドウを閉じることができます。それでもバックグラウンドで接続を維持します。</translation>
+        <source>GlideKVM is now connected. You can close the config window and GlideKVM will remain connected in the background.</source>
+        <translation>ただいま GlideKVM は接続されました。設定ウインドウを閉じることができます。それでもバックグラウンドで接続を維持します。</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="434"/>
@@ -414,8 +414,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     <name>MainWindow</name>
     <message>
         <location filename="res/MainWindow.ui" line="26"/>
-        <source>BlueBridge</source>
-        <translation>BlueBridge</translation>
+        <source>GlideKVM</source>
+        <translation>GlideKVM</translation>
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="90"/>
@@ -505,8 +505,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="390"/>
-        <source>&amp;About BlueBridge...</source>
-        <translation>BlueBridge について(&amp;A)...</translation>
+        <source>&amp;About GlideKVM...</source>
+        <translation>GlideKVM について(&amp;A)...</translation>
     </message>
     <message>
         <location filename="res/MainWindow.ui" line="398"/>
@@ -646,8 +646,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     <name>PluginWizardPage</name>
     <message>
         <location filename="res/PluginWizardPage.ui" line="14"/>
-        <source>Setup BlueBridge</source>
-        <translation>BlueBridge のセットアップ</translation>
+        <source>Setup GlideKVM</source>
+        <translation>GlideKVM のセットアップ</translation>
     </message>
     <message>
         <location filename="res/PluginWizardPage.ui" line="101"/>
@@ -695,13 +695,13 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     <name>QObject</name>
     <message>
         <location filename="src/MainWindow.cpp" line="60"/>
-        <source>BlueBridge Configurations (*.sgc);;All files (*.*)</source>
-        <translation>BlueBridge 構成設定 (*.sgc);;すべてのファイル(*.*)</translation>
+        <source>GlideKVM Configurations (*.sgc);;All files (*.*)</source>
+        <translation>GlideKVM 構成設定 (*.sgc);;すべてのファイル(*.*)</translation>
     </message>
     <message>
         <location filename="src/MainWindow.cpp" line="67"/>
-        <source>BlueBridge Configurations (*.conf);;All files (*.*)</source>
-        <translation>BlueBridge 構成設定 (*.conf);;すべてのファイル(*.*)</translation>
+        <source>GlideKVM Configurations (*.conf);;All files (*.*)</source>
+        <translation>GlideKVM 構成設定 (*.conf);;すべてのファイル(*.*)</translation>
     </message>
     <message>
         <location filename="src/main.cpp" line="119"/>
@@ -939,8 +939,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
     </message>
     <message>
         <location filename="res/ServerConfigDialog.ui" line="60"/>
-        <source>Configure the layout of your BlueBridge server configuration.</source>
-        <translation type="unfinished">BlueBridge のサーバー構成の配置を設定します。</translation>
+        <source>Configure the layout of your GlideKVM server configuration.</source>
+        <translation type="unfinished">GlideKVM のサーバー構成の配置を設定します。</translation>
     </message>
     <message>
         <location filename="res/ServerConfigDialog.ui" line="73"/>
@@ -1113,16 +1113,16 @@ Double click on a screen to edit its settings.</source>
     </message>
     <message>
         <location filename="src/SettingsDialog.cpp" line="151"/>
-        <source>Elevate BlueBridge</source>
-        <translation>BlueBridge の権限昇格</translation>
+        <source>Elevate GlideKVM</source>
+        <translation>GlideKVM の権限昇格</translation>
     </message>
     <message>
         <location filename="src/SettingsDialog.cpp" line="152"/>
-        <source>Are you sure you want to Elevate BlueBridge?
+        <source>Are you sure you want to Elevate GlideKVM?
 
-This allows BlueBridge to interact with elevated processes and the UAC dialog, but can cause problems with non-elevated processes. Elevate BlueBridge only if you really need to.</source>
-        <translation type="unfinished">BlueBridge の権限を昇格しますか？
-この許可により BlueBridge は権限を持つプロセスや UAC ダイアログとやりとりできます。一方で、昇格されていないプロセスとのやり取りに問題が起こることもあります。確かに必要である場合にのみ BlueBridge を昇格させてください。</translation>
+This allows GlideKVM to interact with elevated processes and the UAC dialog, but can cause problems with non-elevated processes. Elevate GlideKVM only if you really need to.</source>
+        <translation type="unfinished">GlideKVM の権限を昇格しますか？
+この許可により GlideKVM は権限を持つプロセスや UAC ダイアログとやりとりできます。一方で、昇格されていないプロセスとのやり取りに問題が起こることもあります。確かに必要である場合にのみ GlideKVM を昇格させてください。</translation>
     </message>
 </context>
 <context>
@@ -1244,8 +1244,8 @@ This allows BlueBridge to interact with elevated processes and the UAC dialog, b
     </message>
     <message>
         <location filename="res/SettingsDialog.ui" line="93"/>
-        <source>Specify when the BlueBridge service should run at an elevated privilege level</source>
-        <translation>BlueBridge のサービスを昇格した権限で実行するタイミングの指定</translation>
+        <source>Specify when the GlideKVM service should run at an elevated privilege level</source>
+        <translation>GlideKVM のサービスを昇格した権限で実行するタイミングの指定</translation>
     </message>
     <message>
         <location filename="res/SettingsDialog.ui" line="100"/>
@@ -1284,8 +1284,8 @@ This allows BlueBridge to interact with elevated processes and the UAC dialog, b
     </message>
     <message>
         <location filename="res/SettingsDialog.ui" line="132"/>
-        <source>Start &amp;BlueBridge on startup</source>
-        <translation>起動時に BlueBridge を開始(&amp;B)</translation>
+        <source>Start &amp;GlideKVM on startup</source>
+        <translation>起動時に GlideKVM を開始(&amp;B)</translation>
     </message>
     <message>
         <location filename="res/SettingsDialog.ui" line="201"/>
@@ -1297,8 +1297,8 @@ This allows BlueBridge to interact with elevated processes and the UAC dialog, b
     <name>LogWindow</name>
     <message>
         <location filename="res/LogWindow.ui" line="26"/>
-        <source>Log - BlueBridge</source>
-        <translation>ログ - BlueBridge</translation>
+        <source>Log - GlideKVM</source>
+        <translation>ログ - GlideKVM</translation>
     </message>
     <message>
         <location filename="res/LogWindow.ui" line="71"/>
@@ -1315,8 +1315,8 @@ This allows BlueBridge to interact with elevated processes and the UAC dialog, b
     <name>SetupWizard</name>
     <message>
         <location filename="src/SetupWizard.cpp" line="72"/>
-        <source>Setup BlueBridge</source>
-        <translation>BlueBridge のセットアップ</translation>
+        <source>Setup GlideKVM</source>
+        <translation>GlideKVM のセットアップ</translation>
     </message>
     <message>
         <location filename="src/SetupWizard.cpp" line="113"/>
@@ -1333,8 +1333,8 @@ This allows BlueBridge to interact with elevated processes and the UAC dialog, b
     <name>SetupWizard</name>
     <message>
         <location filename="res/SetupWizard.ui" line="26"/>
-        <source>Setup BlueBridge</source>
-        <translation>BlueBridge のセットアップ</translation>
+        <source>Setup GlideKVM</source>
+        <translation>GlideKVM のセットアップ</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="30"/>
@@ -1343,13 +1343,13 @@ This allows BlueBridge to interact with elevated processes and the UAC dialog, b
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="39"/>
-        <source>Thanks for installing BlueBridge!</source>
-        <translation>BlueBridge をインストールしていただき、ありがとうございます！</translation>
+        <source>Thanks for installing GlideKVM!</source>
+        <translation>GlideKVM をインストールしていただき、ありがとうございます！</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="114"/>
-        <source>BlueBridge lets you easily share your mouse and keyboard between multiple computers on your desk, and it&apos;s Free and Open Source. Just move your mouse off the edge of one computer&apos;s screen on to another. You can even share all of your clipboards. All you need is a network connection. BlueBridge is cross-platform (works on Windows, Mac OS X and Linux).</source>
-        <translation>BlueBridge によって、複数のデスクトップパソコン間でマウスとキーボードを簡単に共有することができます。そしてこれは無料でオープンソースのソフトウェアです。あるコンピュータの画面の端にマウスを移動するだけで、別のコンピュータの画面に移ることができます。クリップボードを共有することもできます。必要なのはネットワーク接続だけです。 BlueBridge はクロスプラットフォームで Windows、Mac OS X、Linux で動作します。</translation>
+        <source>GlideKVM lets you easily share your mouse and keyboard between multiple computers on your desk, and it&apos;s Free and Open Source. Just move your mouse off the edge of one computer&apos;s screen on to another. You can even share all of your clipboards. All you need is a network connection. GlideKVM is cross-platform (works on Windows, Mac OS X and Linux).</source>
+        <translation>GlideKVM によって、複数のデスクトップパソコン間でマウスとキーボードを簡単に共有することができます。そしてこれは無料でオープンソースのソフトウェアです。あるコンピュータの画面の端にマウスを移動するだけで、別のコンピュータの画面に移ることができます。クリップボードを共有することもできます。必要なのはネットワーク接続だけです。 GlideKVM はクロスプラットフォームで Windows、Mac OS X、Linux で動作します。</translation>
     </message>
     <message>
         <location filename="res/SetupWizard.ui" line="125"/>
@@ -1548,8 +1548,8 @@ Server response:
     </message>
     <message>
         <location filename="src/ZeroconfService.cpp" line="140"/>
-        <source>BlueBridge</source>
-        <translation>BlueBridge</translation>
+        <source>GlideKVM</source>
+        <translation>GlideKVM</translation>
     </message>
     <message>
         <location filename="src/ZeroconfService.cpp" line="141"/>

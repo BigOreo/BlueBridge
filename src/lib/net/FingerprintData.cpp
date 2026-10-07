@@ -1,5 +1,5 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
+    GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <fstream>
 
-namespace bluebridge {
+namespace glidekvm {
 
 bool FingerprintData::operator==(const FingerprintData& other) const
 {
@@ -50,4 +50,4 @@ FingerprintType fingerprint_type_from_string(const std::string& type)
     return FingerprintType::INVALID;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include <sys/un.h> // for EIS fd hack, remove
 #include <sys/socket.h> // for EIS fd hack, remove
 
-namespace bluebridge {
+namespace glidekvm {
 
 PortalRemoteDesktop::PortalRemoteDesktop(EiScreen *screen,
                                          IEventQueue* events) :
@@ -208,4 +208,4 @@ void PortalRemoteDesktop::glib_thread()
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,6 +1,6 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
-    Copyright (C) BlueBridge contributors
+    GlideKVM -- mouse and keyboard sharing utility
+    Copyright (C) GlideKVM contributors
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -16,12 +16,12 @@
 */
 
 #include "common/Policy.h"
-#include "bluebridge/ArgsBase.h"
+#include "glidekvm/ArgsBase.h"
 
 #include <gtest/gtest.h>
 #include <map>
 
-namespace bluebridge {
+namespace glidekvm {
 
 namespace {
 
@@ -97,4 +97,4 @@ TEST(PolicyTests, RecognizesBluetoothHosts)
     EXPECT_FALSE(is_bluetooth_host("btserver"));
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

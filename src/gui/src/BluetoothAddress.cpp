@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
 
     This package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 
 #include <QStringList>
 
-namespace bluebridge {
+namespace glidekvm {
 
 QString normalize_bluetooth_address(const QString& address)
 {
@@ -47,4 +47,4 @@ QString normalize_bluetooth_address(const QString& address)
     return bytes.join(':');
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

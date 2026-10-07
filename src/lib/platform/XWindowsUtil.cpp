@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -24,7 +24,7 @@
 
 #include <X11/Xatom.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //
 // XWindowsUtil
@@ -211,10 +211,10 @@ std::string XWindowsUtil::atomToString(Display* display, Atom atom)
     XWindowsUtil::ErrorLock lock(display, &error);
     char* name = XGetAtomName(display, atom);
     if (error) {
-        return bluebridge::string::sprintf("<UNKNOWN> (%d)", static_cast<int>(atom));
+        return glidekvm::string::sprintf("<UNKNOWN> (%d)", static_cast<int>(atom));
     }
     else {
-        std::string msg = bluebridge::string::sprintf("%s (%d)", name, static_cast<int>(atom));
+        std::string msg = glidekvm::string::sprintf("%s (%d)", name, static_cast<int>(atom));
         XFree(name);
         return msg;
     }
@@ -229,12 +229,12 @@ std::string XWindowsUtil::atomsToString(Display* display, const Atom* atom, std:
     std::string msg;
     if (error) {
         for (std::uint32_t i = 0; i < num; ++i) {
-            msg += bluebridge::string::sprintf("<UNKNOWN> (%d), ", static_cast<int>(atom[i]));
+            msg += glidekvm::string::sprintf("<UNKNOWN> (%d), ", static_cast<int>(atom[i]));
         }
     }
     else {
         for (std::uint32_t i = 0; i < num; ++i) {
-            msg += bluebridge::string::sprintf("%s (%d), ", names[i], static_cast<int>(atom[i]));
+            msg += glidekvm::string::sprintf("%s (%d), ", names[i], static_cast<int>(atom[i]));
             XFree(names[i]);
         }
     }
@@ -368,4 +368,4 @@ XWindowsUtil::ErrorLock::saveHandler(Display* display, XErrorEvent* e, void* fla
     *static_cast<bool*>(flag) = true;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

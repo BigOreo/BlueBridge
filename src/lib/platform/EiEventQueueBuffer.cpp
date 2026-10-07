@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 
 #include <cstdio>
 
-namespace bluebridge {
+namespace glidekvm {
 
 EiEventQueueBuffer::EiEventQueueBuffer(EiScreen* screen, ei *ei, IEventQueue* events) :
     ei_(ei_ref(ei)),
@@ -144,4 +144,4 @@ bool EiEventQueueBuffer::isEmpty() const
     return queue_.empty();
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
  *
@@ -32,7 +32,7 @@
 #include <cstddef>
 #include <map>
 
-namespace bluebridge {
+namespace glidekvm {
 
 static const size_t ModifiersFromXDefaultSize = 32;
 
@@ -50,7 +50,7 @@ XWindowsKeyState::XWindowsKeyState(IXWindowsImpl* impl,
 
 XWindowsKeyState::XWindowsKeyState(IXWindowsImpl* impl,
     Display* display, bool useXKB,
-    IEventQueue* events, bluebridge::KeyMap& keyMap) :
+    IEventQueue* events, glidekvm::KeyMap& keyMap) :
     KeyState(events, keyMap),
     m_display(display),
     m_modifierFromX(ModifiersFromXDefaultSize)
@@ -211,10 +211,10 @@ XWindowsKeyState::pollPressedKeys(KeyButtonSet& pressedKeys) const
 }
 
 void
-XWindowsKeyState::getKeyMap(bluebridge::KeyMap& keyMap)
+XWindowsKeyState::getKeyMap(glidekvm::KeyMap& keyMap)
 {
     // get autorepeat info.  we must use the global_auto_repeat told to
-    // us because it may have modified by BlueBridge.
+    // us because it may have modified by GlideKVM.
     int oldGlobalAutoRepeat = m_keyboardState.global_auto_repeat;
     XGetKeyboardControl(m_display, &m_keyboardState);
     m_keyboardState.global_auto_repeat = oldGlobalAutoRepeat;
@@ -289,7 +289,7 @@ XWindowsKeyState::fakeKey(const Keystroke& keystroke)
 }
 
 void
-XWindowsKeyState::updateKeysymMap(bluebridge::KeyMap& keyMap)
+XWindowsKeyState::updateKeysymMap(glidekvm::KeyMap& keyMap)
 {
     // there are up to 4 keysyms per keycode
     static const int maxKeysyms = 4;
@@ -383,7 +383,7 @@ XWindowsKeyState::updateKeysymMap(bluebridge::KeyMap& keyMap)
     }
 
     // add entries for each keycode
-    bluebridge::KeyMap::KeyItem item;
+    glidekvm::KeyMap::KeyItem item;
     for (int i = 0; i < numKeycodes; ++i) {
         KeySym* keysyms = allKeysyms + maxKeysyms * i;
         KeyCode keycode = static_cast<KeyCode>(i + minKeycode);
@@ -487,7 +487,7 @@ XWindowsKeyState::updateKeysymMap(bluebridge::KeyMap& keyMap)
             item.m_lock      = false;
             if (modifierButtons.count(keycode) > 0) {
                 // get flags for modifier keys
-                bluebridge::KeyMap::initModifierKey(item);
+                glidekvm::KeyMap::initModifierKey(item);
 
                 // add mapping from X (unless we already have)
                 if (item.m_generates != 0) {
@@ -534,7 +534,7 @@ XWindowsKeyState::updateKeysymMap(bluebridge::KeyMap& keyMap)
 }
 
 void
-XWindowsKeyState::updateKeysymMapXKB(bluebridge::KeyMap& keyMap)
+XWindowsKeyState::updateKeysymMapXKB(glidekvm::KeyMap& keyMap)
 {
     static const XkbKTMapEntryRec defMapEntry = {
         True,        // active
@@ -580,7 +580,7 @@ XWindowsKeyState::updateKeysymMapXKB(bluebridge::KeyMap& keyMap)
 
     // check every button.  on this pass we save all modifiers as native
     // X modifier masks.
-    bluebridge::KeyMap::KeyItem item;
+    glidekvm::KeyMap::KeyItem item;
     for (int i = m_xkb->min_key_code; i <= m_xkb->max_key_code; ++i) {
         KeyCode keycode = static_cast<KeyCode>(i);
         item.m_button   = static_cast<KeyButton>(keycode);
@@ -766,7 +766,7 @@ XWindowsKeyState::updateKeysymMapXKB(bluebridge::KeyMap& keyMap)
         }
     }
 
-    // change all modifier masks to BlueBridge masks from X masks
+    // change all modifier masks to GlideKVM masks from X masks
     keyMap.foreachKey(&XWindowsKeyState::remapKeyModifiers, this);
 
     // allow composition across groups
@@ -774,7 +774,7 @@ XWindowsKeyState::updateKeysymMapXKB(bluebridge::KeyMap& keyMap)
 }
 
 void XWindowsKeyState::remapKeyModifiers(KeyID id, std::int32_t group,
-                                         bluebridge::KeyMap::KeyItem& item, void* vself)
+                                         glidekvm::KeyMap::KeyItem& item, void* vself)
 {
     (void) id;
 
@@ -852,4 +852,4 @@ std::uint32_t XWindowsKeyState::getGroupFromState(unsigned int state) const
     return 0;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

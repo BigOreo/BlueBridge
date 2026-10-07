@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -19,14 +19,14 @@
 #pragma once
 
 #include "server/Config.h"
-#include "bluebridge/clipboard_types.h"
-#include "bluebridge/Clipboard.h"
-#include "bluebridge/key_types.h"
-#include "bluebridge/mouse_types.h"
-#include "bluebridge/Fwd.h"
-#include "bluebridge/INode.h"
-#include "bluebridge/DragInformation.h"
-#include "bluebridge/ServerArgs.h"
+#include "glidekvm/clipboard_types.h"
+#include "glidekvm/Clipboard.h"
+#include "glidekvm/key_types.h"
+#include "glidekvm/mouse_types.h"
+#include "glidekvm/Fwd.h"
+#include "glidekvm/INode.h"
+#include "glidekvm/DragInformation.h"
+#include "glidekvm/ServerArgs.h"
 #include "base/Fwd.h"
 #include "base/Event.h"
 #include "base/EventTarget.h"
@@ -37,7 +37,7 @@
 #include <set>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class BaseClientProxy;
 class PrimaryClient;
@@ -45,7 +45,7 @@ class InputFilter;
 class Thread;
 class ClientListener;
 
-/// This class implements the top-level server algorithms for BlueBridge.
+/// This class implements the top-level server algorithms for GlideKVM.
 class Server : public INode, public EventTarget {
 public:
     //! Lock cursor to screen data
@@ -113,10 +113,10 @@ public:
     ownership of \p primaryClient.
     */
     Server(Config& config, PrimaryClient* primaryClient,
-        bluebridge::Screen* screen, IEventQueue* events, ServerArgs const& args);
+        glidekvm::Screen* screen, IEventQueue* events, ServerArgs const& args);
     ~Server();
 
-#ifdef BLUEBRIDGE_TEST_ENV
+#ifdef GLIDEKVM_TEST_ENV
     Server() : m_mock(true), m_config(nullptr) { }
     void setActive(BaseClientProxy* active) { m_active = active; }
 #endif
@@ -462,7 +462,7 @@ private:
     bool m_lockedToScreen;
 
     // server screen
-    bluebridge::Screen* m_screen;
+    glidekvm::Screen* m_screen;
 
     IEventQueue* m_events;
 
@@ -485,4 +485,4 @@ private:
     ServerArgs m_args;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

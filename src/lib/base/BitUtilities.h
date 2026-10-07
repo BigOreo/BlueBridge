@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) 2012-2016 Symless Ltd.
     Copyright (C) 2004 Chris Schoeneman
 
@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-namespace bluebridge {
+namespace glidekvm {
 
 inline void store_little_endian_u8(std::uint8_t*& dst, std::uint8_t src)
 {
@@ -80,4 +80,4 @@ inline std::uint32_t load_little_endian_u32(const std::uint8_t* data)
             (static_cast<std::uint32_t>(data[3]) << 24);
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

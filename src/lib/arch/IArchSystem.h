@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -31,10 +31,10 @@ public:
     //! @name accessors
     //@{
 
-    /// Reads a BlueBridge setting from the system.
+    /// Reads a GlideKVM setting from the system.
     virtual std::string setting(const std::string& valueName) const = 0;
     //@}
 
-    /// Writes a BlueBridge setting from the system.
+    /// Writes a GlideKVM setting from the system.
     virtual void setting(const std::string& valueName, const std::string& valueString) const = 0;
 };

@@ -1,5 +1,5 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
+    GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 #pragma once
 
 #include "net/FingerprintData.h"
-#include "bluebridge/AppRole.h"
+#include "glidekvm/AppRole.h"
 #include <QDialog>
 #include <memory>
 
@@ -33,8 +33,8 @@ class FingerprintAcceptDialog : public QDialog
 public:
     explicit FingerprintAcceptDialog(QWidget* parent,
                                      AppRole type,
-                                     const bluebridge::FingerprintData& fingerprint_sha1,
-                                     const bluebridge::FingerprintData& fingerprint_sha256);
+                                     const glidekvm::FingerprintData& fingerprint_sha1,
+                                     const glidekvm::FingerprintData& fingerprint_sha256);
     ~FingerprintAcceptDialog() override;
 
 private:

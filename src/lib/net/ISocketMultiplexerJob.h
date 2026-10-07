@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -21,7 +21,7 @@
 #include "arch/IArchNetwork.h"
 #include <memory>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class ISocketMultiplexerJob;
 
@@ -91,4 +91,4 @@ public:
     //@}
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

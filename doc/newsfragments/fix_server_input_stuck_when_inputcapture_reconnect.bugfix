@@ -1,1 +1,1 @@
-Fix BlueBridge server inputs stuck when EIS reconnect to client after invalid EIS protocol.
+Fix GlideKVM server inputs stuck when EIS reconnect to client after invalid EIS protocol.

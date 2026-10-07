@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -28,7 +28,7 @@
 #include <ctime>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 // names of priorities
 static const char*        g_priority[] = {
@@ -181,7 +181,7 @@ Log::insert(ILogOutputter* outputter, bool alwaysAtHead)
     // don't show log unless user requests it, as some users find this
     // feature irritating (i.e. when they lose network connectivity).
     // in windows the log window can be displayed by selecting "show log"
-    // from the BlueBridge system tray icon.
+    // from the GlideKVM system tray icon.
     // if this causes problems for other architectures, then a different
     // work around should be attempted.
     //outputter->show(false);
@@ -261,4 +261,4 @@ Log::output(ELevel priority, const char* msg)
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

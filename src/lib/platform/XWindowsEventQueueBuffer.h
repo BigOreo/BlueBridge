@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  *
@@ -28,7 +28,7 @@
 #include <mutex>
 #include <vector>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Event queue buffer for X11
 class XWindowsEventQueueBuffer : public IEventQueueBuffer {
@@ -64,4 +64,4 @@ private:
     IEventQueue* m_events;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=GlideKVM
+Comment=Keyboard and mouse sharing solution
+Exec=glidekvm
+Icon=io.github.bigoreo.glidekvm
+Terminal=false
+Categories=Network
+Keywords=keyboard;mouse;sharing;network;share;

@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -40,7 +40,7 @@
 
 #define ARCH_NETWORK ArchNetworkWinsock
 
-namespace bluebridge {
+namespace glidekvm {
 
 class ArchSocketImpl {
 public:
@@ -120,4 +120,4 @@ private:
     EventList m_unblockEvents;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

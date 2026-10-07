@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include <Carbon/Carbon.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 OSXUchrKeyResource::OSXUchrKeyResource(const void* resource, std::uint32_t keyboardType) :
     m_m(nullptr),
@@ -193,7 +193,7 @@ bool OSXUchrKeyResource::getDeadKey(KeySequence& keys, std::uint16_t index) cons
 
     // convert keys to their dead counterparts
     for (auto i = keys.begin(); i != keys.end(); ++i) {
-        *i = bluebridge::KeyMap::getDeadKey(*i);
+        *i = glidekvm::KeyMap::getDeadKey(*i);
     }
 
     return true;
@@ -286,4 +286,4 @@ OSXUchrKeyResource::addSequence(
     return true;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

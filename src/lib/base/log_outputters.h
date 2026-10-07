@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -27,7 +27,7 @@
 #include <fstream>
 #include <string>
 
-namespace bluebridge {
+namespace glidekvm {
 
 //! Stop traversing log chain outputter
 /*!
@@ -173,4 +173,4 @@ public:
     bool write(ELevel level, const char* message) override;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

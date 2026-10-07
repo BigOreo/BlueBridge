@@ -1,8 +1,8 @@
 Creating a release
 ==================
 
-This document is documentation intended for maintainers of BlueBridge.
-It documents the release process of BlueBridge.
+This document is documentation intended for maintainers of GlideKVM.
+It documents the release process of GlideKVM.
 
 Step 1: Setup environment variables
 -----------------------------------
@@ -35,12 +35,12 @@ Pull the merge commit created on the `master` branch during the step 2.
 Edit the following files and update the version numbers:
 
  - `cmake/Version.cmake`
- - `doc/bluebridge-client.1`
- - `doc/bluebridge-server.1`
+ - `doc/glidekvm-client.1`
+ - `doc/glidekvm-server.1`
  - `.github/ISSUE_TEMPLATE/bug_report.yml`
  - `dist/debian/changelog`
 
-Commit to the release branch with the following message `BlueBridge x.y.z`.
+Commit to the release branch with the following message `GlideKVM x.y.z`.
 
 Create a tag:
 
@@ -53,7 +53,7 @@ Push the commit:
 Step 5: Draft a new release on Github
 -------------------------------------
 
-Go to https://github.com/BigOreo/BlueBridge/releases and draft a new release.
+Go to https://github.com/BigOreo/GlideKVM/releases and draft a new release.
 
 Use git tag as the title of the release: `vX.Y.Z`.
 

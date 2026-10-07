@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -20,9 +20,9 @@
 #include "platform/PortalRemoteDesktop.h"
 #include "platform/PortalInputCapture.h"
 #include "platform/EiKeyState.h"
-#include "bluebridge/Clipboard.h"
-#include "bluebridge/KeyMap.h"
-#include "bluebridge/XScreen.h"
+#include "glidekvm/Clipboard.h"
+#include "glidekvm/KeyMap.h"
+#include "glidekvm/XScreen.h"
 #include "arch/XArch.h"
 #include "arch/Arch.h"
 #include "base/Log.h"
@@ -40,7 +40,7 @@ struct ScrollRemainder {
     double x, y; // scroll remainder in pixels
 };
 
-namespace bluebridge {
+namespace glidekvm {
 
 EiScreen::EiScreen(bool is_primary, IEventQueue* events, bool use_portal) :
     is_primary_(is_primary),
@@ -128,7 +128,7 @@ void EiScreen::init_ei()
     ei_set_user_data(ei_, this);
     ei_log_set_priority(ei_, EI_LOG_PRIORITY_DEBUG);
     ei_log_set_handler(ei_, cb_handle_ei_log_event);
-    ei_configure_name(ei_, "BlueBridge client");
+    ei_configure_name(ei_, "GlideKVM client");
 
     // install the platform event queue
     events_->set_buffer(nullptr);
@@ -299,7 +299,7 @@ void EiScreen::fakeMouseWheel(int32_t xDelta, int32_t yDelta) const
     if (!ei_pointer_)
         return;
 
-    // libEI and BlueBridge seem to use opposite directions, so we have
+    // libEI and GlideKVM seem to use opposite directions, so we have
     // to send EI the opposite of the value received if we want to remain
     // compatible with other platforms (including X11).
     ei_device_scroll_discrete(ei_pointer_, -xDelta, -yDelta);
@@ -644,7 +644,7 @@ void EiScreen::on_pointer_scroll_event(ei_event* event)
     assert(!std::isnan(x) && !std::isinf(x));
     assert(!std::isnan(y) && !std::isinf(y));
 
-    // libEI and BlueBridge seem to use opposite directions, so we have
+    // libEI and GlideKVM seem to use opposite directions, so we have
     // to send the opposite of the value reported by EI if we want to
     // remain compatible with other platforms (including X11).
     if (x != 0 || y != 0)
@@ -658,7 +658,7 @@ void EiScreen::on_pointer_scroll_event(ei_event* event)
 
 void EiScreen::on_pointer_scroll_discrete_event(ei_event* event)
 {
-    // both libei and bluebridge use multiples of 120 to represent
+    // both libei and glidekvm use multiples of 120 to represent
     // one scroll wheel click event so we can just forward things
     // as-is.
 
@@ -669,7 +669,7 @@ void EiScreen::on_pointer_scroll_discrete_event(ei_event* event)
 
     LOG_DEBUG1("event: Scroll discrete (%d, %d)", dx, dy);
 
-    // libEI and BlueBridge seem to use opposite directions, so we have
+    // libEI and GlideKVM seem to use opposite directions, so we have
     // to send the opposite of the value reported by EI if we want to
     // remain compatible with other platforms (including X11).
     send_event(EventType::PRIMARY_SCREEN_WHEEL,
@@ -786,7 +786,7 @@ void EiScreen::handle_system_event(const Event& sysevent)
                 // so by the time we get here our EiScreen should be in a neutral state.
                 //
                 // We must release the xdg-portal InputCapture in case it is still active
-                // so that the cursor is usable and not stuck on the BlueBridge server.
+                // so that the cursor is usable and not stuck on the GlideKVM server.
                 LOG_WARN("disconnected from eis, will afterwards commence attempt to reconnect");
                 if (is_primary_) {
                     LOG_DEBUG("re-allocating portal input capture connection and releasing active captures");
@@ -902,4 +902,4 @@ std::uint32_t EiScreen::HotKeySet::find_by_mask(std::uint32_t mask) const
     return 0;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

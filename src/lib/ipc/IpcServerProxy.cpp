@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -20,13 +20,13 @@
 
 #include "ipc/IpcMessage.h"
 #include "ipc/Ipc.h"
-#include "bluebridge/ProtocolUtil.h"
+#include "glidekvm/ProtocolUtil.h"
 #include "io/IStream.h"
 #include "base/Log.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
-IpcServerProxy::IpcServerProxy(bluebridge::IStream& stream, IEventQueue* events) :
+IpcServerProxy::IpcServerProxy(glidekvm::IStream& stream, IEventQueue* events) :
     m_stream(stream),
     m_events(events)
 {
@@ -111,4 +111,4 @@ IpcServerProxy::disconnect()
     m_stream.close();
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

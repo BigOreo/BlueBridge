@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
@@ -17,7 +17,7 @@
  */
 
 // uncomment to debug this end of IPC chatter
-//#define BLUEBRIDGE_IPC_VERBOSE
+//#define GLIDEKVM_IPC_VERBOSE
 
 #include "IpcReader.h"
 #include <QTcpSocket>
@@ -25,10 +25,10 @@
 #include <QMutex>
 #include <QByteArray>
 
-#ifdef BLUEBRIDGE_IPC_VERBOSE
+#ifdef GLIDEKVM_IPC_VERBOSE
 #include <iostream>
 #define IPC_LOG(x) (x)
-#else // not defined BLUEBRIDGE_IPC_VERBOSE
+#else // not defined GLIDEKVM_IPC_VERBOSE
 #define IPC_LOG(x)
 #endif
 

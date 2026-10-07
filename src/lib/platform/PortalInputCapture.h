@@ -1,4 +1,4 @@
-/*  BlueBridge -- mouse and keyboard sharing utility
+/*  GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #include <libportal/portal.h>
 #include <libportal/inputcapture.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class PortalInputCapture {
 public:
@@ -100,6 +100,6 @@ private:
     std::vector<XdpInputCapturePointerBarrier*> barriers_;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm
 
 #endif // HAVE_LIBPORTAL_INPUTCAPTURE

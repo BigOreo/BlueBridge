@@ -1,5 +1,5 @@
 /*
-    BlueBridge -- mouse and keyboard sharing utility
+    GlideKVM -- mouse and keyboard sharing utility
     Copyright (C) InputLeap contributors
 
     This package is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include <chrono>
 #include <thread>
 
-namespace bluebridge {
+namespace glidekvm {
 
 void this_thread_sleep(double timeout_seconds)
 {
@@ -40,4 +40,4 @@ double current_time_seconds()
     return us_since_epoch / 1000000.0;
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

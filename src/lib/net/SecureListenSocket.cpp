@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #include "common/DataDirectories.h"
 #include "base/String.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 SecureListenSocket::SecureListenSocket(IEventQueue* events, SocketMultiplexer* socketMultiplexer,
                                        IArchNetwork::EAddressFamily family,
@@ -45,7 +45,7 @@ std::unique_ptr<IDataSocket> SecureListenSocket::accept()
         socket->initSsl(true);
         setListeningJob();
 
-        bool loaded = socket->load_certificates(bluebridge::DataDirectories::ssl_certificate_path());
+        bool loaded = socket->load_certificates(glidekvm::DataDirectories::ssl_certificate_path());
         if (!loaded) {
             return nullptr;
         }
@@ -68,4 +68,4 @@ std::unique_ptr<IDataSocket> SecureListenSocket::accept()
     }
 }
 
-} // namespace bluebridge
+} // namespace glidekvm

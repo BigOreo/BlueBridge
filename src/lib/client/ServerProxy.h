@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  *
@@ -18,14 +18,14 @@
 
 #pragma once
 
-#include "bluebridge/clipboard_types.h"
-#include "bluebridge/key_types.h"
-#include "bluebridge/Fwd.h"
+#include "glidekvm/clipboard_types.h"
+#include "glidekvm/key_types.h"
+#include "glidekvm/Fwd.h"
 #include "base/Fwd.h"
 #include "base/Event.h"
 #include "base/EventTarget.h"
 
-namespace bluebridge {
+namespace glidekvm {
 
 class Client;
 class ClientInfo;
@@ -42,7 +42,7 @@ public:
     Process messages from the server on \p stream and forward to
     \p client.
     */
-    ServerProxy(Client* client, bluebridge::IStream* stream, IEventQueue* events);
+    ServerProxy(Client* client, glidekvm::IStream* stream, IEventQueue* events);
     ~ServerProxy();
 
     //! @name manipulators
@@ -60,7 +60,7 @@ public:
     // sending dragging information to server
     void sendDragInfo(std::uint32_t fileCount, const char* info, size_t size);
 
-#ifdef BLUEBRIDGE_TEST_ENV
+#ifdef GLIDEKVM_TEST_ENV
     void handleDataForTest() { handleData(Event(), nullptr); }
 #endif
 
@@ -112,7 +112,7 @@ private:
     typedef EResult (ServerProxy::*MessageParser)(const std::uint8_t*);
 
     Client* m_client;
-    bluebridge::IStream* m_stream;
+    glidekvm::IStream* m_stream;
 
     std::uint32_t m_seqNum;
 
@@ -132,4 +132,4 @@ private:
     IEventQueue* m_events;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm

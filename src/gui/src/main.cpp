@@ -1,5 +1,5 @@
 /*
- * BlueBridge -- mouse and keyboard sharing utility
+ * GlideKVM -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  *
@@ -19,7 +19,7 @@
 #define TRAY_RETRY_COUNT 5
 #define TRAY_RETRY_WAIT 2000
 
-#include "QBlueBridgeApplication.h"
+#include "QGlideKVMApplication.h"
 #include "MainWindow.h"
 #include "AppConfig.h"
 #include "SetupWizard.h"
@@ -72,8 +72,8 @@ int main(int argc, char* argv[])
         // We're running on X11, all good.
         // Continue running.
     } else if (platformType == "wayland") {
-        QMessageBox::information(nullptr, "BlueBridge",
-                                 "You are using Wayland. BlueBridge supports Wayland via `libei` "
+        QMessageBox::information(nullptr, "GlideKVM",
+                                 "You are using Wayland. GlideKVM supports Wayland via `libei` "
                                  "but not all desktop environment/window managers support our "
                                  "implementation at this time. Therefore, your mileage may vary.");
     }
@@ -83,22 +83,22 @@ int main(int argc, char* argv[])
     /* Workaround for QTBUG-40332 - "High ping when QNetworkAccessManager is instantiated" */
     ::setenv ("QT_BEARER_POLL_TIMEOUT", "-1", 1);
 #endif
-    QCoreApplication::setOrganizationName("BlueBridge");
+    QCoreApplication::setOrganizationName("GlideKVM");
 	QCoreApplication::setOrganizationDomain("github.com");
-    QCoreApplication::setApplicationName("BlueBridge");
+    QCoreApplication::setApplicationName("GlideKVM");
 
-    QBlueBridgeApplication app(argc, argv);
-    bluebridge::theme::apply(app);
+    QGlideKVMApplication app(argc, argv);
+    glidekvm::theme::apply(app);
 
     // every window, the setup wizard and dialogs included, shows the app icon
-    QIcon app_icon(QStringLiteral(":/res/icons/256x256/bluebridge.png"));
+    QIcon app_icon(QStringLiteral(":/res/icons/256x256/glidekvm.png"));
     for (int size : {16, 24, 32, 48, 64, 128}) {
-        app_icon.addFile(QStringLiteral(":/res/icons/app/bluebridge-%1.png").arg(size), QSize(size, size));
+        app_icon.addFile(QStringLiteral(":/res/icons/app/glidekvm-%1.png").arg(size), QSize(size, size));
     }
     app.setWindowIcon(app_icon);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    app.setDesktopFileName(QStringLiteral("io.github.bigoreo.bluebridge"));
+    app.setDesktopFileName(QStringLiteral("io.github.bigoreo.glidekvm"));
 #endif
 
 #if defined(Q_OS_MAC)
@@ -107,10 +107,10 @@ int main(int argc, char* argv[])
         // Unfortunately, there's no user-friendly way to allow assistive access
         // to applications that are not in default paths (/Applications),
         // especially if an identically named application already exists in
-        // /Applications). Thus we require BlueBridge to reside in the /Applications
+        // /Applications). Thus we require GlideKVM to reside in the /Applications
         // folder
-        QMessageBox::information(nullptr, "BlueBridge",
-                                 "Please drag BlueBridge to the Applications folder, "
+        QMessageBox::information(nullptr, "GlideKVM",
+                                 "Please drag GlideKVM to the Applications folder, "
                                  "and open it from there.");
 		return 1;
 	}
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 	{
 		mainWindow.open();
 	}
-    QObject::connect(&mainWindow, &MainWindow::requestLanguageChange, &app, &QBlueBridgeApplication::switchTranslator);
+    QObject::connect(&mainWindow, &MainWindow::requestLanguageChange, &app, &QGlideKVMApplication::switchTranslator);
 	return app.exec();
 }
 
@@ -189,7 +189,7 @@ bool checkMacAssistiveDevices()
 	// new in mavericks, applications are trusted individually
 	// with use of the accessibility api. this call will show a
 	// prompt which can show the security/privacy/accessibility
-    // tab, with a list of allowed applications. BlueBridge should
+    // tab, with a list of allowed applications. GlideKVM should
 	// show up there automatically, but will be unchecked.
 
 	if (AXIsProcessTrusted()) {
@@ -210,10 +210,10 @@ bool checkMacAssistiveDevices()
 	bool result = AXAPIEnabled();
 	if (!result) {
 		QMessageBox::information(
-            nullptr, "BlueBridge",
+            nullptr, "GlideKVM",
 			"Please enable access to assistive devices "
 			"System Preferences -> Security & Privacy -> "
-            "Privacy -> Accessibility, then re-open BlueBridge.");
+            "Privacy -> Accessibility, then re-open GlideKVM.");
 	}
 	return result;
 

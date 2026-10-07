@@ -1,0 +1,1 @@
+The app, installer, Windows file details, Mac and Linux app names and the policy templates now say GlideKVM, and every window shows the GlideKVM icon. Settings, the service and policy registry keys keep their original names, so upgrades keep working.

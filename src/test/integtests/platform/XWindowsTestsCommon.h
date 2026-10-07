@@ -5,7 +5,7 @@
 
 #include <X11/Xlib.h>
 
-namespace bluebridge {
+namespace glidekvm {
 
 class XDisplayOpenUtil {
 public:
@@ -48,4 +48,4 @@ private:
     Display* display_ = nullptr;
 };
 
-} // namespace bluebridge
+} // namespace glidekvm
