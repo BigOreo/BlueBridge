@@ -851,7 +851,8 @@ QString MainWindow::hostname() const
 
 QString MainWindow::address()
 {
-    if (connection_mode() == ConnectionMode::Bluetooth) {
+    // Bluetooth alone when the organization turned the network off
+    if (!m_policy.network_allowed() && server_accepts_bluetooth()) {
         return "[bt]:" + QString::number(appConfig().port());
     }
 
@@ -899,6 +900,9 @@ bool MainWindow::serverArgs(QStringList& args, QString& app)
     configFilename = QString("\"%1\"").arg(configFilename);
 #endif
     args << "-c" << configFilename << "--address" << address();
+    if (m_policy.network_allowed() && server_accepts_bluetooth()) {
+        args << "--bluetooth";
+    }
 
     return true;
 }
@@ -1440,18 +1444,14 @@ void MainWindow::windowStateChanged()
 
 void MainWindow::setupConnectionModeUi()
 {
-    // connection mode toggle at the top of the window
-    m_pConnectionModeRow = new QWidget(this);
-    auto* modeLayout = new QHBoxLayout(m_pConnectionModeRow);
+    // the client chooses how to connect; the server accepts both at once
+    m_pConnectionModeField = new QWidget(ui_->m_pGroupClient);
+    auto* modeLayout = new QHBoxLayout(m_pConnectionModeField);
     modeLayout->setContentsMargins(0, 0, 0, 0);
     modeLayout->setSpacing(0);
 
-    auto* modeLabel = new QLabel(tr("Connect over:"), m_pConnectionModeRow);
-    modeLayout->addWidget(modeLabel);
-    modeLayout->addSpacing(8);
-
     auto makeModeButton = [this](const QString& text, const QString& toolTip, bool bluetooth) {
-        auto* button = new QToolButton(m_pConnectionModeRow);
+        auto* button = new QToolButton(m_pConnectionModeField);
         button->setText(text);
         button->setToolTip(toolTip);
         button->setCheckable(true);
@@ -1469,12 +1469,14 @@ void MainWindow::setupConnectionModeUi()
     m_pButtonModeNetwork->setChecked(true);
 
     // make the two buttons look like one segmented control
-    m_pConnectionModeRow->setStyleSheet(
+    m_pConnectionModeField->setStyleSheet(
         "QToolButton { padding: 5px 14px; border: 1px solid palette(mid);"
         "  background: palette(button); }"
         "QToolButton:hover:!checked { background: palette(midlight); }"
         "QToolButton:checked { background: palette(highlight); color: palette(highlighted-text);"
         "  border-color: palette(highlight); }"
+        "QToolButton:checked:disabled { background: palette(midlight); color: palette(dark);"
+        "  border-color: palette(mid); }"
         "QToolButton#modeNetwork { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }"
         "QToolButton#modeBluetooth { border-left: none; border-top-right-radius: 6px;"
         "  border-bottom-right-radius: 6px; }");
@@ -1488,7 +1490,14 @@ void MainWindow::setupConnectionModeUi()
     modeLayout->addWidget(m_pButtonModeBluetooth);
     modeLayout->addStretch();
 
-    // tells the user why some choices are locked
+    m_pLabelConnectionMode = new QLabel(tr("Connect over:"), ui_->m_pGroupClient);
+    m_pLabelConnectionMode->setBuddy(m_pButtonModeNetwork);
+    ui_->formLayout_3->insertRow(0, m_pLabelConnectionMode, m_pConnectionModeField);
+
+    // top of the window: tells the user why some choices are locked
+    m_pConnectionModeRow = new QWidget(this);
+    auto* managedLayout = new QHBoxLayout(m_pConnectionModeRow);
+    managedLayout->setContentsMargins(0, 0, 0, 0);
     m_pLabelManaged = new QLabel(tr("Managed by your organization"), m_pConnectionModeRow);
     QFont managedFont = m_pLabelManaged->font();
     managedFont.setItalic(true);
@@ -1514,8 +1523,8 @@ void MainWindow::setupConnectionModeUi()
     }
     m_pLabelManaged->setToolTip(tr("Your organization manages some settings on this computer:") +
                                 "\n" + managed.join("\n"));
-    m_pLabelManaged->setVisible(m_policy.any());
-    modeLayout->addWidget(m_pLabelManaged);
+    managedLayout->addWidget(m_pLabelManaged);
+    managedLayout->addStretch();
 
     const QString lockedByPolicy = tr("Turned off by your organization");
     if (!m_policy.network_allowed()) {
@@ -1562,9 +1571,10 @@ void MainWindow::setupConnectionModeUi()
     ui_->formLayout->addRow(m_pLabelBluetoothAddressTitle, m_pBluetoothAddressField);
 
     m_pLabelServerBluetoothHint = new QLabel(
-        tr("Pair the two computers in <a href=\"ms-settings:bluetooth\">Bluetooth settings</a>, "
-           "then choose this computer on the other one. If it isn't listed there, enter this "
-           "address instead."), ui_->m_pGroupServer);
+        tr("Other computers can connect over the network or Bluetooth. For Bluetooth, pair "
+           "them in <a href=\"ms-settings:bluetooth\">Bluetooth settings</a>, then choose this "
+           "computer on the other one. If it isn't listed there, enter this address instead."),
+        ui_->m_pGroupServer);
     m_pLabelServerBluetoothHint->setWordWrap(true);
     m_pLabelServerBluetoothHint->setOpenExternalLinks(true);
     ui_->formLayout->addRow(m_pLabelServerBluetoothHint);
@@ -1619,12 +1629,10 @@ void MainWindow::setupConnectionModeUi()
         }
     });
 
-    // the row also carries the "managed" note on systems without Bluetooth
     const bool bluetoothSupported = inputleap::is_bluetooth_supported();
-    modeLabel->setVisible(bluetoothSupported);
-    m_pButtonModeNetwork->setVisible(bluetoothSupported);
-    m_pButtonModeBluetooth->setVisible(bluetoothSupported);
-    m_pConnectionModeRow->setVisible(bluetoothSupported || m_policy.any());
+    m_pLabelConnectionMode->setVisible(bluetoothSupported);
+    m_pConnectionModeField->setVisible(bluetoothSupported);
+    m_pConnectionModeRow->setVisible(m_policy.any());
 }
 
 void MainWindow::setConnectionMode(ConnectionMode mode)
@@ -1636,8 +1644,8 @@ void MainWindow::setConnectionMode(ConnectionMode mode)
     updateConnectionModeUi();
     saveSettings();
 
-    // the server and client must be restarted to switch transport
-    if (m_ExpectedRunningState == kStarted) {
+    // the client must be restarted to switch transport
+    if (m_ExpectedRunningState == kStarted && app_role() == AppRole::Client) {
         restart_cmd_app();
     }
 }
@@ -1646,12 +1654,17 @@ void MainWindow::updateConnectionModeUi()
 {
     bool bluetooth = m_ConnectionMode == ConnectionMode::Bluetooth;
 
-    // server
-    ui_->label_2->setVisible(!bluetooth);
-    ui_->m_pLabelIpAddresses->setVisible(!bluetooth);
-    m_pLabelBluetoothAddressTitle->setVisible(bluetooth);
-    m_pBluetoothAddressField->setVisible(bluetooth);
-    m_pLabelServerBluetoothHint->setVisible(bluetooth);
+    // server: shows every way the clients can reach it
+    const bool serverNetwork = m_policy.network_allowed();
+    const bool serverBluetooth = server_accepts_bluetooth();
+    ui_->label_2->setVisible(serverNetwork);
+    ui_->m_pLabelIpAddresses->setVisible(serverNetwork);
+    m_pLabelBluetoothAddressTitle->setVisible(serverBluetooth);
+    m_pBluetoothAddressField->setVisible(serverBluetooth);
+    m_pLabelServerBluetoothHint->setVisible(serverBluetooth);
+    if (serverBluetooth) {
+        updateLocalBluetoothAddress();
+    }
 
     // client
     ui_->m_pLabelServerName->setVisible(!bluetooth);
@@ -1665,9 +1678,13 @@ void MainWindow::updateConnectionModeUi()
     m_pLabelClientBluetoothHint->setVisible(bluetooth);
 
     if (bluetooth) {
-        updateLocalBluetoothAddress();
         refreshPairedBluetoothServers();
     }
+}
+
+bool MainWindow::server_accepts_bluetooth() const
+{
+    return inputleap::is_bluetooth_supported() && m_policy.bluetooth_allowed();
 }
 
 namespace {

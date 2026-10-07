@@ -67,4 +67,20 @@ TEST(ServerArgsParsingTests, parseServerArgs_configArg_setConfigFile)
     EXPECT_EQ("mock_configFile", serverArgs.m_configFile);
 }
 
+TEST(ServerArgsParsingTests, parseServerArgs_bluetoothArg_listenBluetooth)
+{
+    NiceMock<MockArgParser> argParser;
+    ON_CALL(argParser, parseGenericArgs(_, _, _)).WillByDefault(Invoke(server_stubParseGenericArgs));
+    ON_CALL(argParser, checkUnexpectedArgs()).WillByDefault(Invoke(server_stubCheckUnexpectedArgs));
+    ServerArgs serverArgs;
+    const int argc = 4;
+    const char* kBluetoothCmd[argc] = { "stub", "--address", ":24800", "--bluetooth" };
+
+    EXPECT_FALSE(serverArgs.listen_bluetooth);
+    argParser.parseServerArgs(serverArgs, argc, kBluetoothCmd);
+
+    EXPECT_TRUE(serverArgs.listen_bluetooth);
+    EXPECT_EQ(":24800", serverArgs.network_address);
+}
+
 } // namespace inputleap

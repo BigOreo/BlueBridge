@@ -143,6 +143,9 @@ ArgParser::parseServerArgs(ServerArgs& args, int argc, const char* const* argv)
             }
             else if (a.shift("--disable-client-cert-checking")) {
                 args.check_client_certificates = false;
+            }
+            else if (a.shift("--bluetooth")) {
+                args.listen_bluetooth = true;
             } else {
                 throw XArgvParserError("unrecognized option `%s'", a.peek());
             }

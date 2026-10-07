@@ -180,6 +180,7 @@ public slots:
         void selectBluetoothServer(int index);
         void applyBluetoothServerStatus(int generation, const QMap<QString, bool>& running);
         ConnectionMode connection_mode() const { return m_ConnectionMode; }
+        bool server_accepts_bluetooth() const;
 
     private:
         std::unique_ptr<Ui::MainWindow> ui_;
@@ -212,6 +213,8 @@ public slots:
         inputleap::MachinePolicy m_policy;
         QLabel* m_pLabelManaged = nullptr;
         QWidget* m_pConnectionModeRow = nullptr;
+        QLabel* m_pLabelConnectionMode = nullptr;
+        QWidget* m_pConnectionModeField = nullptr;
         QToolButton* m_pButtonModeNetwork = nullptr;
         QToolButton* m_pButtonModeBluetooth = nullptr;
         QLabel* m_pLabelBluetoothAddressTitle = nullptr;

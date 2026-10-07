@@ -32,6 +32,8 @@ public:
     Config* m_config;
     std::string m_screenChangeScript;
     bool check_client_certificates = true;
+    // also accept clients over Bluetooth, next to the network address
+    bool listen_bluetooth = false;
 };
 
 } // namespace inputleap

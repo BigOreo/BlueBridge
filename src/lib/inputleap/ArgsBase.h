@@ -67,8 +67,10 @@ bool is_bluetooth_host(const std::string& host);
 
 // Reads this computer's policy into args.m_policy and applies what it
 // enforces to the arguments (encryption, file transfer). host is the server
-// or listen address' host, empty for all network interfaces. Returns false,
-// after logging why, when the policy does not allow connecting that way.
-bool apply_machine_policy(ArgsBase& args, const std::string& host);
+// or listen address' host, empty for all network interfaces. also_bluetooth
+// is set for a server that also accepts clients over Bluetooth. Returns false,
+// after logging why, when the policy allows none of the ways asked for.
+bool apply_machine_policy(ArgsBase& args, const std::string& host,
+                          bool also_bluetooth = false);
 
 } // namespace inputleap
