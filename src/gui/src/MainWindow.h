@@ -301,6 +301,8 @@ public slots:
         QLabel* m_pClientTitle = nullptr;
         QVBoxLayout* m_pClientButtonSlot = nullptr;
         QStringList m_ConnectedClients;
+        // computers the server turned away because they are not in the layout
+        QStringList m_UnplacedClients;
 
 private slots:
     void on_m_pCheckBoxAutoConfig_toggled(bool checked);

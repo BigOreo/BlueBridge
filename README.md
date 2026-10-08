@@ -32,13 +32,16 @@ for example when a VPN on your work laptop blocks local network access.
 ## Getting started
 
 1. Install GlideKVM on each computer.
-2. On the computer with the keyboard and mouse, choose **Server**.
-3. Click **Configure server** and drag a screen onto the grid for each other
-   computer, next to your own screen on the side where it sits on your desk.
-   Give each one the exact screen name (case-sensitive) shown in that
-   computer's GlideKVM window.
-4. On the other computers, choose **Client** and enter the server's IP address.
-5. Click **Start sharing** on the server and **Connect** on the others.
+2. On the computer with the keyboard and mouse, choose **Share this keyboard &
+   mouse**.
+3. Open **Arrange screens** and click **Add a computer...** for each other
+   computer, using the exact name (case-sensitive) shown next to "This
+   computer" in its GlideKVM window. Drag each one to the side where it sits
+   on your desk. A computer that tries to connect before it is placed shows up
+   under **Waiting to be placed**. Click **Save**.
+4. On the other computers, choose **Use another computer's** and enter the
+   main computer's IP address, or pick it over Bluetooth.
+5. Click **Start sharing** on the main computer and **Connect** on the others.
 
 Once both show that GlideKVM is running, move the mouse off the edge of your
 screen toward the other computer.

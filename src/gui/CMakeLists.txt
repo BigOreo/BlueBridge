@@ -33,6 +33,7 @@ set(GUI_SOURCE_FILES
     src/BluetoothAdapter.cpp
     src/CommandProcess.cpp
     src/DataDownloader.cpp
+    src/DeskView.cpp
     src/FingerprintAcceptDialog.cpp
     src/HotkeyDialog.cpp
     src/IpcClient.cpp
@@ -44,20 +45,16 @@ set(GUI_SOURCE_FILES
     src/MainWindow.cpp
     src/MainWindowHome.cpp
     src/MainWindowPages.cpp
-    src/NewScreenWidget.cpp
     src/QGlideKVMApplication.cpp
     src/QUtility.cpp
     src/Screen.cpp
     src/ScreenSettingsDialog.cpp
-    src/ScreenSetupModel.cpp
-    src/ScreenSetupView.cpp
     src/ServerConfig.cpp
     src/ServerConfigDialog.cpp
     src/SettingsDialog.cpp
     src/SetupWizard.cpp
     src/SslCertificate.cpp
     src/Theme.cpp
-    src/TrashScreenWidget.cpp
     src/ZeroconfBrowser.cpp
     src/ZeroconfRegister.cpp
     src/ZeroconfServer.cpp
@@ -75,6 +72,7 @@ set(GUI_HEADER_FILES
     src/BaseConfig.h
     src/CommandProcess.h
     src/DataDownloader.h
+    src/DeskView.h
     src/ElevateMode.h
     src/HotkeyDialog.h
     src/IpcClient.h
@@ -83,21 +81,17 @@ set(GUI_HEADER_FILES
     src/KeySequenceWidget.h
     src/LogWindow.h
     src/MainWindow.h
-    src/NewScreenWidget.h
     src/ProcessorArch.h
     src/QGlideKVMApplication.h
     src/QUtility.h
     src/Screen.h
     src/ScreenSettingsDialog.h
-    src/ScreenSetupModel.h
-    src/ScreenSetupView.h
     src/Theme.h
     src/ServerConfigDialog.h
     src/ServerConfig.h
     src/SettingsDialog.h
     src/SetupWizard.h
     src/SslCertificate.h
-    src/TrashScreenWidget.h
     src/ZeroconfBrowser.h
     src/ZeroconfRecord.h
     src/ZeroconfRegister.h

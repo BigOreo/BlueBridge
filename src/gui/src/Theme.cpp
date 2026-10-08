@@ -171,6 +171,27 @@ QPushButton[segment="true"] {
 QPushButton[segment="true"]:checked { background: #FFFFFF; color: #0F1B2D; font-weight: 600; }
 QPushButton[segment="true"]:disabled { color: #9AA8BB; }
 QFrame[card="true"] { background: #FFFFFF; border: 1px solid #DCE3EC; border-radius: 16px; }
+QTabWidget::pane { border: 0; border-top: 1px solid #DCE3EC; top: -1px; }
+QTabWidget::tab-bar { left: 0; }
+QTabBar::tab {
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 13px 14px;
+    color: #5B6B82;
+    font-weight: 500;
+}
+QTabBar::tab:hover:!selected { color: #0F1B2D; }
+QTabBar::tab:selected { color: #0F1B2D; font-weight: 600; border-bottom-color: #1F5EFF; }
+QPushButton[chip="true"] {
+    background: #FFFFFF;
+    border: 1px dashed #9AA8BB;
+    border-radius: 16px;
+    padding: 6px 14px;
+    color: #0F1B2D;
+    font-weight: 500;
+}
+QPushButton[chip="true"]:hover { border-color: #1F5EFF; background: #E8EFFF; }
 QFrame[tile="true"] { background: #F4F6F9; border: 0; border-radius: 12px; }
 QLabel[role="cardTitle"] { font-family: "Sora"; font-weight: 600; font-size: 16px; color: #0F1B2D; }
 QLabel[role="pageTitle"] { font-family: "Sora"; font-weight: 700; font-size: 20px; color: #0F1B2D; }

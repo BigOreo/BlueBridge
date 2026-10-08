@@ -250,7 +250,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     });
 
     // room for the sidebar and two cards side by side
-    resize(1000, 720);
+    resize(1080, 720);
 }
 
 MainWindow::~MainWindow()
@@ -1343,6 +1343,7 @@ void MainWindow::showConfigureServer(const QString& message)
 {
     auto* dialog = new ServerConfigDialog(this, serverConfig(), appConfig().screenName());
     dialog->message(message);
+    dialog->setComputers(m_ConnectedClients, m_UnplacedClients);
     connect(dialog, &QDialog::finished, this, [this, dialog](int) { closePanel(dialog); });
     showPanel(tr("Arrange screens"), dialog, m_pNavArrange);
 }

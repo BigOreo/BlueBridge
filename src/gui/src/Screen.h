@@ -35,8 +35,6 @@ class Screen : public BaseConfig
     friend QDataStream& operator<<(QDataStream& outStream, const Screen& screen);
     friend QDataStream& operator>>(QDataStream& inStream, Screen& screen);
     friend class ScreenSettingsDialog;
-    friend class ScreenSetupModel;
-    friend class ScreenSetupView;
 
     public:
         Screen();
