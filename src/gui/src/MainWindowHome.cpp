@@ -20,6 +20,7 @@
 // keep their logic; this file only arranges them into the GlideKVM layout.
 
 #include "MainWindow.h"
+#include "DeskView.h"
 #include "ui_MainWindow.h"
 
 #include "AppConfig.h"
@@ -726,7 +727,8 @@ void MainWindow::updateHome()
             parts << side;
         }
         const QString detail = parts.join(QStringLiteral("  \u00b7  "));
-        auto* item = new QListWidgetItem(QIcon(":/res/icons/48x48/computer.png"),
+        const DeviceKind kind = device_kind_from_key(serverConfig().deviceKind(name), guess_device_kind(name));
+        auto* item = new QListWidgetItem(QIcon(DeskView::icon(false, kind, 22, QColor(glidekvm::theme::kBlue))),
                                          name + "\n" + detail);
         m_pListConnected->addItem(item);
     }

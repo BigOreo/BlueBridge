@@ -23,7 +23,16 @@
 #include <QStringList>
 #include <QWidget>
 
+#include <functional>
 #include <vector>
+
+// What a computer on the desk is, for its icon. The main computer only learns
+// a name, so this is guessed from the name and can be changed by the person.
+enum class DeviceKind { Desktop, Laptop, Tablet, Phone };
+
+DeviceKind guess_device_kind(const QString& name);
+QString device_kind_key(DeviceKind kind);
+DeviceKind device_kind_from_key(const QString& key, DeviceKind fallback);
 
 // The desk on the Arrange screens page: each computer is a tile on a grid,
 // dragged to where it sits. Amber marks show where the mouse crosses.
@@ -39,9 +48,10 @@ public:
     void setScreens(std::vector<Screen>* screens, int columns, int rows);
     void setServerName(const QString& name) { m_ServerName = name; update(); }
     void setConnected(const QStringList& names) { m_Connected = names; update(); }
+    void setKindOf(std::function<DeviceKind(const QString&)> kindOf) { m_KindOf = std::move(kindOf); update(); }
 
-    // the pointer used for this computer and the monitor used for the others
-    static QPixmap icon(bool server, int size, const QColor& color);
+    // the pointer used for this computer, or a drawing of the kind of device
+    static QPixmap icon(bool server, DeviceKind kind, int size, const QColor& color);
 
     int selected() const { return m_Selected; }
     void setSelected(int index);
@@ -88,6 +98,7 @@ private:
     int m_Rows = 0;
     QString m_ServerName;
     QStringList m_Connected;
+    std::function<DeviceKind(const QString&)> m_KindOf;
     int m_Selected = -1;
 
     // the part of the grid on show: the computers plus one free place around them
@@ -118,7 +129,7 @@ class ComputerChip : public QPushButton
     Q_OBJECT
 
 public:
-    ComputerChip(const QString& name, QWidget* parent);
+    ComputerChip(const QString& name, DeviceKind kind, QWidget* parent);
     const QString& name() const { return m_Name; }
 
 protected:

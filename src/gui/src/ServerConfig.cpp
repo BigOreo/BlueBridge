@@ -121,6 +121,14 @@ void ServerConfig::saveSettings()
     settings().setValue("enableDragAndDrop", enableDragAndDrop());
     settings().setValue("clipboardSharing", clipboardSharing());
     settings().setValue("switchNeedsControl", switchNeedsControl());
+    settings().beginWriteArray("deviceKinds");
+    int kindIndex = 0;
+    for (auto it = m_DeviceKinds.constBegin(); it != m_DeviceKinds.constEnd(); ++it) {
+        settings().setArrayIndex(kindIndex++);
+        settings().setValue("name", it.key());
+        settings().setValue("kind", it.value());
+    }
+    settings().endArray();
     settings().setValue("clipboardSharingSize", (int)clipboardSharingSize());
 
     writeSettings<bool>(settings(), switchCorners(), "switchCorner");
@@ -168,6 +176,13 @@ void ServerConfig::loadSettings()
     setEnableDragAndDrop(settings().value("enableDragAndDrop", true).toBool());
     setClipboardSharing(settings().value("clipboardSharing", true).toBool());
     setSwitchNeedsControl(settings().value("switchNeedsControl", false).toBool());
+    m_DeviceKinds.clear();
+    const int kinds = settings().beginReadArray("deviceKinds");
+    for (int i = 0; i < kinds; ++i) {
+        settings().setArrayIndex(i);
+        m_DeviceKinds[settings().value("name").toString()] = settings().value("kind").toString();
+    }
+    settings().endArray();
     setClipboardSharingSize(settings().value("clipboardSharingSize",
         (int) ServerConfig::defaultClipboardSharingSize()).toULongLong());
 

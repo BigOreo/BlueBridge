@@ -305,22 +305,25 @@ void ServerConfigDialog::setComputers(const QStringList& connected, const QStrin
 
 void ServerConfigDialog::buildLayoutTab()
 {
-    // Undo, Cancel and Save sit next to the tabs
+    // Undo, Cancel and Save sit in a row above the tabs, where they have
+    // room at any text size
     auto* corner = new QWidget(this);
     auto* cornerLayout = new QHBoxLayout(corner);
-    cornerLayout->setContentsMargins(0, 0, 0, 6);
+    cornerLayout->setContentsMargins(0, 0, 0, 0);
     cornerLayout->setSpacing(8);
+    cornerLayout->addStretch();
     m_pButtonUndo = new QPushButton(tr("&Undo"), corner);
     m_pButtonUndo->setEnabled(false);
     connect(m_pButtonUndo, &QPushButton::clicked, this, [this]() { undo(); });
     cornerLayout->addWidget(m_pButtonUndo);
     layout()->removeWidget(ui_->m_pButtonBox);
     ui_->m_pButtonBox->setParent(corner);
+    ui_->m_pButtonBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     cornerLayout->addWidget(ui_->m_pButtonBox);
     for (QAbstractButton* button : ui_->m_pButtonBox->buttons()) {
         button->setIcon(QIcon());
     }
-    ui_->m_pTabWidget->setCornerWidget(corner, Qt::TopRightCorner);
+    static_cast<QBoxLayout*>(layout())->insertWidget(0, corner);
     connect(ui_->m_pTabWidget, &QTabWidget::currentChanged, this, [this]() { updateSidePanel(); });
 
     auto* tab = ui_->m_pTabScreens;
@@ -335,6 +338,7 @@ void ServerConfigDialog::buildLayoutTab()
                                          "The mouse crosses wherever two computers touch."), tab));
     m_pDesk = new DeskView(tab);
     m_pDesk->setServerName(m_ServerName);
+    m_pDesk->setKindOf([this](const QString& name) { return kindOf(name); });
     m_pDesk->setScreens(&serverConfig().screens(), serverConfig().numColumns(), serverConfig().numRows());
     deskColumn->addWidget(m_pDesk);
 
@@ -376,12 +380,13 @@ void ServerConfigDialog::buildLayoutTab()
     waitingRow->addWidget(m_pLabelWaitingHint, 1);
     deskColumn->addLayout(waitingRow);
     deskColumn->addStretch();
-    columns->addLayout(deskColumn, 1);
+    columns->addLayout(deskColumn, 3);
 
     // the selected computer
     auto* side = new QFrame(tab);
     side->setProperty("card", true);
-    side->setFixedWidth(240);
+    side->setMinimumWidth(250);
+    side->setMaximumWidth(320);
     auto* sideLayout = new QVBoxLayout(side);
     sideLayout->setContentsMargins(20, 20, 20, 20);
     m_pSideStack = new QStackedWidget(side);
@@ -411,6 +416,7 @@ void ServerConfigDialog::buildLayoutTab()
     words->setSpacing(2);
     m_pSideName = new QLabel(details);
     m_pSideName->setProperty("role", "cardTitle");
+    m_pSideName->setWordWrap(true);
     m_pSideStatus = muted_label(QString(), details);
     words->addWidget(m_pSideName);
     words->addWidget(m_pSideStatus);
@@ -418,7 +424,7 @@ void ServerConfigDialog::buildLayoutTab()
     detailsLayout->addLayout(header);
     detailsLayout->addSpacing(8);
 
-    auto* sitsLabel = strong_label(tr("Sits to the"), details);
+    auto* sitsLabel = strong_label(tr("Device location"), details);
     detailsLayout->addWidget(sitsLabel);
     m_pComboSide = new QComboBox(details);
     sitsLabel->setBuddy(m_pComboSide);
@@ -433,11 +439,39 @@ void ServerConfigDialog::buildLayoutTab()
     detailsLayout->addWidget(m_pLabelUnreachable);
     detailsLayout->addSpacing(8);
 
+    auto* kindLabel = strong_label(tr("Device type"), details);
+    detailsLayout->addWidget(kindLabel);
+    m_pComboKind = new QComboBox(details);
+    kindLabel->setBuddy(m_pComboKind);
+    m_pComboKind->addItem(DeskView::icon(false, DeviceKind::Desktop, 16, QColor(glidekvm::theme::kInk)), tr("Desktop"),
+                          device_kind_key(DeviceKind::Desktop));
+    m_pComboKind->addItem(DeskView::icon(false, DeviceKind::Laptop, 16, QColor(glidekvm::theme::kInk)), tr("Laptop"),
+                          device_kind_key(DeviceKind::Laptop));
+    m_pComboKind->addItem(DeskView::icon(false, DeviceKind::Tablet, 16, QColor(glidekvm::theme::kInk)), tr("Tablet"),
+                          device_kind_key(DeviceKind::Tablet));
+    m_pComboKind->addItem(DeskView::icon(false, DeviceKind::Phone, 16, QColor(glidekvm::theme::kInk)), tr("Phone"),
+                          device_kind_key(DeviceKind::Phone));
+    connect(m_pComboKind, QOverload<int>::of(&QComboBox::activated), this, [this](int row) {
+        const int index = m_pDesk->selected();
+        if (index < 0) {
+            return;
+        }
+        serverConfig().setDeviceKind(serverConfig().screens()[index].name(),
+                                     m_pComboKind->itemData(row).toString());
+        m_pDesk->refresh();
+        updateSidePanel();
+    });
+    detailsLayout->addWidget(m_pComboKind);
+    detailsLayout->addSpacing(8);
+
     m_pShortcutRow = new QWidget(details);
     auto* shortcutLayout = new QVBoxLayout(m_pShortcutRow);
     shortcutLayout->setContentsMargins(0, 0, 0, 0);
     shortcutLayout->setSpacing(8);
-    shortcutLayout->addWidget(strong_label(tr("Jump here with a shortcut"), m_pShortcutRow));
+    shortcutLayout->addWidget(strong_label(tr("Shortcut to move the mouse here"), m_pShortcutRow));
+    shortcutLayout->addWidget(muted_label(tr("Press these keys to send the mouse straight to this "
+                                             "device, without moving it across the edges."),
+                                          m_pShortcutRow));
     auto* shortcutButtons = new QHBoxLayout();
     shortcutButtons->setSpacing(8);
     m_pShortcut = new KeySequenceWidget(m_pShortcutRow);
@@ -513,6 +547,11 @@ void ServerConfigDialog::layoutChanged()
 {
     updateWaiting();
     updateSidePanel();
+}
+
+DeviceKind ServerConfigDialog::kindOf(const QString& name) const
+{
+    return device_kind_from_key(m_ServerConfig.deviceKind(name), guess_device_kind(name));
 }
 
 int ServerConfigDialog::serverIndex() const
@@ -761,7 +800,8 @@ void ServerConfigDialog::updateSidePanel()
 
     const QString name = screens[index].name();
     const bool server = index == serverIndex();
-    m_pSideIcon->setPixmap(DeskView::icon(server, 22, QColor(glidekvm::theme::kBlue)));
+    m_pSideIcon->setPixmap(DeskView::icon(server, kindOf(name), 22, QColor(glidekvm::theme::kBlue)));
+    m_pComboKind->setCurrentIndex(m_pComboKind->findData(device_kind_key(kindOf(name))));
     m_pSideName->setText(name);
     if (server) {
         m_pSideStatus->setText(tr("This computer"));
@@ -842,7 +882,7 @@ void ServerConfigDialog::updateWaiting()
         if (placed.contains(name)) {
             continue;
         }
-        auto* chip = new ComputerChip(name, ui_->m_pTabScreens);
+        auto* chip = new ComputerChip(name, kindOf(name), ui_->m_pTabScreens);
         connect(chip, &QPushButton::clicked, this, [this, name]() { placeNearServer(name); });
         m_pWaitingChips->addWidget(chip);
         ++shown;

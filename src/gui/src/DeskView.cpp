@@ -89,9 +89,92 @@ void draw_monitor(QPainter& painter, const QPointF& at, qreal size, const QColor
     painter.drawLine(at + QPointF(12, 15) * k, at + QPointF(12, 20) * k);
 }
 
+void draw_laptop(QPainter& painter, const QPointF& at, qreal size, const QColor& color)
+{
+    const qreal k = size / 24.0;
+    painter.setPen(QPen(color, 1.75 * k, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRoundedRect(QRectF(at + QPointF(5, 5) * k, QSizeF(14, 10) * k), 1.5 * k, 1.5 * k);
+    painter.drawLine(at + QPointF(2.5, 19) * k, at + QPointF(21.5, 19) * k);
+}
+
+void draw_tablet(QPainter& painter, const QPointF& at, qreal size, const QColor& color)
+{
+    const qreal k = size / 24.0;
+    painter.setPen(QPen(color, 1.75 * k, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRoundedRect(QRectF(at + QPointF(5, 3) * k, QSizeF(14, 18) * k), 2 * k, 2 * k);
+    painter.drawLine(at + QPointF(11, 18) * k, at + QPointF(13, 18) * k);
+}
+
+void draw_phone(QPainter& painter, const QPointF& at, qreal size, const QColor& color)
+{
+    const qreal k = size / 24.0;
+    painter.setPen(QPen(color, 1.75 * k, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRoundedRect(QRectF(at + QPointF(7, 3) * k, QSizeF(10, 18) * k), 2 * k, 2 * k);
+    painter.drawLine(at + QPointF(11, 18) * k, at + QPointF(13, 18) * k);
+}
+
+void draw_device(QPainter& painter, DeviceKind kind, const QPointF& at, qreal size, const QColor& color)
+{
+    switch (kind) {
+    case DeviceKind::Laptop: draw_laptop(painter, at, size, color); break;
+    case DeviceKind::Tablet: draw_tablet(painter, at, size, color); break;
+    case DeviceKind::Phone: draw_phone(painter, at, size, color); break;
+    case DeviceKind::Desktop: draw_monitor(painter, at, size, color); break;
+    }
+}
+
 } // namespace
 
-QPixmap DeskView::icon(bool server, int size, const QColor& color)
+DeviceKind guess_device_kind(const QString& name)
+{
+    const QString n = name.toLower();
+    auto any = [&n](std::initializer_list<const char*> words) {
+        for (const char* w : words) {
+            if (n.contains(QLatin1String(w))) {
+                return true;
+            }
+        }
+        return false;
+    };
+    // tablets first, as "Galaxy Tab" and "Pixel Tablet" also name phone brands
+    if (any({"ipad", "tablet", "tab-", "-tab", "galaxy-tab", "kindle", "fire-hd"})) {
+        return DeviceKind::Tablet;
+    }
+    if (any({"phone", "pixel", "galaxy", "android", "oneplus", "moto", "xiaomi", "redmi", "huawei",
+             "oppo", "vivo", "nokia", "sm-"})) {
+        return DeviceKind::Phone;
+    }
+    if (any({"laptop", "book", "notebook", "thinkpad", "latitude", "xps", "zenbook", "-lt", "lt-", "-nb"})) {
+        return DeviceKind::Laptop;
+    }
+    return DeviceKind::Desktop;
+}
+
+QString device_kind_key(DeviceKind kind)
+{
+    switch (kind) {
+    case DeviceKind::Laptop: return QStringLiteral("laptop");
+    case DeviceKind::Tablet: return QStringLiteral("tablet");
+    case DeviceKind::Phone: return QStringLiteral("phone");
+    case DeviceKind::Desktop: break;
+    }
+    return QStringLiteral("desktop");
+}
+
+DeviceKind device_kind_from_key(const QString& key, DeviceKind fallback)
+{
+    for (DeviceKind kind : {DeviceKind::Desktop, DeviceKind::Laptop, DeviceKind::Tablet, DeviceKind::Phone}) {
+        if (key == device_kind_key(kind)) {
+            return kind;
+        }
+    }
+    return fallback;
+}
+
+QPixmap DeskView::icon(bool server, DeviceKind kind, int size, const QColor& color)
 {
     // drawn at twice the size so it stays sharp on high density displays
     QPixmap pixmap(size * 2, size * 2);
@@ -101,7 +184,7 @@ QPixmap DeskView::icon(bool server, int size, const QColor& color)
     if (server) {
         draw_cursor(painter, QPointF(0, 0), size * 2, color);
     } else {
-        draw_monitor(painter, QPointF(0, 0), size * 2, color);
+        draw_device(painter, kind, QPointF(0, 0), size * 2, color);
     }
     painter.end();
     pixmap.setDevicePixelRatio(2);
@@ -359,14 +442,19 @@ void DeskView::paintTile(QPainter& painter, const QRectF& rect, int index, bool 
 
     QFont nameFont = font();
     nameFont.setWeight(QFont::DemiBold);
-    nameFont.setPixelSize(rect.height() > 70 ? 13 : 12);
+    // a long name gets smaller before it gets cut short
+    int namePixels = rect.height() > 70 ? 13 : 12;
+    nameFont.setPixelSize(namePixels);
+    while (namePixels > 10 && QFontMetricsF(nameFont).horizontalAdvance(screen.name()) > rect.width() - 16) {
+        nameFont.setPixelSize(--namePixels);
+    }
     QFont smallFont = font();
     smallFont.setPixelSize(11);
     const QFontMetricsF nameMetrics(nameFont);
     const QFontMetricsF smallMetrics(smallFont);
 
-    const bool roomForIcon = rect.height() >= 72;
-    const qreal iconSize = roomForIcon ? 18 : 0;
+    const qreal iconSize = rect.height() >= 72 ? 18 : rect.height() >= 54 ? 14 : 0;
+    const bool roomForIcon = iconSize > 0;
     const qreal gap = 4;
     const qreal total = iconSize + (roomForIcon ? gap : 0) + nameMetrics.height() + 2 + smallMetrics.height();
     qreal y = rect.center().y() - total / 2;
@@ -376,7 +464,8 @@ void DeskView::paintTile(QPainter& painter, const QRectF& rect, int index, bool 
         if (server) {
             draw_cursor(painter, at, iconSize, text);
         } else {
-            draw_monitor(painter, at, iconSize, QColor(glidekvm::theme::kBlue));
+            const DeviceKind kind = m_KindOf ? m_KindOf(screen.name()) : guess_device_kind(screen.name());
+            draw_device(painter, kind, at, iconSize, QColor(glidekvm::theme::kBlue));
         }
         y += iconSize + gap;
     }
@@ -562,13 +651,13 @@ void DeskView::dropEvent(QDropEvent* event)
     }
 }
 
-ComputerChip::ComputerChip(const QString& name, QWidget* parent) :
+ComputerChip::ComputerChip(const QString& name, DeviceKind kind, QWidget* parent) :
     QPushButton(parent),
     m_Name(name)
 {
     setText(name);
     setProperty("chip", true);
-    setIcon(QIcon(DeskView::icon(false, 16, QColor(glidekvm::theme::kInk))));
+    setIcon(QIcon(DeskView::icon(false, kind, 16, QColor(glidekvm::theme::kInk))));
     setIconSize(QSize(16, 16));
     setCursor(Qt::OpenHandCursor);
     setToolTip(tr("Drag onto the desk, or click to put it next to this computer."));

@@ -39,6 +39,7 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <QScreen>
 #include <QtNetwork>
 #include <QNetworkAccessManager>
 #include <QMenu>
@@ -249,8 +250,14 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
         }
     });
 
-    // room for the sidebar and two cards side by side
-    resize(1080, 720);
+    // room for the sidebar, two cards side by side and the Arrange screens
+    // page without scrolling, within the screen
+    QSize size(1120, 900);
+    if (QScreen* screen = QGuiApplication::primaryScreen()) {
+        const QRect available = screen->availableGeometry();
+        size = size.boundedTo(QSize(available.width() * 94 / 100, available.height() * 92 / 100));
+    }
+    resize(size);
 }
 
 MainWindow::~MainWindow()
