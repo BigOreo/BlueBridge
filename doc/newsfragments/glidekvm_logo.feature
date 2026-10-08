@@ -1,0 +1,1 @@
+New GlideKVM logo and icons: the app, tray, Windows, Mac and Linux icons, the installer images and the About box. Small sizes use a simplified icon (tablet, monitor, mouse and cursor); larger sizes use the full logo.
