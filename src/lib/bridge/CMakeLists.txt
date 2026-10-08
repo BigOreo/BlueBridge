@@ -1,6 +1,5 @@
 # GlideKVM -- mouse and keyboard sharing utility
-# Copyright (C) 2012-2016 Symless Ltd.
-# Copyright (C) 2009 Nick Bolton
+# Copyright (C) GlideKVM contributors
 #
 # This package is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,18 +13,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# For config.h, save the results based on a template (config.h.in).
-configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
+# Talking to the GlideKVM Bridge board over USB. Used by the server and the GUI.
 
-add_subdirectory(arch)
-add_subdirectory(base)
-add_subdirectory(bridge)
-add_subdirectory(client)
-add_subdirectory(common)
-add_subdirectory(io)
-add_subdirectory(ipc)
-add_subdirectory(mt)
-add_subdirectory(net)
-add_subdirectory(platform)
-add_subdirectory(server)
-add_subdirectory(glidekvm)
+file(GLOB headers "*.h")
+file(GLOB sources "*.cpp")
+
+if(GLIDEKVM_ADD_HEADERS)
+    list(APPEND sources ${headers})
+endif()
+
+add_library(bridge STATIC ${sources})
+
+if (WIN32)
+    target_link_libraries(bridge setupapi advapi32)
+elseif (APPLE)
+    find_library(IOKIT_LIB IOKit)
+    target_link_libraries(bridge ${IOKIT_LIB})
+endif()

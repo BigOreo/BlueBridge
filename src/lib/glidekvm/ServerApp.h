@@ -44,6 +44,7 @@ enum EServerState {
 
 class Server;
 class ClientListener;
+class BridgeManager;
 
 class ServerApp : public App {
 public:
@@ -110,6 +111,8 @@ public:
     PrimaryClient* m_primaryClient;
     ClientListener* m_listener;
     ClientListener* bluetooth_listener_ = nullptr;
+    // phones and tablets reached through the GlideKVM Bridge board
+    std::unique_ptr<BridgeManager> bridge_;
     EventQueueTimer* m_timer;
     NetworkAddress* listen_address_;
 
