@@ -8,16 +8,24 @@ pasted on the device.
 ## Using it
 
 1. Install the app (the APK is built by CI as the `glidekvm-android` artifact).
-2. Install [Shizuku](https://shizuku.rikka.app/) and start it. On Android 11
-   and newer it starts through Wireless debugging; after a restart, open
-   Shizuku and tap Start again. Android only lets the system and the shell
-   user control other apps, and Shizuku runs GlideKVM's input service as the
-   shell user, without rooting the device.
-3. In GlideKVM, allow it to use Shizuku and to appear on top (Android shows no
-   pointer for a shared mouse, so the app draws one).
-4. On the main computer, open **Arrange screens**, click **Add a computer...**,
+2. In the app's setup list:
+   - **Let the mouse control it**: turn on *GlideKVM mouse* under
+     Accessibility. It plays the main computer's mouse as touch gestures: a
+     click is a tap, a drag is a swipe, the right button is a long press and
+     the wheel scrolls. It also draws the pointer. It reads nothing on the
+     screen.
+   - **Let the keyboard type**: turn on *GlideKVM keyboard* and choose it
+     while you type from the main computer. It types into the focused field,
+     including shortcuts such as Ctrl+C and Ctrl+V. A bar at the bottom
+     switches back to your usual keyboard.
+   - **Full control (optional)**: with [Shizuku](https://shizuku.rikka.app/)
+     running, the mouse and keyboard work like real ones instead: hover,
+     right-click, real scrolling and shortcuts in every app, with no need to
+     change keyboard. Shizuku starts through Wireless debugging, and needs a
+     tap again after each restart.
+3. On the main computer, open **Arrange screens**, click **Add a computer...**,
    use the name shown in the app, and place it where the device sits.
-5. In the app, enter the main computer's address and tap **Connect**. The
+4. In the app, enter the main computer's address and tap **Connect**. The
    first time, compare the fingerprint the app shows with the one under
    **Security** on the main computer, and the device's fingerprint with the
    one the main computer asks you to confirm.
@@ -39,4 +47,5 @@ pasted on the device.
 ## Not yet
 
 Bluetooth, sending the device's clipboard to the main computer, file
-transfer, and starting with the device.
+transfer, and starting with the device. Without Shizuku, a drag plays back as a
+swipe when the button is let go rather than following the mouse live.

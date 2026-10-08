@@ -34,6 +34,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -49,7 +50,9 @@ class MainActivity : Activity() {
     private lateinit var name: EditText
     private lateinit var connect: Button
     private lateinit var status: TextView
-    private lateinit var controlRow: Row
+    private lateinit var mouseRow: Row
+    private lateinit var keyboardRow: Row
+    private lateinit var fullRow: Row
     private lateinit var pointerRow: Row
     private val prefs by lazy { getSharedPreferences("connection", MODE_PRIVATE) }
     private var askedAbout: String? = null
@@ -139,7 +142,9 @@ class MainActivity : Activity() {
         // what this device still needs
         val setupCard = card(column)
         setupCard.addView(text("Set up this device", 18f, bold = true))
-        controlRow = Row(setupCard, "Let the mouse and keyboard control it")
+        mouseRow = Row(setupCard, "Let the mouse control it")
+        keyboardRow = Row(setupCard, "Let the keyboard type")
+        fullRow = Row(setupCard, "Full control (optional)")
         pointerRow = Row(setupCard, "Show the pointer")
 
         // fingerprint
@@ -227,31 +232,60 @@ class MainActivity : Activity() {
     }
 
     private fun refreshSetup() {
-        when (Injector.readiness(this)) {
-            Injector.Readiness.NOT_INSTALLED -> controlRow.show(
-                "Install Shizuku. It lets GlideKVM move the pointer and type, without rooting the device.",
+        val touch = GlideAccessibilityService.isEnabled(this)
+        if (touch) {
+            mouseRow.done("Ready. Clicks are taps, drags are swipes, the right button is a long press.")
+        } else {
+            mouseRow.show("Turn on GlideKVM mouse under Accessibility. It plays the mouse as taps and swipes, " +
+                          "and reads nothing on the screen.", "Open Accessibility") {
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            }
+        }
+
+        when {
+            GlideKeyboard.isChosen(this) -> keyboardRow.done("Ready. Switch back any time from the bar at the bottom.")
+            GlideKeyboard.isEnabled(this) -> keyboardRow.show(
+                "Choose GlideKVM keyboard while you type from the main computer.", "Choose keyboard"
+            ) { getSystemService(InputMethodManager::class.java)?.showInputMethodPicker() }
+            else -> keyboardRow.show(
+                "Turn on GlideKVM keyboard. It types what your main computer's keyboard sends.", "Open Keyboards"
+            ) { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) }
+        }
+
+        val full = Injector.readiness(this)
+        when (full) {
+            Injector.Readiness.NOT_INSTALLED -> fullRow.show(
+                "For right-click, hover and shortcuts in every app, install Shizuku. It needs Wireless debugging " +
+                    "and a tap after each restart.",
                 "Get Shizuku"
             ) { open("https://shizuku.rikka.app/download/") }
-            Injector.Readiness.NOT_RUNNING -> controlRow.show(
-                "Start Shizuku. After a restart, open it and tap Start (it uses Wireless debugging).",
+            Injector.Readiness.NOT_RUNNING -> fullRow.show(
+                "Start Shizuku for full control: open it and tap Start (it uses Wireless debugging).",
                 "Open Shizuku"
             ) {
                 packageManager.getLaunchIntentForPackage(Injector.SHIZUKU_PACKAGE)?.let { startActivity(it) }
             }
-            Injector.Readiness.TOO_OLD -> controlRow.show("Update Shizuku to version 11 or newer.", "Get Shizuku") {
+            Injector.Readiness.TOO_OLD -> fullRow.show("Update Shizuku to version 11 or newer.", "Get Shizuku") {
                 open("https://shizuku.rikka.app/download/")
             }
-            Injector.Readiness.NEEDS_PERMISSION -> controlRow.show("Allow GlideKVM to use Shizuku.", "Allow") {
+            Injector.Readiness.NEEDS_PERMISSION -> fullRow.show("Allow GlideKVM to use Shizuku.", "Allow") {
                 Shizuku.requestPermission(2)
             }
-            Injector.Readiness.READY -> controlRow.done("Ready")
+            Injector.Readiness.READY -> fullRow.done("On. The mouse and keyboard work like real ones.")
         }
-        if (Settings.canDrawOverlays(this)) {
-            pointerRow.done("Ready")
-        } else {
-            pointerRow.show("Android shows no pointer for a shared mouse, so GlideKVM draws one. " +
-                            "Allow it to appear on top.", "Allow") {
-                startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
+
+        // the accessibility service draws the pointer itself; without it, the
+        // app needs permission to appear on top
+        val needsOverlay = !touch && full == Injector.Readiness.READY
+        pointerRow.visible = needsOverlay
+        if (needsOverlay) {
+            if (Settings.canDrawOverlays(this)) {
+                pointerRow.done("Ready")
+            } else {
+                pointerRow.show("Android shows no pointer for a shared mouse, so GlideKVM draws one. " +
+                                "Allow it to appear on top.", "Allow") {
+                    startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
+                }
             }
         }
     }
@@ -260,6 +294,7 @@ class MainActivity : Activity() {
 
     // One item of the setup list: what it is, what to do, and a button.
     private inner class Row(parent: LinearLayout, title: String) {
+        private val heading = text(title, 15f, bold = true).apply { setPadding(0, dp(14), 0, 0) }
         private val detail = muted("")
         private val button = Button(this@MainActivity).apply {
             isAllCaps = false
@@ -268,12 +303,21 @@ class MainActivity : Activity() {
         }
 
         init {
-            parent.addView(text(title, 15f, bold = true).apply { setPadding(0, dp(14), 0, 0) })
+            parent.addView(heading)
             parent.addView(detail)
             parent.addView(button, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(44)).apply {
                 topMargin = dp(8)
             })
         }
+
+        var visible = true
+            set(value) {
+                field = value
+                val v = if (value) View.VISIBLE else View.GONE
+                heading.visibility = v
+                detail.visibility = v
+                if (!value) button.visibility = View.GONE
+            }
 
         fun show(text: String, action: String, onClick: () -> Unit) {
             detail.text = text

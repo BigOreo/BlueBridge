@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GlideKVM</string>
+    <string name="accessibility_label">GlideKVM mouse</string>
+    <string name="accessibility_description">Lets the mouse of your main computer control this device: clicks become taps, drags become swipes, and the wheel scrolls. GlideKVM doesn\'t read what is on the screen.</string>
+    <string name="keyboard_label">GlideKVM keyboard</string>
 </resources>

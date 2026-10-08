@@ -31,39 +31,21 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 
-// Android draws no pointer for injected mouse events, so this draws one: a
+// Android draws no pointer for a mouse it doesn't own, so this draws one: a
 // small window above everything that ignores touches and follows the mouse.
+// The accessibility service hosts it when it's on, with no extra permission;
+// otherwise the app does, if it may appear on top of other apps.
 class CursorOverlay(private val context: Context) {
     private val main = Handler(Looper.getMainLooper())
-    private val windows = context.getSystemService(WindowManager::class.java)!!
-    private val size = (24 * context.resources.displayMetrics.density).toInt()
-    private val view = PointerView(context)
-    private var shown = false
     private var x = 0
     private var y = 0
     private var visible = false
     private var updatePending = false
 
-    private val params = WindowManager.LayoutParams(
-        size, size,
-        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        PixelFormat.TRANSLUCENT,
-    ).apply {
-        gravity = Gravity.TOP or Gravity.START
-        title = "GlideKVM pointer"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            fitInsetsTypes = 0
-        }
-    }
-
-    val allowed: Boolean get() = Settings.canDrawOverlays(context)
+    // the window as it is now: where it lives and the view in it
+    private var host: Context? = null
+    private var view: View? = null
+    private var params: WindowManager.LayoutParams? = null
 
     // Called from any thread; the window moves at most once per frame.
     fun moveTo(x: Int, y: Int) {
@@ -80,6 +62,10 @@ class CursorOverlay(private val context: Context) {
         schedule()
     }
 
+    fun close() {
+        main.post { remove() }
+    }
+
     private fun schedule() {
         synchronized(this) {
             if (updatePending) return
@@ -93,31 +79,76 @@ class CursorOverlay(private val context: Context) {
             updatePending = false
             Triple(x, y, visible)
         }
-        if (!allowed) return
+        val accessibility = GlideAccessibilityService.instance
+        val target: Context? = when {
+            !visible -> null
+            accessibility != null -> accessibility
+            Settings.canDrawOverlays(context) -> context
+            else -> null
+        }
+        if (target !== host) {
+            remove()
+            if (target == null) return
+            add(target, if (target === accessibility) TYPE_ACCESSIBILITY else TYPE_APP)
+        }
+        val p = params ?: return
         // the window starts one pixel past the tip, so the spot being
         // clicked is never under it (Android blocks touches through overlays)
-        params.x = x + 1
-        params.y = y + 1
+        p.x = x + 1
+        p.y = y + 1
         try {
-            if (visible && !shown) {
-                windows.addView(view, params)
-                shown = true
-            } else if (!visible && shown) {
-                windows.removeView(view)
-                shown = false
-            } else if (shown) {
-                windows.updateViewLayout(view, params)
-            }
+            windowsOf(host!!).updateViewLayout(view, p)
         } catch (e: RuntimeException) {
-            shown = false
+            remove()
         }
     }
 
-    fun close() {
-        main.post {
-            if (shown) windows.removeView(view)
-            shown = false
+    private fun add(target: Context, type: Int) {
+        val size = (24 * target.resources.displayMetrics.density).toInt()
+        val p = WindowManager.LayoutParams(
+            size, size, type,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            PixelFormat.TRANSLUCENT,
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            title = "GlideKVM pointer"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                fitInsetsTypes = 0
+            }
         }
+        val v = PointerView(target)
+        try {
+            windowsOf(target).addView(v, p)
+        } catch (e: RuntimeException) {
+            return
+        }
+        host = target
+        view = v
+        params = p
+    }
+
+    private fun remove() {
+        val h = host ?: return
+        try {
+            windowsOf(h).removeView(view)
+        } catch (e: RuntimeException) {
+        }
+        host = null
+        view = null
+        params = null
+    }
+
+    private fun windowsOf(c: Context) = c.getSystemService(WindowManager::class.java)!!
+
+    private companion object {
+        const val TYPE_APP = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        const val TYPE_ACCESSIBILITY = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
     }
 
     // The same arrow as the desktop pointer, dark with a light edge so it

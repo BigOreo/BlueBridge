@@ -34,7 +34,9 @@ import io.github.bigoreo.glidekvm.core.ScreenSink
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 
 // Turns what the main computer sends into Android input: a mouse with a
-// pointer, a keyboard, and the clipboard.
+// pointer, a keyboard, and the clipboard. With Shizuku running it injects a
+// real mouse and keyboard; otherwise the accessibility service plays the
+// mouse as touches and the GlideKVM keyboard types.
 class InputTranslator(
     private val context: Context,
     private val overlay: CursorOverlay,
@@ -52,6 +54,9 @@ class InputTranslator(
 
     val position: Pair<Int, Int> get() = x to y
 
+    // full control through Shizuku, or the accessibility service and keyboard
+    private val full: Boolean get() = Injector.ready
+
     override fun connected() = onConnected()
 
     override fun enter(x: Int, y: Int, modifiers: Int) {
@@ -59,6 +64,11 @@ class InputTranslator(
     }
 
     override fun leave() {
+        overlay.hide()
+        if (!full) {
+            buttons = 0
+            return
+        }
         // let go of anything still held, as the desktop client does
         if (buttons != 0) {
             val now = SystemClock.uptimeMillis()
@@ -67,7 +77,6 @@ class InputTranslator(
         }
         for (code in pressedKeys.values) inject(key(KeyEvent.ACTION_UP, code, 0, 0))
         pressedKeys.clear()
-        overlay.hide()
     }
 
     override fun mouseMove(x: Int, y: Int) = moveTo(x, y)
@@ -79,11 +88,27 @@ class InputTranslator(
         x = newX.coerceIn(0, s.width - 1)
         y = newY.coerceIn(0, s.height - 1)
         overlay.moveTo(x, y)
+        if (!full) {
+            val (px, py) = x to y
+            main.post { GlideAccessibilityService.instance?.moveTo(px, py) }
+            return
+        }
         val action = if (buttons != 0) MotionEvent.ACTION_MOVE else MotionEvent.ACTION_HOVER_MOVE
         inject(motion(action, SystemClock.uptimeMillis()))
     }
 
     override fun mouseDown(button: Int) {
+        if (!full) {
+            val (px, py) = x to y
+            main.post {
+                val touch = GlideAccessibilityService.instance ?: return@post
+                when (button) {
+                    GlideAccessibilityService.LEFT, GlideAccessibilityService.RIGHT -> touch.press(button, px, py)
+                    4 -> touch.back()
+                }
+            }
+            return
+        }
         val flag = buttonFlag(button)
         if (flag == 0 || buttons and flag != 0) return
         val now = SystemClock.uptimeMillis()
@@ -98,6 +123,11 @@ class InputTranslator(
     }
 
     override fun mouseUp(button: Int) {
+        if (!full) {
+            val (px, py) = x to y
+            main.post { GlideAccessibilityService.instance?.release(button, px, py) }
+            return
+        }
         val flag = buttonFlag(button)
         if (flag == 0 || buttons and flag == 0) return
         val now = SystemClock.uptimeMillis()
@@ -110,6 +140,11 @@ class InputTranslator(
     }
 
     override fun mouseWheel(dx: Int, dy: Int) {
+        if (!full) {
+            val (px, py) = x to y
+            main.post { GlideAccessibilityService.instance?.scroll(px, py, dx / 120f, dy / 120f) }
+            return
+        }
         val now = SystemClock.uptimeMillis()
         inject(motion(MotionEvent.ACTION_SCROLL, now, vscroll = dy / 120f, hscroll = dx / 120f))
     }
@@ -117,6 +152,10 @@ class InputTranslator(
     override fun keyDown(key: Int, modifiers: Int, button: Int) {
         // modifiers travel as the meta state of the keys they change
         if (AndroidKeys.isModifier(key)) return
+        if (!full) {
+            main.post { typeWithoutShizuku(key, modifiers) }
+            return
+        }
         if (AndroidKeys.typesCharacter(key, modifiers)) {
             typeCharacter(key)
             return
@@ -128,6 +167,10 @@ class InputTranslator(
 
     override fun keyRepeat(key: Int, modifiers: Int, count: Int, button: Int) {
         if (AndroidKeys.isModifier(key)) return
+        if (!full) {
+            main.post { repeat(count.coerceIn(1, 32)) { typeWithoutShizuku(key, modifiers) } }
+            return
+        }
         if (AndroidKeys.typesCharacter(key, modifiers)) {
             repeat(count.coerceIn(1, 32)) { typeCharacter(key) }
             return
@@ -146,6 +189,16 @@ class InputTranslator(
             val clipboard = context.getSystemService(ClipboardManager::class.java)!!
             clipboard.setPrimaryClip(ClipData.newPlainText("GlideKVM", text))
         }
+    }
+
+    // On the main thread: the GlideKVM keyboard types into the focused field;
+    // a few keys also mean something with no field, through accessibility.
+    private fun typeWithoutShizuku(key: Int, modifiers: Int) {
+        if (key == KEY_ESCAPE) {
+            GlideAccessibilityService.instance?.back()
+            return
+        }
+        GlideKeyboard.instance?.keyDown(key, modifiers)
     }
 
     // Types a character the way this device's keyboard layout would.
@@ -202,6 +255,10 @@ class InputTranslator(
 
     private fun inject(event: android.view.InputEvent) {
         Injector.inject(event)
+    }
+
+    private companion object {
+        const val KEY_ESCAPE = 0xEF1B
     }
 
     private fun buttonFlag(button: Int): Int = when (button) {
