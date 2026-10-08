@@ -1356,6 +1356,15 @@ void MainWindow::showConfigureServer(const QString& message)
     auto* dialog = new ServerConfigDialog(this, serverConfig(), appConfig().screenName());
     dialog->message(message);
     dialog->setComputers(m_ConnectedClients, m_UnplacedClients);
+    connect(dialog, &QDialog::accepted, this, [this]() {
+        // the server reads its layout when it starts, so a saved change
+        // takes effect by restarting it
+        serverConfig().saveSettings();
+        if (m_ExpectedRunningState == kStarted && app_role() == AppRole::Server) {
+            restart_cmd_app();
+        }
+        updateHome();
+    });
     connect(dialog, &QDialog::finished, this, [this, dialog](int) { closePanel(dialog); });
     showPanel(tr("Arrange screens"), dialog, m_pNavArrange);
 }
