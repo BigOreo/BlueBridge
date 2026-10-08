@@ -32,6 +32,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".KeyboardPickerActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <service
             android:name=".GlideService"
             android:exported="false"

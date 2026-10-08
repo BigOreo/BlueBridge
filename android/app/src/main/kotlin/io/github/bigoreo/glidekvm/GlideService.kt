@@ -130,7 +130,8 @@ class GlideService : Service() {
                 running = false
                 break
             } finally {
-                overlay.hide()
+                // the connection ended: put the usual keyboard back
+                translator.leave()
                 connection = null
             }
             try {

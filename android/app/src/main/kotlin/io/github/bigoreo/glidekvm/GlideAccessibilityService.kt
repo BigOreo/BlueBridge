@@ -22,6 +22,7 @@ import android.accessibilityservice.GestureDescription
 import android.content.ComponentName
 import android.content.Context
 import android.graphics.Path
+import android.os.Build
 import android.os.SystemClock
 import android.provider.Settings
 import android.view.accessibility.AccessibilityEvent
@@ -108,6 +109,10 @@ class GlideAccessibilityService : AccessibilityService() {
     }
 
     fun back() = performGlobalAction(GLOBAL_ACTION_BACK)
+
+    // Android 13 lets an accessibility service choose the keyboard
+    fun switchKeyboard(id: String): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && softKeyboardController.switchToInputMethod(id)
 
     private fun flushScroll() {
         if (pendingScrollX == 0f && pendingScrollY == 0f) return

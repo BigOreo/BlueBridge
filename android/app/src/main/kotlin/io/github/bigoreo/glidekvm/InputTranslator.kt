@@ -49,6 +49,8 @@ class InputTranslator(
     private var y = 0
     private var buttons = 0
     private var downTime = 0L
+    // whether the mouse is on this device now
+    private var inside = false
     // the Android key code each pressed key was sent as, by the server's key button
     private val pressedKeys = HashMap<Int, Int>()
 
@@ -60,11 +62,15 @@ class InputTranslator(
     override fun connected() = onConnected()
 
     override fun enter(x: Int, y: Int, modifiers: Int) {
+        inside = true
         moveTo(x, y)
+        if (!full) main.post { KeyboardSwitcher.entered(context) }
     }
 
     override fun leave() {
         overlay.hide()
+        if (inside) main.post { KeyboardSwitcher.left(context) }
+        inside = false
         if (!full) {
             buttons = 0
             return
@@ -198,7 +204,12 @@ class InputTranslator(
             GlideAccessibilityService.instance?.back()
             return
         }
-        GlideKeyboard.instance?.keyDown(key, modifiers)
+        val keyboard = GlideKeyboard.instance
+        if (keyboard == null || !GlideKeyboard.isChosen(context)) {
+            KeyboardSwitcher.typedWithoutKeyboard(context)
+            return
+        }
+        keyboard.keyDown(key, modifiers)
     }
 
     // Types a character the way this device's keyboard layout would.

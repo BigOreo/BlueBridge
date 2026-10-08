@@ -34,7 +34,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -243,10 +242,14 @@ class MainActivity : Activity() {
         }
 
         when {
-            GlideKeyboard.isChosen(this) -> keyboardRow.done("Ready. Switch back any time from the bar at the bottom.")
-            GlideKeyboard.isEnabled(this) -> keyboardRow.show(
-                "Choose GlideKVM keyboard while you type from the main computer.", "Choose keyboard"
-            ) { getSystemService(InputMethodManager::class.java)?.showInputMethodPicker() }
+            GlideKeyboard.isEnabled(this) -> keyboardRow.done(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && touch) {
+                    "Ready. It takes over while the mouse is on this device, then your usual keyboard comes back."
+                } else {
+                    "Ready. The first time you type from the main computer, pick it in the list that appears. " +
+                        "Your usual keyboard comes back when the mouse leaves."
+                }
+            )
             else -> keyboardRow.show(
                 "Turn on GlideKVM keyboard. It types what your main computer's keyboard sends.", "Open Keyboards"
             ) { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) }

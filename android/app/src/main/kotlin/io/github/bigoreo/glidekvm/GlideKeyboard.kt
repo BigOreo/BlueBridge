@@ -81,6 +81,11 @@ class GlideKeyboard : InputMethodService() {
         return bar
     }
 
+    // Hands back to the keyboard used before this one.
+    fun switchBack() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) switchToPreviousInputMethod()
+    }
+
     private fun switchAway() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && switchToPreviousInputMethod()) return
         getSystemService(InputMethodManager::class.java)?.showInputMethodPicker()

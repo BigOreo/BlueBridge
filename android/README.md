@@ -14,10 +14,13 @@ pasted on the device.
      click is a tap, a drag is a swipe, the right button is a long press and
      the wheel scrolls. It also draws the pointer. It reads nothing on the
      screen.
-   - **Let the keyboard type**: turn on *GlideKVM keyboard* and choose it
-     while you type from the main computer. It types into the focused field,
-     including shortcuts such as Ctrl+C and Ctrl+V. A bar at the bottom
-     switches back to your usual keyboard.
+   - **Let the keyboard type**: turn on *GlideKVM keyboard*. It types into
+     the focused field, including shortcuts such as Ctrl+C and Ctrl+V, and is
+     only in use while the mouse is on the device: when the mouse leaves or
+     the connection ends, your usual keyboard comes back by itself. On
+     Android 13 and newer it also takes over by itself when the mouse
+     arrives; on older versions, the first time you type from the main
+     computer the list of keyboards appears so you can pick it.
    - **Full control (optional)**: with [Shizuku](https://shizuku.rikka.app/)
      running, the mouse and keyboard work like real ones instead: hover,
      right-click, real scrolling and shortcuts in every app, with no need to
