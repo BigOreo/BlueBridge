@@ -745,6 +745,15 @@ void MainWindow::trackConnectedClients(const QString& line)
     static const QRegularExpression connected("client \"([^\"]+)\" has connected");
     static const QRegularExpression gone(
         "client \"([^\"]+)\" (?:has disconnected|is dead)|disconnecting client \"([^\"]+)\"");
+    static const QRegularExpression unplaced("unrecognised client name \"([^\"]+)\"");
+
+    QRegularExpressionMatch turnedAway = unplaced.match(line);
+    if (turnedAway.hasMatch()) {
+        if (!m_UnplacedClients.contains(turnedAway.captured(1))) {
+            m_UnplacedClients << turnedAway.captured(1);
+        }
+        return;
+    }
 
     QRegularExpressionMatch match = connected.match(line);
     if (match.hasMatch()) {

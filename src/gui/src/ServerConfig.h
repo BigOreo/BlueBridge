@@ -63,6 +63,7 @@ class ServerConfig : public BaseConfig
         bool ignoreAutoConfigClient() const { return m_IgnoreAutoConfigClient; }
         bool enableDragAndDrop() const { return m_EnableDragAndDrop; }
         bool clipboardSharing() const { return m_ClipboardSharing; }
+        bool switchNeedsControl() const { return m_SwitchNeedsControl; }
         size_t clipboardSharingSize() const { return m_ClipboardSharingSize; }
         static size_t defaultClipboardSharingSize();
 
@@ -94,6 +95,7 @@ class ServerConfig : public BaseConfig
         void setIgnoreAutoConfigClient(bool on) { m_IgnoreAutoConfigClient = on; }
         void setEnableDragAndDrop(bool on) { m_EnableDragAndDrop = on; }
         void setClipboardSharing(bool on) { m_ClipboardSharing = on; }
+        void setSwitchNeedsControl(bool on) { m_SwitchNeedsControl = on; }
         size_t setClipboardSharingSize(size_t size);
         QList<bool>& switchCorners() { return m_SwitchCorners; }
         std::vector<Hotkey>& hotkeys() { return m_Hotkeys; }
@@ -128,6 +130,7 @@ class ServerConfig : public BaseConfig
         bool m_IgnoreAutoConfigClient;
         bool m_EnableDragAndDrop;
         bool m_ClipboardSharing;
+        bool m_SwitchNeedsControl = false;
         size_t m_ClipboardSharingSize;
         MainWindow* m_pMainWindow;
 };

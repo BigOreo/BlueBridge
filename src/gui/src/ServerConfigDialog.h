@@ -18,11 +18,21 @@
 
 #pragma once
 
-#include "ScreenSetupModel.h"
 #include "ServerConfig.h"
 
 #include <QDialog>
+#include <QStringList>
 #include <memory>
+#include <vector>
+
+class DeskView;
+class KeySequenceWidget;
+class QCheckBox;
+class QComboBox;
+class QHBoxLayout;
+class QLabel;
+class QPushButton;
+class QStackedWidget;
 
 namespace Ui
 {
@@ -41,6 +51,11 @@ class ServerConfigDialog : public QDialog
         void accept() override;
         void message(const QString& message) { m_Message = message; }
 
+    public:
+        // computers connected now, and ones that tried to connect but are not
+        // in the layout yet
+        void setComputers(const QStringList& connected, const QStringList& waiting);
+
     protected slots:
         void on_m_pButtonNewHotkey_clicked();
         void on_m_pListHotkeys_itemSelectionChanged();
@@ -56,12 +71,56 @@ class ServerConfigDialog : public QDialog
     protected:
         ServerConfig& serverConfig() { return m_ServerConfig; }
         void setOrigServerConfig(const ServerConfig& s) { m_OrigServerConfig = s; }
-        ScreenSetupModel& model() { return m_ScreenSetupModel; }
+
+    private:
+        struct Snapshot {
+            std::vector<Screen> screens;
+            std::vector<Hotkey> hotkeys;
+            QStringList waiting;
+            int selected;
+        };
+
+        void buildLayoutTab();
+        void snapshot();
+        void undo();
+        int serverIndex() const;
+        int shortcutIndex(const QString& name) const;
+        void placeComputer(const QString& name, int index);
+        void placeNearServer(const QString& name);
+        void addComputer();
+        void removeComputer(int index);
+        void editComputer(int index);
+        void moveSelected(int target);
+        void shortcutChanged();
+        void clearShortcut();
+        void refreshHotkeyList();
+        void updateSidePanel();
+        void updateWaiting();
+        void layoutChanged();
 
     private:
         std::unique_ptr<Ui::ServerConfigDialog> ui_;
         ServerConfig& m_OrigServerConfig;
         ServerConfig m_ServerConfig;
-        ScreenSetupModel m_ScreenSetupModel;
         QString m_Message;
+        QString m_ServerName;
+        QStringList m_Connected;
+        QStringList m_Waiting;
+        std::vector<Snapshot> m_Undo;
+
+        DeskView* m_pDesk = nullptr;
+        QPushButton* m_pButtonUndo = nullptr;
+        QCheckBox* m_pCheckNeedsControl = nullptr;
+        QHBoxLayout* m_pWaitingChips = nullptr;
+        QLabel* m_pLabelWaitingHint = nullptr;
+        QStackedWidget* m_pSideStack = nullptr;
+        QLabel* m_pSideIcon = nullptr;
+        QLabel* m_pSideName = nullptr;
+        QLabel* m_pSideStatus = nullptr;
+        QComboBox* m_pComboSide = nullptr;
+        QLabel* m_pLabelUnreachable = nullptr;
+        QWidget* m_pShortcutRow = nullptr;
+        KeySequenceWidget* m_pShortcut = nullptr;
+        QPushButton* m_pButtonClearShortcut = nullptr;
+        QPushButton* m_pButtonRemove = nullptr;
 };

@@ -18,142 +18,12 @@
     <widget class="QTabWidget" name="m_pTabWidget">
      <widget class="QWidget" name="m_pTabScreens">
       <attribute name="title">
-       <string>Screens and links</string>
+       <string>Layout</string>
       </attribute>
-      <layout class="QVBoxLayout">
-       <item>
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="TrashScreenWidget" name="m_pTrashScreenWidget">
-           <property name="acceptDrops">
-            <bool>true</bool>
-           </property>
-           <property name="toolTip">
-            <string>Drag a screen from the grid to the trashcan to remove it.</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="../res/GlideKVM.qrc">:/res/icons/64x64/user-trash.png</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Configure the layout of your GlideKVM server configuration.</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="NewScreenWidget" name="m_pLabelNewScreenWidget">
-           <property name="toolTip">
-            <string>Drag this button to the grid to add a new screen.</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="../res/GlideKVM.qrc">:/res/icons/64x64/video-display.png</pixmap>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="ScreenSetupView" name="m_pScreenSetupView">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>273</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>273</height>
-          </size>
-         </property>
-         <property name="acceptDrops">
-          <bool>true</bool>
-         </property>
-         <property name="autoFillBackground">
-          <bool>false</bool>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>1</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Each square is one computer, not one monitor: all monitors of a computer share a single square.
-Place each client directly next to the computer it borders, with no empty squares in between.
-Drag new screens to the grid or move existing ones around.
-Drag a screen to the trashcan to delete it.
-Double click on a screen to edit its settings.</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
      </widget>
      <widget class="QWidget" name="m_pTabHotkeys">
       <attribute name="title">
-       <string>Hotkeys</string>
+       <string>Shortcuts</string>
       </attribute>
       <layout class="QHBoxLayout">
        <item>
@@ -270,7 +140,7 @@ Double click on a screen to edit its settings.</string>
      </widget>
      <widget class="QWidget" name="m_pTabAdvanced">
       <attribute name="title">
-       <string>Advanced server settings</string>
+       <string>Advanced</string>
       </attribute>
       <layout class="QGridLayout">
        <item row="0" column="0">
@@ -707,24 +577,6 @@ Double click on a screen to edit its settings.</string>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ScreenSetupView</class>
-   <extends>QTableView</extends>
-   <header>ScreenSetupView.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>NewScreenWidget</class>
-   <extends>QLabel</extends>
-   <header>NewScreenWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TrashScreenWidget</class>
-   <extends>QLabel</extends>
-   <header>TrashScreenWidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../res/GlideKVM.qrc"/>
  </resources>

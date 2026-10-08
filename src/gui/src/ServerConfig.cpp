@@ -120,6 +120,7 @@ void ServerConfig::saveSettings()
     settings().setValue("ignoreAutoConfigClient", ignoreAutoConfigClient());
     settings().setValue("enableDragAndDrop", enableDragAndDrop());
     settings().setValue("clipboardSharing", clipboardSharing());
+    settings().setValue("switchNeedsControl", switchNeedsControl());
     settings().setValue("clipboardSharingSize", (int)clipboardSharingSize());
 
     writeSettings<bool>(settings(), switchCorners(), "switchCorner");
@@ -166,6 +167,7 @@ void ServerConfig::loadSettings()
     setIgnoreAutoConfigClient(settings().value("ignoreAutoConfigClient").toBool());
     setEnableDragAndDrop(settings().value("enableDragAndDrop", true).toBool());
     setClipboardSharing(settings().value("clipboardSharing", true).toBool());
+    setSwitchNeedsControl(settings().value("switchNeedsControl", false).toBool());
     setClipboardSharingSize(settings().value("clipboardSharingSize",
         (int) ServerConfig::defaultClipboardSharingSize()).toULongLong());
 
@@ -260,6 +262,9 @@ QTextStream& operator<<(QTextStream& outStream, const ServerConfig& config)
     outStream << "\t" << "win32KeepForeground = " << (config.win32KeepForeground() ? "true" : "false") << "\n";
     outStream << "\t" << "clipboardSharing = " << (config.clipboardSharing() ? "true" : "false") << "\n";
     outStream << "\t" << "clipboardSharingSize = " << config.clipboardSharingSize() << "\n";
+
+    if (config.switchNeedsControl())
+        outStream << "\t" << "switchNeedsControl = true" << "\n";
 
     if (config.hasSwitchDelay())
         outStream << "\t" << "switchDelay = " << config.switchDelay() << "\n";

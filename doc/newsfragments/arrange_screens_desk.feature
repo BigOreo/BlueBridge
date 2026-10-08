@@ -1,0 +1,1 @@
+Arrange screens is redesigned as a desk: drag each computer to where it sits, see where the mouse crosses, place computers that tried to connect from "Waiting to be placed", give each computer a shortcut, undo changes, and choose to only cross while holding Ctrl.
