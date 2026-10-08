@@ -461,6 +461,13 @@ void MainWindow::buildHomeLayout()
     m_pLabelNoneConnected = make_muted(QString(), clients);
     clientsLayout->addWidget(m_pListConnected);
     clientsLayout->addWidget(m_pLabelNoneConnected);
+    // a device that tried to connect but isn't on the desk yet
+    m_pLabelWaiting = new QLabel(clients);
+    m_pLabelWaiting->setWordWrap(true);
+    m_pLabelWaiting->setTextFormat(Qt::RichText);
+    m_pLabelWaiting->setStyleSheet("color: #9A5B00;");
+    connect(m_pLabelWaiting, &QLabel::linkActivated, this, [this]() { on_m_pButtonConfigureServer_clicked(); });
+    clientsLayout->addWidget(m_pLabelWaiting);
     clientsLayout->addStretch();
     m_pLinkArrange = new QLabel(QString("<a href=\"#arrange\">%1</a>").arg(tr("Change where they sit")),
                                 clients);
@@ -733,6 +740,21 @@ void MainWindow::updateHome()
     m_pLabelNoneConnected->setVisible(connected == 0);
     m_pLinkArrange->setVisible(ui_->m_pRadioInternalConfig->isChecked());
 
+    QStringList waiting;
+    for (const QString& name : m_UnplacedClients) {
+        bool placed = false;
+        for (const Screen& screen : serverConfig().screens()) {
+            placed = placed || (!screen.isNull() && screen.name() == name);
+        }
+        if (!placed) {
+            waiting << name.toHtmlEscaped();
+        }
+    }
+    m_pLabelWaiting->setText(
+        tr("%1 tried to connect but isn't on the desk yet. <a href=\"#arrange\">Place it</a>")
+            .arg(waiting.join(QStringLiteral(", "))));
+    m_pLabelWaiting->setVisible(running && !waiting.isEmpty() && ui_->m_pRadioInternalConfig->isChecked());
+
     syncSharingOptions(m_pHomeShareClipboard, m_pHomeShareFiles);
     if (m_pCheckReconnect) {
         QSignalBlocker block(m_pCheckReconnect);
@@ -751,6 +773,7 @@ void MainWindow::trackConnectedClients(const QString& line)
     if (turnedAway.hasMatch()) {
         if (!m_UnplacedClients.contains(turnedAway.captured(1))) {
             m_UnplacedClients << turnedAway.captured(1);
+            updateHome();
         }
         return;
     }

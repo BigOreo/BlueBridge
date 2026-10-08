@@ -206,6 +206,10 @@ void ClientListener::handle_client_disconnected(ClientProxy* client)
 void
 ClientListener::cleanupListenSocket()
 {
+    // creating the socket can be what failed
+    if (!listen_) {
+        return;
+    }
     m_events->remove_handler(EventType::LISTEN_SOCKET_CONNECTING, listen_->get_event_target());
     listen_.reset();
 }

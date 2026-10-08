@@ -297,6 +297,7 @@ public slots:
         QFrame* m_pBluetoothTile = nullptr;
         QListWidget* m_pListConnected = nullptr;
         QLabel* m_pLabelNoneConnected = nullptr;
+        QLabel* m_pLabelWaiting = nullptr;
         QLabel* m_pLinkArrange = nullptr;
         QLabel* m_pClientTitle = nullptr;
         QVBoxLayout* m_pClientButtonSlot = nullptr;

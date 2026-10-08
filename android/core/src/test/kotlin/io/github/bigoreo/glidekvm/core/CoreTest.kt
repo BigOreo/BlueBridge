@@ -161,6 +161,29 @@ class SessionTest {
     }
 
     @Test
+    fun hangingUpAfterHelloMeansTheNameIsUnknown() {
+        val fake = FakeServer()
+        val session = ClientSession(fake.client, "tablet", { ScreenShape(1, 1) }, Recorder())
+        var error: Throwable? = null
+        val runner = thread { error = runCatching { session.run() }.exceptionOrNull() }
+        fake.send(MessageWriter("Barrier").u16(1).u16(6))
+        fake.receive()
+        fake.toClient.close()
+        runner.join(5000)
+        assertTrue(error is SessionEndedException)
+        assertTrue(error!!.message!!.contains("Add a computer"))
+    }
+
+    @Test
+    fun hangingUpBeforeHelloMeansNotAccepted() {
+        val fake = FakeServer()
+        val session = ClientSession(fake.client, "tablet", { ScreenShape(1, 1) }, Recorder())
+        fake.toClient.close()
+        val e = assertFailsWith<SessionEndedException> { session.run() }
+        assertEquals(ClientSession.NOT_ACCEPTED, e.message)
+    }
+
+    @Test
     fun olderServerIsRefused() {
         val fake = FakeServer()
         val session = ClientSession(fake.client, "tablet", { ScreenShape(1, 1) }, Recorder())
@@ -182,7 +205,8 @@ class FingerprintTest {
     fun matchesTheDesktopFormat() {
         val f = Fingerprint(ByteArray(32) { it.toByte() })
         assertEquals("v2:sha256:000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f", f.dbLine)
-        assertTrue(f.display.startsWith("00:01:02"))
+        assertEquals("00:01:02:03:04:05:06:07:\n08:09:0A:0B:0C:0D:0E:0F:\n" +
+                     "10:11:12:13:14:15:16:17:\n18:19:1A:1B:1C:1D:1E:1F:", f.display)
         assertEquals(f, Fingerprint.parse(f.dbLine))
         assertNull(Fingerprint.parse("v1:sha1:abcd"))
     }

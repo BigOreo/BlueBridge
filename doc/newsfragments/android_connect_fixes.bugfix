@@ -1,0 +1,1 @@
+A phone or tablet whose name isn't on the desk yet is told how to add it, instead of only seeing that the connection closed, and the main computer's Home shows that it tried to connect. The question about trusting a device's fingerprint now comes to the front, and the server no longer crashes when it cannot open its listening socket.

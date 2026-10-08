@@ -605,6 +605,18 @@ void MainWindow::checkFingerprint(const QString& line)
 
         messageBoxAlreadyShown = true;
         FingerprintAcceptDialog dialog{this, app_role(), fingerprint_sha1, fingerprint_sha256};
+        // the question comes while the person is looking at the other device,
+        // so bring it to the front rather than leaving it behind other windows
+        dialog.setWindowFlags(dialog.windowFlags() | Qt::WindowStaysOnTopHint);
+        if (!isVisible() || isMinimized()) {
+            showNormal();
+        }
+        raise();
+        activateWindow();
+        QApplication::alert(this);
+        dialog.show();
+        dialog.raise();
+        dialog.activateWindow();
         if (dialog.exec() == QDialog::Accepted) {
             // restart core process after trusting fingerprint.
             db.add_trusted(fingerprint_sha256);

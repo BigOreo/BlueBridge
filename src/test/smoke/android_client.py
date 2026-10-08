@@ -20,6 +20,10 @@ connection core to it (as the command line probe, so no device is needed),
 then checks:
 
   * an unknown main computer is refused until its fingerprint is trusted,
+  * the main computer refuses the device until it trusts the device's
+    fingerprint, logs that fingerprint for the app to ask about, and the
+    device says it hasn't been accepted yet,
+  * a device whose name isn't in the layout is told to add it,
   * the device connects over TLS with its own certificate,
   * moving the mouse off the server's right edge enters the device,
   * the pointer moves and keys typed on the server arrive,
@@ -140,7 +144,6 @@ def run(bin_dir, jar, work, port):
         server_profile = os.path.join(work, "server-profile")
         server_fingerprint = make_profile(server_profile)
         p12, device_fingerprint = device_certificate(work)
-        trust(server_profile, "TrustedClients.txt", device_fingerprint)
         trusted_servers = os.path.join(work, "TrustedServers.txt")
 
         config = os.path.join(work, "server.conf")
@@ -179,6 +182,21 @@ def run(bin_dir, jar, work, port):
 
         with open(trusted_servers, "w") as f:
             f.write(server_fingerprint + "\n")
+
+        step("connecting before the main computer trusts the device")
+        refused = Probe(jar, probe_args)
+        probes.append(refused)
+        wait_for("the device to be refused", lambda: refused.has("error"), timeout=30)
+        if "hasn't accepted this device" not in refused.last("error"):
+            raise SmokeTestFailure("the device said %r" % refused.last("error"))
+        # the desktop app asks about the fingerprint in this line
+        logged = device_fingerprint.split(":")[2]
+        lines = [line for line in read_file(server_log).splitlines() if "peer fingerprint" in line]
+        if not lines or logged not in lines[-1].replace(":", "").lower().split("(sha256)")[-1]:
+            raise SmokeTestFailure("the server did not log the device's fingerprint: %s" % lines)
+        step("PASS: the server logged the device's fingerprint and the device asked to be accepted")
+
+        trust(server_profile, "TrustedClients.txt", device_fingerprint)
         probe = Probe(jar, probe_args)
         probes.append(probe)
         wait_for("the device to connect", lambda: probe.has("connected"))
@@ -187,6 +205,14 @@ def run(bin_dir, jar, work, port):
         if "accepted secure socket" not in read_file(server_log):
             raise SmokeTestFailure("the connection is not encrypted")
         step("PASS: the device connected over TLS with its own certificate")
+
+        step("connecting with a name that isn't in the layout")
+        stranger = Probe(jar, ["--name", "Pixel-3a"] + probe_args[2:])
+        probes.append(stranger)
+        wait_for("the stranger to be turned away", lambda: stranger.has("error"), timeout=30)
+        if "Add a computer" not in stranger.last("error"):
+            raise SmokeTestFailure("the device said %r" % stranger.last("error"))
+        step("PASS: a device that isn't in the layout is told how to add it")
 
         mouse = display.Display(SERVER_DISPLAY)
 
