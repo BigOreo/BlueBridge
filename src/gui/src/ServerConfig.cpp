@@ -129,6 +129,14 @@ void ServerConfig::saveSettings()
         settings().setValue("kind", it.value());
     }
     settings().endArray();
+    settings().beginWriteArray("bridgeDevices");
+    for (int i = 0; i < m_BridgeDevices.size(); ++i) {
+        settings().setArrayIndex(i);
+        settings().setValue("slot", m_BridgeDevices[i].slot);
+        settings().setValue("name", m_BridgeDevices[i].name);
+        settings().setValue("away", m_BridgeDevices[i].away);
+    }
+    settings().endArray();
     settings().setValue("clipboardSharingSize", (int)clipboardSharingSize());
 
     writeSettings<bool>(settings(), switchCorners(), "switchCorner");
@@ -181,6 +189,19 @@ void ServerConfig::loadSettings()
     for (int i = 0; i < kinds; ++i) {
         settings().setArrayIndex(i);
         m_DeviceKinds[settings().value("name").toString()] = settings().value("kind").toString();
+    }
+    settings().endArray();
+    m_BridgeDevices.clear();
+    const int bridged = settings().beginReadArray("bridgeDevices");
+    for (int i = 0; i < bridged; ++i) {
+        settings().setArrayIndex(i);
+        BridgeDevice device;
+        device.slot = settings().value("slot", -1).toInt();
+        device.name = settings().value("name").toString();
+        device.away = settings().value("away", false).toBool();
+        if (device.slot >= 0 && !device.name.isEmpty()) {
+            m_BridgeDevices << device;
+        }
     }
     settings().endArray();
     setClipboardSharingSize(settings().value("clipboardSharingSize",
@@ -447,4 +468,44 @@ size_t ServerConfig::setClipboardSharingSize(size_t size) {
     using std::swap;
     swap (size, m_ClipboardSharingSize);
     return size;
+}
+
+const ServerConfig::BridgeDevice* ServerConfig::bridgeDevice(const QString& name) const
+{
+    for (const BridgeDevice& device : m_BridgeDevices) {
+        if (device.name == name) {
+            return &device;
+        }
+    }
+    return nullptr;
+}
+
+void ServerConfig::setBridgeDevice(const BridgeDevice& device)
+{
+    for (BridgeDevice& known : m_BridgeDevices) {
+        if (known.slot == device.slot) {
+            known = device;
+            return;
+        }
+    }
+    m_BridgeDevices << device;
+}
+
+void ServerConfig::removeBridgeDevice(int slot)
+{
+    for (int i = 0; i < m_BridgeDevices.size(); ++i) {
+        if (m_BridgeDevices[i].slot == slot) {
+            m_BridgeDevices.removeAt(i);
+            return;
+        }
+    }
+}
+
+void ServerConfig::renameBridgeDevice(const QString& from, const QString& to)
+{
+    for (BridgeDevice& device : m_BridgeDevices) {
+        if (device.name == from) {
+            device.name = to;
+        }
+    }
 }

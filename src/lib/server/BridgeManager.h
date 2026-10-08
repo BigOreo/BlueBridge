@@ -48,13 +48,12 @@ public:
 private:
     struct Link {
         std::mutex mutex;
-        SerialPort port;
+        std::unique_ptr<SerialPort> port;
         bool write(const std::string& line);
     };
 
     void run();
     bool find_board();
-    bool open_board(const std::string& path);
     void post(const std::string& line);
     void handle_line(const std::string& line);
     void add_device(int slot, bool linked);

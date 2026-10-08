@@ -18,6 +18,7 @@
 
 #include <cstdlib>
 #include <sstream>
+#include <string>
 
 namespace glidekvm {
 
@@ -313,7 +314,7 @@ BridgeEvent parse_bridge_event(const std::string& line)
 
     if (word == "hello") {
         std::string what;
-        if (in >> what >> event.protocol >> event.version >> event.slots && what == "glidekvm-bridge") {
+        if (in >> what >> event.protocol >> event.version >> event.slot_count && what == "glidekvm-bridge") {
             event.type = BridgeEvent::Hello;
         }
     } else if (word == "ready") {
@@ -354,6 +355,37 @@ BridgeEvent parse_bridge_event(const std::string& line)
         event.type = BridgeEvent::None;
     }
     return event;
+}
+
+bool parse_bridge_device(const std::string& text, BridgeDevice& device)
+{
+    std::istringstream in(text);
+    std::string slot, name, size, flag;
+    if (!std::getline(in, slot, ',') || !std::getline(in, name, ',') || !std::getline(in, size, ',')) {
+        return false;
+    }
+    std::getline(in, flag, ',');
+    BridgeDevice result;
+    char* end = nullptr;
+    result.slot = static_cast<int>(std::strtol(slot.c_str(), &end, 10));
+    if (*end || slot.empty() || result.slot < 0 || result.slot > 255 || name.empty()) {
+        return false;
+    }
+    result.name = name;
+    int w = 0, h = 0;
+    char x = 0;
+    std::istringstream dims(size);
+    if (!(dims >> w >> x >> h) || x != 'x' || w < 100 || h < 100 || w > 20000 || h > 20000) {
+        return false;
+    }
+    result.width = w;
+    result.height = h;
+    if (!flag.empty() && flag != "away") {
+        return false;
+    }
+    result.away = flag == "away";
+    device = result;
+    return true;
 }
 
 } // namespace glidekvm

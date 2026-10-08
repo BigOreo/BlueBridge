@@ -35,6 +35,9 @@ endif()
 
 add_library(synlib STATIC ${sources})
 
+# the server's arguments include the Bridge board's devices
+target_link_libraries(synlib bridge)
+
 if (UNIX)
     target_link_libraries(synlib arch client ipc net base platform mt server)
 endif()

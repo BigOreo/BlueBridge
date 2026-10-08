@@ -73,7 +73,7 @@ struct BridgeEvent {
     Type type = None;
     int slot = -1;
     int protocol = 0;
-    int slots = 0;
+    int slot_count = 0;
     std::string version;
     std::string address;
     std::string state;  // connected, away or off
@@ -81,5 +81,20 @@ struct BridgeEvent {
 };
 
 BridgeEvent parse_bridge_event(const std::string& line);
+
+// What the server knows about a phone or tablet paired with the GlideKVM
+// Bridge board, from its settings.
+struct BridgeDevice {
+    int slot = -1;
+    std::string name;
+    std::int32_t width = 1366;
+    std::int32_t height = 1024;
+    // disconnects from the board while the mouse is elsewhere, so the device
+    // shows its own on-screen keyboard again
+    bool away = false;
+};
+
+// Parses "SLOT,NAME,WIDTHxHEIGHT[,away]"; false if it isn't that.
+bool parse_bridge_device(const std::string& text, BridgeDevice& device);
 
 } // namespace glidekvm

@@ -17,7 +17,7 @@
 #include "server/BridgeManager.h"
 
 #include "server/Server.h"
-#include "bridge/BridgeProtocol.h"
+#include "bridge/BridgeBoard.h"
 #include "base/IEventQueue.h"
 #include "base/Log.h"
 
@@ -25,16 +25,10 @@
 
 namespace glidekvm {
 
-namespace {
-
-const int kBaud = 921600;
-
-} // namespace
-
 bool BridgeManager::Link::write(const std::string& line)
 {
     std::lock_guard<std::mutex> lock(mutex);
-    return port.is_open() && port.write(line + "\n");
+    return port && port->write(line + "\n");
 }
 
 BridgeManager::BridgeManager(IEventQueue* events, Server* server, const std::string& port,
@@ -59,7 +53,7 @@ BridgeManager::~BridgeManager()
     events_->remove_handler(EventType::BRIDGE_LINE, this);
     {
         std::lock_guard<std::mutex> lock(link_->mutex);
-        link_->port.close();
+        link_->port.reset();
     }
     // the server deletes the proxies; they mustn't call back into this
     for (auto& entry : proxies_) {
@@ -72,65 +66,25 @@ void BridgeManager::post(const std::string& line)
     events_->add_event(EventType::BRIDGE_LINE, this, create_event_data<std::string>(line));
 }
 
-bool BridgeManager::open_board(const std::string& path)
-{
-    {
-        std::lock_guard<std::mutex> lock(link_->mutex);
-        if (!link_->port.open(path, kBaud)) {
-            return false;
-        }
-    }
-    // the board may have restarted as the port opened: give it a moment to answer
-    std::string buffer;
-    char data[256];
-    const auto until = std::chrono::steady_clock::now() + std::chrono::milliseconds(2500);
-    auto next_hello = std::chrono::steady_clock::now();
-    while (!stopping_ && std::chrono::steady_clock::now() < until) {
-        if (std::chrono::steady_clock::now() >= next_hello) {
-            link_->write("");
-            link_->write("hello");
-            next_hello += std::chrono::milliseconds(700);
-        }
-        const int n = link_->port.read(data, sizeof data, 100);
-        if (n < 0) {
-            break;
-        }
-        buffer.append(data, static_cast<std::size_t>(n));
-        std::size_t end;
-        while ((end = buffer.find('\n')) != std::string::npos) {
-            std::string line = buffer.substr(0, end);
-            buffer.erase(0, end + 1);
-            if (!line.empty() && line.back() == '\r') {
-                line.pop_back();
-            }
-            const BridgeEvent event = parse_bridge_event(line);
-            if (event.type == BridgeEvent::Hello) {
-                LOG_NOTE("found the GlideKVM Bridge on %s, firmware %s", path.c_str(), event.version.c_str());
-                post(line);
-                return true;
-            }
-        }
-    }
-    std::lock_guard<std::mutex> lock(link_->mutex);
-    link_->port.close();
-    return false;
-}
-
 bool BridgeManager::find_board()
 {
-    if (port_name_ != "auto") {
-        return open_board(port_name_);
+    // looked for on a port of its own, so writers never wait on the search
+    auto port = std::make_unique<SerialPort>();
+    SerialPort* probing = port.get();
+    const auto write = [probing](const std::string& line) { return probing->write(line + "\n"); };
+    BridgeEvent hello;
+    std::string found;
+    if (!find_bridge_board(*port, port_name_, stopping_, &hello, &found, write)) {
+        return false;
     }
-    for (const SerialPortInfo& port : list_serial_ports()) {
-        // other serial devices aren't sent anything
-        if (!is_board_usb_chip(port.vendor_id) || stopping_) {
-            continue;
-        }
-        if (open_board(port.path)) {
-            return true;
-        }
+    {
+        std::lock_guard<std::mutex> lock(link_->mutex);
+        link_->port = std::move(port);
     }
-    return false;
+    LOG_NOTE("found the GlideKVM Bridge on %s, firmware %s", found.c_str(), hello.version.c_str());
+    post("@hello glidekvm-bridge " + std::to_string(hello.protocol) + " " + hello.version + " " +
+         std::to_string(hello.slot_count));
+    return true;
 }
 
 // On its own thread: finds the board, then passes on what it says.
@@ -149,33 +103,27 @@ void BridgeManager::run()
         }
         told_missing_ = false;
 
-        std::string buffer;
+        // only this thread replaces the port, so it can read without the lock
+        SerialPort* port = link_->port.get();
+        LineSplitter lines;
         char data[256];
         while (!stopping_) {
-            const int n = link_->port.read(data, sizeof data, 100);
+            const int n = port->read(data, sizeof data, 100);
             if (n < 0) {
-                LOG_WARN("lost the GlideKVM Bridge: %s", link_->port.error().c_str());
+                LOG_WARN("lost the GlideKVM Bridge: %s", port->error().c_str());
                 {
                     std::lock_guard<std::mutex> lock(link_->mutex);
-                    link_->port.close();
+                    link_->port.reset();
                 }
                 post("");
                 break;
             }
-            buffer.append(data, static_cast<std::size_t>(n));
-            std::size_t end;
-            while ((end = buffer.find('\n')) != std::string::npos) {
-                std::string line = buffer.substr(0, end);
-                buffer.erase(0, end + 1);
-                if (!line.empty() && line.back() == '\r') {
-                    line.pop_back();
-                }
+            lines.add(data, static_cast<std::size_t>(n));
+            std::string line;
+            while (lines.next(line)) {
                 if (!line.empty() && line[0] == '@') {
                     post(line);
                 }
-            }
-            if (buffer.size() > 4096) {
-                buffer.clear();
             }
         }
     }

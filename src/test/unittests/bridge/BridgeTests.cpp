@@ -83,7 +83,7 @@ TEST(BridgeProtocolTests, ReadsTheBoard)
     EXPECT_EQ(e.type, BridgeEvent::Hello);
     EXPECT_EQ(e.protocol, 1);
     EXPECT_EQ(e.version, "0.1.0");
-    EXPECT_EQ(e.slots, 8);
+    EXPECT_EQ(e.slot_count, 8);
 
     e = parse_bridge_event("@slot 2 AA:BB:CC:DD:EE:FF connected Oren's iPad");
     EXPECT_EQ(e.type, BridgeEvent::Slot);

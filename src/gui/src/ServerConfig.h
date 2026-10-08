@@ -69,6 +69,19 @@ class ServerConfig : public BaseConfig
         // "phone"; only the ones the person chose, the rest are guessed
         QString deviceKind(const QString& name) const { return m_DeviceKinds.value(name); }
         void setDeviceKind(const QString& name, const QString& kind) { m_DeviceKinds[name] = kind; }
+        // phones and tablets paired with the GlideKVM Bridge board: where the
+        // board keeps each one, by the name it has on the desk
+        struct BridgeDevice {
+            int slot = -1;
+            QString name;
+            // disconnects while the mouse is elsewhere, so its on-screen keyboard shows
+            bool away = false;
+        };
+        const QList<BridgeDevice>& bridgeDevices() const { return m_BridgeDevices; }
+        const BridgeDevice* bridgeDevice(const QString& name) const;
+        void setBridgeDevice(const BridgeDevice& device);
+        void removeBridgeDevice(int slot);
+        void renameBridgeDevice(const QString& from, const QString& to);
         size_t clipboardSharingSize() const { return m_ClipboardSharingSize; }
         static size_t defaultClipboardSharingSize();
 
@@ -137,6 +150,7 @@ class ServerConfig : public BaseConfig
         bool m_ClipboardSharing;
         bool m_SwitchNeedsControl = false;
         QMap<QString, QString> m_DeviceKinds;
+        QList<BridgeDevice> m_BridgeDevices;
         size_t m_ClipboardSharingSize;
         MainWindow* m_pMainWindow;
 };

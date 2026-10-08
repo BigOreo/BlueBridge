@@ -67,6 +67,7 @@ class Screen : public BaseConfig
         bool swapped() const { return m_Swapped; }
         QString& name() { return m_Name; }
         void setName(const QString& name) { m_Name = name; }
+        void setModifier(Modifier m, Modifier n) { m_Modifiers[static_cast<int>(m)] = n; }
 
     protected:
         void init();
@@ -74,7 +75,6 @@ class Screen : public BaseConfig
 
         void setPixmap(const QPixmap& pixmap) { m_Pixmap = pixmap; }
         QStringList& aliases() { return m_Aliases; }
-        void setModifier(Modifier m, Modifier n) { m_Modifiers[static_cast<int>(m)] = n; }
         QList<Modifier>& modifiers() { return m_Modifiers; }
         void addAlias(const QString& alias) { m_Aliases.append(alias); }
         void setSwitchCorner(SwitchCorner c, bool on) { m_SwitchCorners[static_cast<int>(c)] = on; }

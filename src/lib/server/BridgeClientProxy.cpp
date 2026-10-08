@@ -57,41 +57,15 @@ public:
     void close() override {}
 };
 
+std::int32_t clamp_to(std::int32_t value, std::int32_t size)
+{
+    return value < 0 ? 0 : value >= size ? size - 1 : value;
+}
+
 // how far to push the pointer to be sure it reached the corner
 const std::int32_t kHomeDistance = 30000;
 
 } // namespace
-
-bool parse_bridge_device(const std::string& text, BridgeDevice& device)
-{
-    std::istringstream in(text);
-    std::string slot, name, size, flag;
-    if (!std::getline(in, slot, ',') || !std::getline(in, name, ',') || !std::getline(in, size, ',')) {
-        return false;
-    }
-    std::getline(in, flag, ',');
-    BridgeDevice result;
-    char* end = nullptr;
-    result.slot = static_cast<int>(std::strtol(slot.c_str(), &end, 10));
-    if (*end || slot.empty() || result.slot < 0 || result.slot > 255 || name.empty()) {
-        return false;
-    }
-    result.name = name;
-    int w = 0, h = 0;
-    char x = 0;
-    std::istringstream dims(size);
-    if (!(dims >> w >> x >> h) || x != 'x' || w < 100 || h < 100 || w > 20000 || h > 20000) {
-        return false;
-    }
-    result.width = w;
-    result.height = h;
-    if (!flag.empty() && flag != "away") {
-        return false;
-    }
-    result.away = flag == "away";
-    device = result;
-    return true;
-}
 
 BridgeClientProxy::BridgeClientProxy(const BridgeDevice& device, BridgeWriter writer) :
     ClientProxy(device.name, std::make_unique<NoConnection>()),
@@ -262,8 +236,9 @@ void BridgeClientProxy::mouseMove(std::int32_t xAbs, std::int32_t yAbs)
 
 void BridgeClientProxy::mouseRelativeMove(std::int32_t xRel, std::int32_t yRel)
 {
-    x_ = std::max<std::int32_t>(0, std::min(device_.width - 1, x_ + xRel));
-    y_ = std::max<std::int32_t>(0, std::min(device_.height - 1, y_ + yRel));
+    // kept on the screen, as the device keeps its pointer
+    x_ = clamp_to(x_ + xRel, device_.width);
+    y_ = clamp_to(y_ + yRel, device_.height);
     if (xRel || yRel) {
         send("m " + std::to_string(xRel) + " " + std::to_string(yRel));
     }
