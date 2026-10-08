@@ -605,6 +605,18 @@ void MainWindow::checkFingerprint(const QString& line)
 
         messageBoxAlreadyShown = true;
         FingerprintAcceptDialog dialog{this, app_role(), fingerprint_sha1, fingerprint_sha256};
+        // the question comes while the person is looking at the other device,
+        // so bring it to the front rather than leaving it behind other windows
+        dialog.setWindowFlags(dialog.windowFlags() | Qt::WindowStaysOnTopHint);
+        if (!isVisible() || isMinimized()) {
+            showNormal();
+        }
+        raise();
+        activateWindow();
+        QApplication::alert(this);
+        dialog.show();
+        dialog.raise();
+        dialog.activateWindow();
         if (dialog.exec() == QDialog::Accepted) {
             // restart core process after trusting fingerprint.
             db.add_trusted(fingerprint_sha256);
@@ -1344,6 +1356,15 @@ void MainWindow::showConfigureServer(const QString& message)
     auto* dialog = new ServerConfigDialog(this, serverConfig(), appConfig().screenName());
     dialog->message(message);
     dialog->setComputers(m_ConnectedClients, m_UnplacedClients);
+    connect(dialog, &QDialog::accepted, this, [this]() {
+        // the server reads its layout when it starts, so a saved change
+        // takes effect by restarting it
+        serverConfig().saveSettings();
+        if (m_ExpectedRunningState == kStarted && app_role() == AppRole::Server) {
+            restart_cmd_app();
+        }
+        updateHome();
+    });
     connect(dialog, &QDialog::finished, this, [this, dialog](int) { closePanel(dialog); });
     showPanel(tr("Arrange screens"), dialog, m_pNavArrange);
 }

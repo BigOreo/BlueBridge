@@ -43,13 +43,11 @@ FingerprintAcceptDialog::FingerprintAcceptDialog(QWidget *parent,
 
     QString explanation;
     if (type == AppRole::Server) {
-        explanation = tr("This is a client fingerprint. You should compare this "
-                         "fingerprint to the one on your client's screen. If the "
-                         "two don't match exactly, then it's probably not the client "
-                         "you're expecting (it could be a malicious user).\n\n"
-                         "To automatically trust this fingerprint for future "
-                         "connections, click Yes. To reject this fingerprint and "
-                         "disconnect the client, click No.");
+        explanation = tr("A computer or device is trying to use this keyboard and mouse. "
+                         "Compare this fingerprint with the one it shows (in the GlideKVM "
+                         "app on a phone or tablet, under This device's fingerprint). If "
+                         "they don't match exactly, it's not the device you expect.\n\n"
+                         "To trust it from now on, click Yes. To turn it away, click No.");
     } else {
         explanation = tr("This is a server fingerprint. You should compare this "
                          "fingerprint to the one on your server's screen. If the "

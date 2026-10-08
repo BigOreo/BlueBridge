@@ -102,10 +102,13 @@ class GlideService : Service() {
         val host = address.substringBefore(":").trim()
         val port = address.substringAfter(":", "").toIntOrNull() ?: DEFAULT_PORT
         var wait = 2_000L
+        // when the attempts since the last good connection started failing
+        var failingSince = 0L
         while (running) {
             ConnectionState.set(Status.Connecting(host))
             val translator = InputTranslator(this, overlay, ::screenShape) {
                 wait = 2_000L
+                failingSince = 0L
                 ConnectionState.set(Status.Connected(host))
                 // Shizuku may have started after this service did
                 main.post { Injector.bind(this) }
@@ -113,10 +116,11 @@ class GlideService : Service() {
             val c = Connection(host, port, name, DeviceIdentity.keyManagers(), DeviceIdentity.trustedServers(this),
                                ::screenShape, translator) { translator.position }
             connection = c
+            var reason: String
             try {
                 c.run()
                 if (!running) break
-                ConnectionState.set(Status.Retrying(host, "The main computer ended the connection."))
+                reason = "The main computer ended the connection."
             } catch (e: UntrustedServerException) {
                 // the person confirms the fingerprint on the screen, then connects again
                 ConnectionState.set(Status.Untrusted(host, port, e.fingerprint))
@@ -124,7 +128,7 @@ class GlideService : Service() {
                 break
             } catch (e: IOException) {
                 if (!running) break
-                ConnectionState.set(Status.Retrying(host, e.message ?: "Could not reach $host."))
+                reason = reasonFor(e, host)
             } catch (e: RuntimeException) {
                 ConnectionState.set(Status.Failed(e.message ?: e.toString()))
                 running = false
@@ -134,6 +138,15 @@ class GlideService : Service() {
                 translator.leave()
                 connection = null
             }
+            // keep trying for a while, as the main computer may be restarting
+            // or the network coming back, but not for ever on a battery
+            val now = System.currentTimeMillis()
+            if (failingSince == 0L) failingSince = now
+            if (now - failingSince > GIVE_UP_AFTER_MS) {
+                ConnectionState.set(Status.Failed("$reason Stopped trying. Tap Connect when the main computer is sharing again."))
+                break
+            }
+            ConnectionState.set(Status.Retrying(host, reason))
             try {
                 Thread.sleep(wait)
             } catch (e: InterruptedException) {
@@ -145,6 +158,14 @@ class GlideService : Service() {
             ConnectionState.set(Status.Idle)
         }
         stopSelf()
+    }
+
+    private fun reasonFor(e: IOException, host: String): String = when (e) {
+        is java.net.ConnectException -> "The main computer isn't sharing right now."
+        is java.net.UnknownHostException -> "Can't find $host. Check the address."
+        is java.net.NoRouteToHostException, is java.net.SocketTimeoutException ->
+            "Can't reach $host. Check the address, and that both are on the same network."
+        else -> e.message ?: "Can't reach $host."
     }
 
     // The whole screen in its current rotation, in pixels.
@@ -181,6 +202,7 @@ class GlideService : Service() {
     }
 
     companion object {
+        private const val GIVE_UP_AFTER_MS = 10 * 60 * 1000L
         private const val CHANNEL = "connection"
         private const val NOTIFICATION_ID = 1
         private const val ACTION_STOP = "io.github.bigoreo.glidekvm.STOP"

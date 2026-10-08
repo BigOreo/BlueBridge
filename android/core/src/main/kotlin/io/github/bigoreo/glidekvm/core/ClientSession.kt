@@ -66,10 +66,23 @@ class ClientSession(
     fun run() {
         hello()
         while (true) {
-            val reader = MessageReader(stream.read())
-            if (!handle(reader)) return
+            val packet = try {
+                stream.read()
+            } catch (e: java.io.EOFException) {
+                // hanging up between the hello and the options means the main
+                // computer turned this name away; its "unknown" message can be
+                // lost as it closes the connection
+                if (!handshakeComplete) throw SessionEndedException(notInLayout())
+                throw e
+            }
+            if (!handle(MessageReader(packet))) return
         }
     }
+
+    private fun notInLayout() =
+        "The main computer turned \"$name\" away. On it, open Arrange screens, click Add a computer " +
+            "and enter $name exactly, then place it next to the main computer and save."
+
 
     // Says goodbye; the server takes it as this device leaving.
     fun close() {
@@ -86,7 +99,18 @@ class ClientSession(
     }
 
     private fun hello() {
-        val reader = MessageReader(stream.read())
+        // the main computer hangs up before saying hello when it doesn't
+        // trust this device's certificate yet
+        val first = try {
+            stream.read()
+        } catch (e: java.io.EOFException) {
+            throw SessionEndedException(NOT_ACCEPTED)
+        } catch (e: java.net.SocketTimeoutException) {
+            throw SessionEndedException(NOT_ACCEPTED)
+        } catch (e: javax.net.ssl.SSLException) {
+            throw SessionEndedException(NOT_ACCEPTED)
+        }
+        val reader = MessageReader(first)
         reader.literal(Protocol.HELLO)
         val major = reader.i16()
         val minor = reader.i16()
@@ -137,9 +161,7 @@ class ClientSession(
             Protocol.BUSY -> throw SessionEndedException(
                 "Another device named \"$name\" is already connected. Give this one a different name."
             )
-            Protocol.UNKNOWN -> throw SessionEndedException(
-                "The main computer doesn't know \"$name\" yet. Add it under Arrange screens on that computer."
-            )
+            Protocol.UNKNOWN -> throw SessionEndedException(notInLayout())
             Protocol.BAD -> throw SessionEndedException("The main computer reported a protocol error.")
             else -> {
                 if (!handshakeComplete) throw ProtocolException("unexpected \"$code\" before the handshake")
@@ -208,6 +230,9 @@ class ClientSession(
     }
 
     companion object {
+        const val NOT_ACCEPTED = "The main computer hasn't accepted this device yet. On it, check for a " +
+            "question about this device's fingerprint, compare it with the one shown here, and click Yes."
+
         // The text in a marshalled clipboard: a count of formats, then for each
         // its id, size and data. See IClipboard::marshall.
         fun textOf(clipboard: ByteArray): String? {

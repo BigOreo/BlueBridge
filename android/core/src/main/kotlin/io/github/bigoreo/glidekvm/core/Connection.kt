@@ -35,8 +35,10 @@ const val DEFAULT_PORT = 24800
 data class Fingerprint(val sha256: ByteArray) {
     val dbLine: String get() = "v2:sha256:" + sha256.joinToString("") { "%02x".format(it) }
 
-    // as the desktop app shows it, so the two can be compared by eye
-    val display: String get() = sha256.joinToString(":") { "%02X".format(it) }
+    // as the desktop app shows it, so the two can be compared by eye: four
+    // rows of eight, each byte followed by a colon
+    val display: String get() = sha256.toList().chunked(8)
+        .joinToString("\n") { row -> row.joinToString("") { "%02X:".format(it) } }
 
     override fun equals(other: Any?) = other is Fingerprint && other.sha256.contentEquals(sha256)
     override fun hashCode() = sha256.contentHashCode()
