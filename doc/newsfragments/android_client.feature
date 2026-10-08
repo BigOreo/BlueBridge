@@ -1,0 +1,1 @@
+A preview Android app lets a phone or tablet be one of the computers on the desk: the main computer's mouse and keyboard move a pointer and type on it, and copied text arrives on its clipboard. It connects over the network with TLS and its own certificate, and uses Shizuku to control the device without rooting it.

@@ -28,6 +28,8 @@ for example when a VPN on your work laptop blocks local network access.
 - macOS 10.12 and newer: network (Bluetooth coming)
 - Linux: network (Bluetooth coming). Clipboard sharing is not yet supported on
   Wayland.
+- Android 8 and newer (preview): can be controlled from a main computer over
+  the network. See [android/README.md](android/README.md).
 
 ## Getting started
 
