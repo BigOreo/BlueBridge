@@ -1,2 +1,3 @@
 A phone or tablet whose name isn't on the desk yet is told how to add it, instead of only seeing that the connection closed, and the main computer's Home shows that it tried to connect. The question about trusting a device's fingerprint now comes to the front, and the server no longer crashes when it cannot open its listening socket.
 Saving Arrange screens while sharing now restarts sharing with the new layout, so a newly placed computer can connect straight away.
+The Android app stops trying to reconnect after 10 minutes without reaching the main computer, and says why it can't connect in plain words.
