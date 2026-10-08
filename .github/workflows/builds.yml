@@ -209,6 +209,16 @@ jobs:
             apt-get install -y openssl python3-xlib xclip xvfb
             python3 glidekvm/src/test/smoke/two_screens.py --bin-dir build/bin
 
+      # The Android app's connection core, run on the computer, against the
+      # real server: trust the fingerprint, connect, mouse, keys, clipboard.
+      - name: Run the Android client smoke test
+        if: env.B_BUILD_TYPE != 'Release' && matrix.name == 'ubuntu-22-04'
+        run: |
+            apt-get install -y openjdk-17-jdk-headless
+            (cd glidekvm/android && ./gradlew --no-daemon -q :core:probeJar)
+            python3 glidekvm/src/test/smoke/android_client.py --bin-dir build/bin \
+                --probe glidekvm/android/core/build/libs/glidekvm-probe.jar
+
       - name: Create Artifacts
         if: env.B_BUILD_TYPE != 'Release'
         run: tar -cf glidekvm-${{matrix.name}}.tar.gz glidekvm-${{matrix.name}}
@@ -495,6 +505,31 @@ jobs:
           $setup = Get-ChildItem .\build\installer-inno\bin\*.exe | Select-Object -First 1
           powershell -ExecutionPolicy Bypass -File .\glidekvm\src\test\smoke\windows_installer.ps1 -Installer $setup.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+  android:
+    name: android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          path: glidekvm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # The runner comes with the Android SDK. The core's tests run on the JVM.
+      - name: Test the connection core and build the app
+        working-directory: glidekvm/android
+        run: ./gradlew --no-daemon :core:test :app:assembleDebug
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: glidekvm-android
+          path: glidekvm/android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
 
   flatpak:
     runs-on: ubuntu-latest
