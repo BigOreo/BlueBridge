@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include "DeskView.h"
 #include "ServerConfig.h"
 
 #include <QDialog>
@@ -95,6 +96,7 @@ class ServerConfigDialog : public QDialog
         void clearShortcut();
         void refreshHotkeyList();
         void updateSidePanel();
+        DeviceKind kindOf(const QString& name) const;
         void updateWaiting();
         void layoutChanged();
 
@@ -118,6 +120,7 @@ class ServerConfigDialog : public QDialog
         QLabel* m_pSideName = nullptr;
         QLabel* m_pSideStatus = nullptr;
         QComboBox* m_pComboSide = nullptr;
+        QComboBox* m_pComboKind = nullptr;
         QLabel* m_pLabelUnreachable = nullptr;
         QWidget* m_pShortcutRow = nullptr;
         KeySequenceWidget* m_pShortcut = nullptr;

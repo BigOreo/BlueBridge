@@ -19,6 +19,7 @@
 #pragma once
 
 #include <QList>
+#include <QMap>
 
 #include "Screen.h"
 #include "BaseConfig.h"
@@ -64,6 +65,10 @@ class ServerConfig : public BaseConfig
         bool enableDragAndDrop() const { return m_EnableDragAndDrop; }
         bool clipboardSharing() const { return m_ClipboardSharing; }
         bool switchNeedsControl() const { return m_SwitchNeedsControl; }
+        // what each computer is, by name, as "desktop", "laptop", "tablet" or
+        // "phone"; only the ones the person chose, the rest are guessed
+        QString deviceKind(const QString& name) const { return m_DeviceKinds.value(name); }
+        void setDeviceKind(const QString& name, const QString& kind) { m_DeviceKinds[name] = kind; }
         size_t clipboardSharingSize() const { return m_ClipboardSharingSize; }
         static size_t defaultClipboardSharingSize();
 
@@ -131,6 +136,7 @@ class ServerConfig : public BaseConfig
         bool m_EnableDragAndDrop;
         bool m_ClipboardSharing;
         bool m_SwitchNeedsControl = false;
+        QMap<QString, QString> m_DeviceKinds;
         size_t m_ClipboardSharingSize;
         MainWindow* m_pMainWindow;
 };
