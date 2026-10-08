@@ -219,6 +219,13 @@ jobs:
             python3 glidekvm/src/test/smoke/android_client.py --bin-dir build/bin \
                 --probe glidekvm/android/core/build/libs/glidekvm-probe.jar
 
+      # A pretend GlideKVM Bridge board on a pseudo terminal: the server finds
+      # it, puts its devices on the desk and sends them mouse and keys.
+      - name: Run the Bridge smoke test
+        if: env.B_BUILD_TYPE != 'Release'
+        run: |
+            python3 glidekvm/src/test/smoke/bridge_board.py --bin-dir build/bin
+
       - name: Create Artifacts
         if: env.B_BUILD_TYPE != 'Release'
         run: tar -cf glidekvm-${{matrix.name}}.tar.gz glidekvm-${{matrix.name}}
@@ -529,6 +536,38 @@ jobs:
         with:
           name: glidekvm-android
           path: glidekvm/android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+  # The GlideKVM Bridge firmware for ESP32-S3 boards, as one file to install
+  # from the browser.
+  bridge-firmware:
+    name: bridge-firmware
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Test the parts that don't need the board
+        working-directory: bridge/firmware/test
+        run: |
+            cc -Wall -Wextra -Werror -I../main ../main/reports.c ../main/commands.c test_main.c -o firmware-tests
+            ./firmware-tests
+
+      - name: Build the firmware
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.4.1
+          target: esp32s3
+          path: bridge/firmware
+          command: >-
+            idf.py build &&
+            cd build &&
+            python -m esptool --chip esp32s3 merge_bin -o glidekvm-bridge-esp32s3.bin @flash_args
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: glidekvm-bridge-firmware
+          path: bridge/firmware/build/glidekvm-bridge-esp32s3.bin
           if-no-files-found: error
 
   flatpak:
