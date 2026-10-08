@@ -27,7 +27,17 @@ import kotlin.system.exitProcess
 //
 //   java -jar glidekvm-probe.jar --name tablet --pkcs12 cert.p12 \
 //       --trusted TrustedServers.txt --size 1280x800 127.0.0.1:24800
+//
+// or lists the main computers that answer on the local network:
+//
+//   java -jar glidekvm-probe.jar --find [HOST]
 fun main(args: Array<String>) {
+    if (args.firstOrNull() == "--find") {
+        val targets = args.drop(1).map { java.net.InetAddress.getByName(it) }
+        val found = if (targets.isEmpty()) Discovery.find() else Discovery.find(targets = targets)
+        for (server in found) println("found ${server.name} ${server.address}")
+        exitProcess(if (found.isEmpty()) 1 else 0)
+    }
     var name = "android"
     var pkcs12: String? = null
     var password = ""

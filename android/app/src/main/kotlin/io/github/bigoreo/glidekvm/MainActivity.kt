@@ -40,6 +40,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import io.github.bigoreo.glidekvm.core.Discovery
+import io.github.bigoreo.glidekvm.core.FoundServer
 import rikka.shizuku.Shizuku
 
 // The one screen: where to connect, what this device still needs, and the
@@ -48,6 +50,9 @@ class MainActivity : Activity() {
     private lateinit var address: EditText
     private lateinit var name: EditText
     private lateinit var connect: Button
+    private lateinit var find: Button
+    private lateinit var findResult: TextView
+    private var finding = false
     private lateinit var status: TextView
     private lateinit var mouseRow: Row
     private lateinit var keyboardRow: Row
@@ -76,6 +81,8 @@ class MainActivity : Activity() {
         ) {
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
         }
+        // nothing to connect to yet: look for it straight away
+        if (address.text.isBlank()) findServers(chosenByPerson = false)
     }
 
     override fun onResume() {
@@ -117,8 +124,27 @@ class MainActivity : Activity() {
         connectCard.addView(label("Main computer's address"))
         address = field("192.168.1.20", prefs.getString("address", "") ?: "",
                         InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI)
-        connectCard.addView(address)
-        connectCard.addView(muted("Shown on the main computer's Home screen, under Ways to connect."))
+        find = Button(this).apply {
+            isAllCaps = false
+            text = "Find"
+            setTextColor(Colors.BLUE)
+            textSize = 15f
+            typeface = Typeface.DEFAULT_BOLD
+            background = rounded(Colors.BLUE_TINT, 10)
+            setOnClickListener { findServers(chosenByPerson = true) }
+        }
+        val addressRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        addressRow.addView(address, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        addressRow.addView(find, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(48)).apply {
+            leftMargin = dp(8)
+        })
+        connectCard.addView(addressRow)
+        findResult = muted("Tap Find to look for it on this Wi-Fi, or type the address shown on the " +
+                           "main computer's Home screen, under Ways to connect.")
+        connectCard.addView(findResult)
         connectCard.addView(label("This device's name"))
         name = field("", prefs.getString("name", null) ?: DeviceIdentity.defaultName(this),
                      InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
@@ -168,6 +194,48 @@ class MainActivity : Activity() {
             setBackgroundColor(Colors.MIST)
             addView(column)
         }
+    }
+
+    // Asks the local network for main computers that are sharing, and fills in
+    // the address of the one that answers.
+    private fun findServers(chosenByPerson: Boolean) {
+        if (finding) return
+        finding = true
+        find.isEnabled = false
+        find.text = "Finding…"
+        Thread({
+            val found = try {
+                Discovery.find()
+            } catch (e: Exception) {
+                emptyList()
+            }
+            runOnUiThread {
+                finding = false
+                find.isEnabled = true
+                find.text = "Find"
+                if (isFinishing) return@runOnUiThread
+                when {
+                    found.isEmpty() -> if (chosenByPerson) {
+                        findResult.text = "No main computer answered. Check that it's sharing and on the same " +
+                                          "Wi-Fi as this device, or type its address."
+                    }
+                    found.size == 1 -> useServer(found[0])
+                    else -> AlertDialog.Builder(this)
+                        .setTitle("Which main computer?")
+                        .setItems(found.map { "${it.name}  (${it.address})" }.toTypedArray()) { _, i ->
+                            useServer(found[i])
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                }
+            }
+        }, "glidekvm-find").start()
+    }
+
+    private fun useServer(server: FoundServer) {
+        address.setText(server.address)
+        address.error = null
+        findResult.text = "Found ${server.name} at ${server.address}."
     }
 
     private fun toggleConnection() {

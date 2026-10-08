@@ -28,7 +28,8 @@ pasted on the device.
      tap again after each restart.
 3. On the main computer, open **Arrange screens**, click **Add a computer...**,
    use the name shown in the app, and place it where the device sits.
-4. In the app, enter the main computer's address and tap **Connect**. The
+4. In the app, tap **Find** to look for the main computer on the same Wi-Fi
+   (or type the address from its Home screen), then tap **Connect**. The
    first time, compare the fingerprint the app shows with the one under
    **Security** on the main computer, and the device's fingerprint with the
    one the main computer asks you to confirm.

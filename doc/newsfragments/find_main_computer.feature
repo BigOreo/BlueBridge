@@ -1,0 +1,1 @@
+The Home screen now shows the address the network actually reaches this computer at, and no longer lists virtual adapters such as VirtualBox, Hyper-V and WSL. The Android app can find the main computer on the same Wi-Fi with a Find button, so its address doesn't need typing.
