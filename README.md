@@ -30,6 +30,9 @@ for example when a VPN on your work laptop blocks local network access.
   Wayland.
 - Android 8 and newer (preview): can be controlled from a main computer over
   the network. See [android/README.md](android/README.md).
+- iPad, iPhone and other phones and tablets (preview): controlled over
+  Bluetooth through the GlideKVM Bridge, a small USB board, with nothing
+  installed on them. See [bridge/README.md](bridge/README.md).
 
 ## Getting started
 

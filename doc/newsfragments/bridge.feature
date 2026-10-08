@@ -1,0 +1,1 @@
+Added the GlideKVM Bridge: an ESP32-S3 board on the main computer's USB port that makes the keyboard and mouse work on iPads, iPhones and other phones and tablets over Bluetooth, with nothing installed on them. Up to eight devices pair with one board, and are placed on the desk under Arrange screens with Add a phone or tablet.
