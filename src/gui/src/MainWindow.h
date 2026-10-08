@@ -40,6 +40,8 @@
 #include <QMutex>
 #include <memory>
 
+#include <QPointer>
+
 class QAction;
 class QMenu;
 class QLineEdit;
@@ -48,6 +50,7 @@ class QPushButton;
 class QTextEdit;
 class QComboBox;
 class QListWidget;
+class QCheckBox;
 class QFrame;
 class QHBoxLayout;
 class QPushButton;
@@ -194,6 +197,7 @@ public slots:
         void selectBluetoothServer(int index);
         void applyBluetoothServerStatus(int generation, const QMap<QString, bool>& running);
         void updateStartButton();
+        QString connectTarget() const;
         void buildHomeLayout();
         void updateHome();
         void trackConnectedClients(const QString& line);
@@ -201,6 +205,13 @@ public slots:
         void closePanel(QWidget* page);
         void leavePanel();
         void showHomePage();
+        void showClipboardPage();
+        void showSecurityPage();
+        void addSharingOptions(QVBoxLayout* layout, QWidget* parent, QCheckBox** clipboard,
+                               QCheckBox** files);
+        void syncSharingOptions(QCheckBox* clipboard, QCheckBox* files);
+        void setSharingOption(bool clipboard, bool on);
+        QString clientSide(const QString& name) const;
         ConnectionMode connection_mode() const { return m_ConnectionMode; }
         bool server_accepts_bluetooth() const;
 
@@ -261,6 +272,13 @@ public slots:
         QPushButton* m_pNavArrange = nullptr;
         QPushButton* m_pNavSettings = nullptr;
         QPushButton* m_pNavLog = nullptr;
+        QPushButton* m_pNavClipboard = nullptr;
+        QPushButton* m_pNavSecurity = nullptr;
+        QCheckBox* m_pHomeShareClipboard = nullptr;
+        QCheckBox* m_pHomeShareFiles = nullptr;
+        QPointer<QCheckBox> m_pPageShareClipboard;
+        QPointer<QCheckBox> m_pPageShareFiles;
+        QCheckBox* m_pCheckReconnect = nullptr;
         QStackedWidget* m_pMainStack = nullptr;
         QLabel* m_pPanelTitle = nullptr;
         QVBoxLayout* m_pPanelLayout = nullptr;

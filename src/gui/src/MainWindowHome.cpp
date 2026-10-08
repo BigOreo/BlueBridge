@@ -30,6 +30,8 @@
 #include <QDialogButtonBox>
 #include <QEvent>
 #include <QButtonGroup>
+#include <QCheckBox>
+#include <QSignalBlocker>
 #include <QClipboard>
 #include <QFormLayout>
 #include <QFrame>
@@ -55,7 +57,7 @@
 
 namespace {
 
-enum class NavIcon { Home, Arrange, Settings, Log };
+enum class NavIcon { Home, Arrange, Clipboard, Security, Settings, Log };
 
 // Sidebar icons are drawn rather than loaded so they stay sharp at any scale.
 QIcon nav_icon(NavIcon kind)
@@ -84,6 +86,16 @@ QIcon nav_icon(NavIcon kind)
             painter.drawRoundedRect(QRectF(2, 5, 8, 6), 1, 1);
             painter.drawRoundedRect(QRectF(14, 5, 8, 6), 1, 1);
             painter.drawRoundedRect(QRectF(8, 14, 8, 6), 1, 1);
+            break;
+        case NavIcon::Clipboard:
+            painter.drawRoundedRect(QRectF(6, 4, 12, 17), 2, 2);
+            painter.drawRect(QRectF(9, 3, 6, 3));
+            painter.drawLine(QPointF(9, 11), QPointF(15, 11));
+            painter.drawLine(QPointF(9, 15), QPointF(13, 15));
+            break;
+        case NavIcon::Security:
+            painter.drawRoundedRect(QRectF(5, 11, 14, 10), 2, 2);
+            painter.drawArc(QRectF(8, 4, 8, 14), 0, 180 * 16);
             break;
         case NavIcon::Settings:
             painter.drawLine(QPointF(4, 7), QPointF(14, 7));
@@ -255,11 +267,14 @@ void MainWindow::buildHomeLayout()
     };
     m_pNavHome = makeNav(tr("Home"), NavIcon::Home);
     m_pNavArrange = makeNav(tr("Arrange screens"), NavIcon::Arrange);
+    m_pNavClipboard = makeNav(tr("Clipboard && files"), NavIcon::Clipboard);
+    m_pNavSecurity = makeNav(tr("Security"), NavIcon::Security);
     m_pNavSettings = makeNav(tr("Settings"), NavIcon::Settings);
     m_pNavLog = makeNav(tr("Activity log"), NavIcon::Log);
     // the sidebar shows which page is open
     auto* navGroup = new QButtonGroup(this);
-    for (QPushButton* button : {m_pNavHome, m_pNavArrange, m_pNavSettings, m_pNavLog}) {
+    for (QPushButton* button : {m_pNavHome, m_pNavArrange, m_pNavClipboard, m_pNavSecurity,
+                                m_pNavSettings, m_pNavLog}) {
         button->setCheckable(true);
         navGroup->addButton(button);
     }
@@ -288,6 +303,8 @@ void MainWindow::buildHomeLayout()
     connect(m_pNavArrange, &QPushButton::clicked, this, [this]() {
         on_m_pButtonConfigureServer_clicked();
     });
+    connect(m_pNavClipboard, &QPushButton::clicked, this, [this]() { showClipboardPage(); });
+    connect(m_pNavSecurity, &QPushButton::clicked, this, [this]() { showSecurityPage(); });
     connect(m_pNavSettings, &QPushButton::clicked, ui_->m_pActionSettings, &QAction::trigger);
     connect(m_pNavLog, &QPushButton::clicked, ui_->m_pActionShowLog, &QAction::trigger);
 
@@ -452,8 +469,17 @@ void MainWindow::buildHomeLayout()
     });
     clientsLayout->addWidget(m_pLinkArrange);
 
+    // what crosses between the computers
+    auto* between = make_card(serverPage);
+    auto* betweenLayout = new QVBoxLayout(between);
+    betweenLayout->setContentsMargins(22, 20, 22, 20);
+    betweenLayout->setSpacing(12);
+    betweenLayout->addWidget(make_title(tr("Between computers"), between));
+    addSharingOptions(betweenLayout, between, &m_pHomeShareClipboard, &m_pHomeShareFiles);
+
     serverGrid->addWidget(ways, 0, 0);
     serverGrid->addWidget(clients, 0, 1);
+    serverGrid->addWidget(between, 1, 0, 1, 2);
     serverGrid->setColumnStretch(0, 1);
     serverGrid->setColumnStretch(1, 1);
     serverColumn->addLayout(serverGrid);
@@ -536,6 +562,15 @@ void MainWindow::buildHomeLayout()
         step->addLayout(words, 1);
         nextLayout->addLayout(step);
     }
+    m_pCheckReconnect = new QCheckBox(tr("Reconnect automatically when GlideKVM opens"), nextCard);
+    m_pCheckReconnect->setProperty("switch", true);
+    nextLayout->addSpacing(4);
+    nextLayout->addWidget(m_pCheckReconnect);
+    connect(m_pCheckReconnect, &QCheckBox::toggled, this, [this](bool on) {
+        appConfig().setAutoStart(on);
+        appConfig().saveSettings();
+    });
+
     clientGrid->addWidget(connectCard, 0, 0, Qt::AlignTop);
     clientGrid->addWidget(nextCard, 0, 1, Qt::AlignTop);
     clientGrid->setColumnStretch(0, 3);
@@ -552,14 +587,15 @@ void MainWindow::buildHomeLayout()
     statusRow->addWidget(ui_->m_pStatusLabel, 1);
     statusRow->addWidget(ui_->m_pButtonReload);
     statusLayout->addLayout(statusRow);
-    auto* fingerprintRow = new QHBoxLayout();
-    ui_->m_pLabelFingerprint->setProperty("role", "muted");
-    ui_->m_pLabelLocalFingerprint->setProperty("role", "muted");
-    fingerprintRow->addWidget(ui_->m_pLabelFingerprint);
-    fingerprintRow->addWidget(ui_->m_pLabelLocalFingerprint, 1);
-    fingerprintRow->addWidget(ui_->toolbutton_show_fingerprint);
-    statusLayout->addLayout(fingerprintRow);
-    statusLayout->addWidget(ui_->frame_fingerprint_details);
+    // the fingerprint lives on the Security page now
+    ui_->m_pLabelFingerprint->hide();
+    ui_->m_pLabelLocalFingerprint->hide();
+    ui_->toolbutton_show_fingerprint->hide();
+    ui_->frame_fingerprint_details->hide();
+    auto* securityLink = new QLabel(QString("<a href=\"#security\">%1</a>")
+                                        .arg(tr("Fingerprint and trusted computers")), status);
+    connect(securityLink, &QLabel::linkActivated, this, [this]() { showSecurityPage(); });
+    statusLayout->addWidget(securityLink);
     column->addWidget(status);
     column->addStretch();
 
@@ -674,8 +710,15 @@ void MainWindow::updateHome()
 
     m_pListConnected->clear();
     for (const QString& name : m_ConnectedClients) {
-        const QString detail = appConfig().getCryptoEnabled() ? tr("Connected  \u00b7  encrypted")
-                                                              : tr("Connected");
+        QStringList parts{tr("Connected")};
+        if (appConfig().getCryptoEnabled()) {
+            parts << tr("encrypted");
+        }
+        const QString side = clientSide(name);
+        if (!side.isEmpty()) {
+            parts << side;
+        }
+        const QString detail = parts.join(QStringLiteral("  \u00b7  "));
         auto* item = new QListWidgetItem(QIcon(":/res/icons/48x48/computer.png"),
                                          name + "\n" + detail);
         m_pListConnected->addItem(item);
@@ -689,6 +732,12 @@ void MainWindow::updateHome()
         : tr("Computers appear here once you start sharing."));
     m_pLabelNoneConnected->setVisible(connected == 0);
     m_pLinkArrange->setVisible(ui_->m_pRadioInternalConfig->isChecked());
+
+    syncSharingOptions(m_pHomeShareClipboard, m_pHomeShareFiles);
+    if (m_pCheckReconnect) {
+        QSignalBlocker block(m_pCheckReconnect);
+        m_pCheckReconnect->setChecked(appConfig().getAutoStart());
+    }
 }
 
 void MainWindow::trackConnectedClients(const QString& line)

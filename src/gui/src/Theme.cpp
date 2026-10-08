@@ -203,6 +203,11 @@ QListWidget#clientList::item {
     margin: 2px 0;
     color: #0F1B2D;
 }
+QCheckBox[switch="true"] { spacing: 10px; }
+QCheckBox[switch="true"]::indicator { width: 40px; height: 22px; image: url(:/res/icons/switch/off.png); }
+QCheckBox[switch="true"]::indicator:checked { image: url(:/res/icons/switch/on.png); }
+QCheckBox[switch="true"]::indicator:disabled { image: url(:/res/icons/switch/off-disabled.png); }
+QCheckBox[switch="true"]::indicator:checked:disabled { image: url(:/res/icons/switch/on-disabled.png); }
 QToolTip {
     background: #0F1B2D;
     color: #FFFFFF;
