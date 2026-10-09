@@ -33,6 +33,7 @@ set(GUI_SOURCE_FILES
     src/AppLocale.cpp
     src/BaseConfig.cpp
     src/BluetoothAdapter.cpp
+    src/BridgeDialog.cpp
     src/CommandProcess.cpp
     src/DataDownloader.cpp
     src/DeskView.cpp
@@ -73,6 +74,7 @@ set(GUI_HEADER_FILES
     src/AppConnectionState.h
     src/AppLocale.h
     src/BaseConfig.h
+    src/BridgeDialog.h
     src/CommandProcess.h
     src/DataDownloader.h
     src/DeskView.h
@@ -196,6 +198,7 @@ add_executable (glidekvm WIN32
 include_directories (./src)
 
 target_link_libraries(glidekvm
+    bridge
     net
     arch
     base

@@ -146,6 +146,17 @@ ArgParser::parseServerArgs(ServerArgs& args, int argc, const char* const* argv)
             }
             else if (a.shift("--bluetooth")) {
                 args.listen_bluetooth = true;
+            }
+            else if (a.shift("--bridge", nullptr, &optarg)) {
+                args.bridge_port = optarg;
+            }
+            else if (a.shift("--bridge-device", nullptr, &optarg)) {
+                BridgeDevice device;
+                if (!parse_bridge_device(optarg, device)) {
+                    throw XArgvParserError("bridge devices are SLOT,NAME,WIDTHxHEIGHT[,away], not `%s'",
+                                           optarg);
+                }
+                args.bridge_devices.push_back(device);
             } else {
                 throw XArgvParserError("unrecognized option `%s'", a.peek());
             }

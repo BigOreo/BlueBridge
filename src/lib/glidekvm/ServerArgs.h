@@ -18,6 +18,9 @@
 #pragma once
 
 #include "glidekvm/ArgsBase.h"
+#include "server/BridgeClientProxy.h"
+
+#include <vector>
 
 namespace glidekvm {
 
@@ -34,6 +37,10 @@ public:
     bool check_client_certificates = true;
     // also accept clients over Bluetooth, next to the network address
     bool listen_bluetooth = false;
+    // the GlideKVM Bridge board's serial port, or "auto"; empty when not used
+    std::string bridge_port;
+    // the phones and tablets paired with it that are on the desk
+    std::vector<BridgeDevice> bridge_devices;
 };
 
 } // namespace glidekvm

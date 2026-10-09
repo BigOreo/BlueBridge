@@ -23,6 +23,7 @@
 
 #include <QDialog>
 #include <QStringList>
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -50,6 +51,13 @@ class ServerConfigDialog : public QDialog
 
     public slots:
         void accept() override;
+        // pairing needs the bridge board that sharing uses: pause returns whether
+        // sharing was paused, and so should be resumed
+        void setSharingControl(std::function<bool()> pause, std::function<void()> resume)
+        {
+            m_PauseSharing = std::move(pause);
+            m_ResumeSharing = std::move(resume);
+        }
         void message(const QString& message) { m_Message = message; }
 
     public:
@@ -89,6 +97,8 @@ class ServerConfigDialog : public QDialog
         void placeComputer(const QString& name, int index);
         void placeNearServer(const QString& name);
         void addComputer();
+        void openBridge();
+        QString freeScreenName(const QString& wanted) const;
         void removeComputer(int index);
         void editComputer(int index);
         void moveSelected(int target);
@@ -123,6 +133,11 @@ class ServerConfigDialog : public QDialog
         QComboBox* m_pComboKind = nullptr;
         QLabel* m_pLabelUnreachable = nullptr;
         QWidget* m_pShortcutRow = nullptr;
+        QWidget* m_pBridgeRow = nullptr;
+        QCheckBox* m_pCheckAway = nullptr;
+        QCheckBox* m_pCheckCommand = nullptr;
+        std::function<bool()> m_PauseSharing;
+        std::function<void()> m_ResumeSharing;
         KeySequenceWidget* m_pShortcut = nullptr;
         QPushButton* m_pButtonClearShortcut = nullptr;
         QPushButton* m_pButtonRemove = nullptr;

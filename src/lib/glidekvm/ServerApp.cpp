@@ -20,6 +20,7 @@
 
 #include "server/Server.h"
 #include "server/ClientListener.h"
+#include "server/BridgeManager.h"
 #include "server/ClientProxy.h"
 #include "server/PrimaryClient.h"
 #include "glidekvm/ArgParser.h"
@@ -136,6 +137,7 @@ ServerApp::help()
            << "Usage: " << args().m_exename
            << " [--address <address>]"
            << " [--bluetooth]"
+           << " [--bridge <port>|auto [--bridge-device <slot>,<name>,<w>x<h>[,away]]...]"
            << " [--config <pathname>]"
 #ifdef WINAPI_XWINDOWS
            << " [--use-x11] [--display <display>]"
@@ -150,6 +152,12 @@ ServerApp::help()
            << "Options:\n"
            << "  -a, --address <address>  listen for clients on the given address.\n"
            << "      --bluetooth          also listen for clients over Bluetooth (Windows).\n"
+           << "      --bridge <port>      use the GlideKVM Bridge board on this serial port,\n"
+           << "                             or auto to look for it.\n"
+           << "      --bridge-device <slot>,<name>,<w>x<h>[,away]\n"
+           << "                           a phone or tablet paired with the board, its\n"
+           << "                             screen name and size, and whether it\n"
+           << "                             disconnects while the mouse is elsewhere.\n"
            << "  -c, --config <pathname>  use the named configuration file instead.\n"
            << HELP_COMMON_INFO_1
            << "      --disable-client-cert-checking disable client SSL certificate \n"
@@ -372,6 +380,7 @@ void
 ServerApp::stopServer()
 {
     if (m_serverState == kStarted) {
+        bridge_.reset();
         closeServer(server_.get());
         closeClientListener(m_listener);
         closeClientListener(bluetooth_listener_);
@@ -606,6 +615,11 @@ ServerApp::startServer()
             m_listener = listener;
             bluetooth_listener_ = bluetooth_listener;
             updateStatus();
+
+            if (!args().bridge_port.empty()) {
+                bridge_ = std::make_unique<BridgeManager>(m_events, server_.get(), args().bridge_port,
+                                                          args().bridge_devices);
+            }
 
             // using CLOG_PRINT here allows the GUI to see that the server is started
             // regardless of which log level is set

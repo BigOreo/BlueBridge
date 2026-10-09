@@ -199,6 +199,11 @@ enum class EventType : std::uint32_t {
     SERVER_APP_FORCE_RECONNECT,
     SERVER_APP_RESET_SERVER,
 
+    /** This event is sent for each line the GlideKVM Bridge board sends. The event data is the
+        line as a std::string; an empty line means the board went away.
+    */
+    BRIDGE_LINE,
+
     /// This event is sent when key is down. Event data is an instance of KeyInfo (count == 1)
     KEY_STATE_KEY_DOWN,
     /// This event is sent when key is up. Event data is an instance of KeyInfo (count == 1)

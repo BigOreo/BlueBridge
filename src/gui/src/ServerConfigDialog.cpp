@@ -41,6 +41,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include "common/Policy.h"
+#include "BridgeDialog.h"
 
 namespace {
 
@@ -370,6 +371,10 @@ void ServerConfigDialog::buildLayoutTab()
     auto* add = new QPushButton(tr("Add a computer..."), tab);
     connect(add, &QPushButton::clicked, this, [this]() { addComputer(); });
     waitingTitle->addWidget(add);
+    auto* addDevice = new QPushButton(tr("Add a phone or tablet..."), tab);
+    addDevice->setToolTip(tr("Through the GlideKVM Bridge, over Bluetooth"));
+    connect(addDevice, &QPushButton::clicked, this, [this]() { openBridge(); });
+    waitingTitle->addWidget(addDevice);
     deskColumn->addLayout(waitingTitle);
     auto* waitingRow = new QHBoxLayout();
     waitingRow->setSpacing(8);
@@ -462,6 +467,52 @@ void ServerConfigDialog::buildLayoutTab()
         updateSidePanel();
     });
     detailsLayout->addWidget(m_pComboKind);
+    detailsLayout->addSpacing(8);
+
+    // phones and tablets reached through the GlideKVM Bridge
+    m_pBridgeRow = new QWidget(details);
+    auto* bridgeLayout = new QVBoxLayout(m_pBridgeRow);
+    bridgeLayout->setContentsMargins(0, 0, 0, 0);
+    bridgeLayout->setSpacing(6);
+    bridgeLayout->addWidget(strong_label(tr("Over Bluetooth"), m_pBridgeRow));
+    m_pCheckCommand = new QCheckBox(tr("Ctrl works as \u2318 Command"), m_pBridgeRow);
+    m_pCheckCommand->setToolTip(tr("For iPads and iPhones: Ctrl+C copies, Ctrl+V pastes, as here. "
+                                   "The Windows key works as Ctrl."));
+    connect(m_pCheckCommand, &QCheckBox::toggled, this, [this](bool on) {
+        const int index = m_pDesk->selected();
+        if (index < 0) {
+            return;
+        }
+        Screen& screen = serverConfig().screens()[index];
+        screen.setModifier(BaseConfig::Modifier::Ctrl,
+                           on ? BaseConfig::Modifier::Super : BaseConfig::Modifier::DefaultMod);
+        screen.setModifier(BaseConfig::Modifier::Super,
+                           on ? BaseConfig::Modifier::Ctrl : BaseConfig::Modifier::DefaultMod);
+    });
+    bridgeLayout->addWidget(m_pCheckCommand);
+#if defined(Q_OS_MAC)
+    // the Command key already is one
+    m_pCheckCommand->hide();
+#endif
+    m_pCheckAway = new QCheckBox(tr("Keep its on-screen keyboard"), m_pBridgeRow);
+    connect(m_pCheckAway, &QCheckBox::toggled, this, [this](bool on) {
+        const int index = m_pDesk->selected();
+        if (index < 0) {
+            return;
+        }
+        const auto* known = serverConfig().bridgeDevice(serverConfig().screens()[index].name());
+        if (known) {
+            ServerConfig::BridgeDevice device = *known;
+            device.away = on;
+            serverConfig().setBridgeDevice(device);
+        }
+    });
+    bridgeLayout->addWidget(m_pCheckAway);
+    bridgeLayout->addWidget(muted_label(tr("Phones and tablets hide their own keyboard while a "
+                                           "Bluetooth one is connected. With this on, the bridge "
+                                           "lets go of the device while the mouse is elsewhere; "
+                                           "it takes about a second to come back."), m_pBridgeRow));
+    detailsLayout->addWidget(m_pBridgeRow);
     detailsLayout->addSpacing(8);
 
     m_pShortcutRow = new QWidget(details);
@@ -660,6 +711,104 @@ void ServerConfigDialog::addComputer()
     placeNearServer(name);
 }
 
+QString ServerConfigDialog::freeScreenName(const QString& wanted) const
+{
+    // a screen name is letters, numbers, dots, dashes and underscores
+    QString base;
+    for (const QChar c : wanted) {
+        if (c.isLetterOrNumber() && c.unicode() < 128) {
+            base += c;
+        } else if ((c == '.' || c == '_' || c == '-' || c.isSpace()) && !base.endsWith('-')) {
+            base += c.isSpace() ? QChar('-') : c;
+        }
+    }
+    while (base.endsWith('-') || base.endsWith('.')) {
+        base.chop(1);
+    }
+    if (base.isEmpty()) {
+        base = "Tablet";
+    }
+
+    auto taken = [this](const QString& name) {
+        for (const Screen& screen : m_ServerConfig.screens()) {
+            if (!screen.isNull() && screen.name().compare(name, Qt::CaseInsensitive) == 0) {
+                return true;
+            }
+        }
+        return m_ServerConfig.bridgeDevice(name) != nullptr || m_Waiting.contains(name) ||
+               name.compare(m_ServerName, Qt::CaseInsensitive) == 0;
+    };
+    QString name = base;
+    for (int n = 2; taken(name); ++n) {
+        name = QString("%1-%2").arg(base).arg(n);
+    }
+    return name;
+}
+
+void ServerConfigDialog::openBridge()
+{
+    // sharing holds the board while it runs
+    const bool paused = m_PauseSharing && m_PauseSharing();
+
+    QMap<int, QString> onDesk;
+    for (const auto& device : serverConfig().bridgeDevices()) {
+        onDesk[device.slot] = device.name;
+    }
+    BridgeDialog dialog(this, onDesk);
+    dialog.exec();
+
+    if (!dialog.forgotten().isEmpty() || !dialog.toAdd().isEmpty()) {
+        snapshot();
+    }
+    auto& screens = serverConfig().screens();
+    for (int slot : dialog.forgotten()) {
+        for (const auto& device : serverConfig().bridgeDevices()) {
+            if (device.slot != slot) {
+                continue;
+            }
+            for (Screen& screen : screens) {
+                if (!screen.isNull() && screen.name() == device.name) {
+                    screen = Screen();
+                }
+            }
+            m_Waiting.removeAll(device.name);
+        }
+        serverConfig().removeBridgeDevice(slot);
+    }
+    for (const BridgeDialog::Device& paired : dialog.toAdd()) {
+        // the board may have reused a forgotten device's place
+        serverConfig().removeBridgeDevice(paired.slot);
+        const QString name = freeScreenName(paired.name);
+        DeviceKind kind = guess_device_kind(paired.name);
+        if (kind != DeviceKind::Phone) {
+            kind = DeviceKind::Tablet;
+        }
+        serverConfig().setDeviceKind(name, device_kind_key(kind));
+        ServerConfig::BridgeDevice device;
+        device.slot = paired.slot;
+        device.name = name;
+        serverConfig().setBridgeDevice(device);
+        placeNearServer(name);
+#if !defined(Q_OS_MAC)
+        // iPads and iPhones copy with Command+C: let Ctrl do it, as here
+        for (Screen& screen : screens) {
+            if (!screen.isNull() && screen.name() == name) {
+                screen.setModifier(BaseConfig::Modifier::Ctrl, BaseConfig::Modifier::Super);
+                screen.setModifier(BaseConfig::Modifier::Super, BaseConfig::Modifier::Ctrl);
+            }
+        }
+#endif
+    }
+    m_pDesk->refresh();
+    updateWaiting();
+    updateSidePanel();
+    layoutChanged();
+
+    if (paused && m_ResumeSharing) {
+        m_ResumeSharing();
+    }
+}
+
 void ServerConfigDialog::removeComputer(int index)
 {
     auto& screens = serverConfig().screens();
@@ -708,6 +857,7 @@ void ServerConfigDialog::editComputer(int index)
                 }
             }
         }
+        serverConfig().renameBridgeDevice(oldName, edited.name());
         if (oldName == m_ServerName) {
             m_ServerName = edited.name();
             m_pDesk->setServerName(m_ServerName);
@@ -863,6 +1013,19 @@ void ServerConfigDialog::updateSidePanel()
     }
     m_pButtonClearShortcut->setEnabled(shortcut >= 0);
     m_pButtonRemove->setVisible(!server);
+
+    const auto* bridged = serverConfig().bridgeDevice(name);
+    m_pBridgeRow->setVisible(bridged != nullptr);
+    if (bridged) {
+        const QSignalBlocker blockAway(m_pCheckAway);
+        const QSignalBlocker blockCommand(m_pCheckCommand);
+        m_pCheckAway->setChecked(bridged->away);
+        m_pCheckCommand->setChecked(screens[index].modifier(BaseConfig::Modifier::Ctrl) ==
+                                    BaseConfig::Modifier::Super);
+        if (!m_Connected.contains(name)) {
+            m_pSideStatus->setText(tr("Not connected right now. Paired with the GlideKVM Bridge."));
+        }
+    }
 }
 
 void ServerConfigDialog::updateWaiting()
@@ -875,6 +1038,12 @@ void ServerConfigDialog::updateWaiting()
     for (const Screen& screen : serverConfig().screens()) {
         if (!screen.isNull()) {
             placed << screen.name();
+        }
+    }
+    // paired phones and tablets that aren't on the desk
+    for (const auto& device : serverConfig().bridgeDevices()) {
+        if (!placed.contains(device.name) && !m_Waiting.contains(device.name)) {
+            m_Waiting << device.name;
         }
     }
     int shown = 0;

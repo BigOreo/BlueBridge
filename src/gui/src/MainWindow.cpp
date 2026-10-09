@@ -933,6 +933,29 @@ bool MainWindow::serverArgs(QStringList& args, QString& app)
     configFilename = QString("\"%1\"").arg(configFilename);
 #endif
     args << "-c" << configFilename << "--address" << address();
+
+    // phones and tablets on the desk that the GlideKVM Bridge board reaches
+    QStringList bridged;
+    for (const auto& device : serverConfig().bridgeDevices()) {
+        bool placed = false;
+        for (const Screen& screen : serverConfig().screens()) {
+            placed |= !screen.isNull() && screen.name() == device.name;
+        }
+        if (!placed) {
+            continue;
+        }
+        // the size a Bluetooth pointer covers on the device, roughly
+        const bool phone = serverConfig().deviceKind(device.name) == "phone";
+        bridged << QString("%1,%2,%3%4").arg(device.slot).arg(device.name)
+                                         .arg(phone ? "430x932" : "1366x1024")
+                                         .arg(device.away ? ",away" : "");
+    }
+    if (!bridged.isEmpty()) {
+        args << "--bridge" << "auto";
+        for (const QString& device : bridged) {
+            args << "--bridge-device" << device;
+        }
+    }
     if (m_policy.network_allowed() && server_accepts_bluetooth()) {
         args << "--bluetooth";
     }
@@ -1352,6 +1375,16 @@ void MainWindow::showConfigureServer(const QString& message)
         }
         updateHome();
     });
+    dialog->setSharingControl(
+        [this]() {
+            if (m_ExpectedRunningState != kStarted || app_role() != AppRole::Server) {
+                return false;
+            }
+            appendLogInfo("pausing sharing while the GlideKVM Bridge is set up");
+            stop_cmd_app();
+            return true;
+        },
+        [this]() { start_cmd_app(); });
     connect(dialog, &QDialog::finished, this, [this, dialog](int) { closePanel(dialog); });
     showPanel(tr("Arrange screens"), dialog, m_pNavArrange);
 }
