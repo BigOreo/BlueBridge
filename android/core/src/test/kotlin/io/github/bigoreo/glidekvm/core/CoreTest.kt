@@ -200,6 +200,37 @@ class SessionTest {
     }
 }
 
+class DiscoveryTest {
+    @Test
+    fun findsAComputerThatAnswers() {
+        val responder = java.net.DatagramSocket(0, java.net.InetAddress.getLoopbackAddress())
+        val answering = thread {
+            val buffer = ByteArray(64)
+            val packet = java.net.DatagramPacket(buffer, buffer.size)
+            responder.receive(packet)
+            val asked = MessageReader(packet.data.copyOf(packet.length))
+            asked.literal("GlideKVM?")
+            assertEquals(Discovery.VERSION, asked.u8())
+            val answer = MessageWriter("GlideKVM!").u8(1).u16(24801).string("office-pc").build()
+            responder.send(java.net.DatagramPacket(answer, answer.size, packet.socketAddress))
+        }
+        val found = Discovery.find(1000, responder.localPort, listOf(java.net.InetAddress.getLoopbackAddress()))
+        answering.join(2000)
+        responder.close()
+        assertEquals(listOf(FoundServer("office-pc", "127.0.0.1", 24801)), found)
+        assertEquals("127.0.0.1:24801", found[0].address)
+        assertEquals("10.0.0.5", FoundServer("x", "10.0.0.5", DEFAULT_PORT).address)
+    }
+
+    @Test
+    fun ignoresOtherPackets() {
+        val junk = "hello".toByteArray()
+        assertNull(Discovery.parseAnswer(junk, junk.size, "10.0.0.1"))
+        val noName = MessageWriter("GlideKVM!").u8(1).u16(24800).string("").build()
+        assertNull(Discovery.parseAnswer(noName, noName.size, "10.0.0.1"))
+    }
+}
+
 class FingerprintTest {
     @Test
     fun matchesTheDesktopFormat() {

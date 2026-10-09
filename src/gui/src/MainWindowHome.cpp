@@ -21,6 +21,7 @@
 
 #include "MainWindow.h"
 #include "DeskView.h"
+#include "NetworkAddress.h"
 #include "ui_MainWindow.h"
 
 #include "AppConfig.h"
@@ -142,28 +143,6 @@ QLabel* make_muted(const QString& text, QWidget* parent)
     label->setProperty("role", "muted");
     label->setWordWrap(true);
     return label;
-}
-
-// The address people are most likely to type: a home or office network
-// address, else the first one found.
-QString preferred_address()
-{
-    QString first;
-    const auto addresses = QNetworkInterface::allAddresses();
-    for (const auto& address : addresses) {
-        if (address.protocol() != QAbstractSocket::IPv4Protocol ||
-            address == QHostAddress(QHostAddress::LocalHost)) {
-            continue;
-        }
-        const QString text = address.toString();
-        if (text.startsWith("192.168.")) {
-            return text;
-        }
-        if (first.isEmpty() && !text.startsWith("169.254.")) {
-            first = text;
-        }
-    }
-    return first;
 }
 
 // Moves every row of a form into another form, keeping each widget's logic.
@@ -708,11 +687,13 @@ void MainWindow::updateHome()
         m_pHeroText->setText(tr("Move the mouse off the edge of your screen to cross over."));
     }
 
-    const QString address = preferred_address();
+    const glidekvm::LocalAddresses addresses = glidekvm::local_addresses();
+    const QString address = addresses.preferred;
     m_pLabelNetworkAddress->setText(address.isEmpty() ? tr("Not connected to a network") : address);
     m_pButtonCopyNetworkAddress->setVisible(!address.isEmpty());
-    // the full list only helps when there is more than one address
-    ui_->m_pLabelIpAddresses->setVisible(ui_->m_pLabelIpAddresses->text().contains(','));
+    // other real networks this computer is on, for when the devices are on one of those
+    ui_->m_pLabelIpAddresses->setText(tr("Also on: %1").arg(addresses.others.join(", ")));
+    ui_->m_pLabelIpAddresses->setVisible(!addresses.others.isEmpty());
     m_pNetworkTile->setVisible(m_policy.network_allowed());
     m_pBluetoothTile->setVisible(server_accepts_bluetooth());
 

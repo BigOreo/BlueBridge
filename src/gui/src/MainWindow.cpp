@@ -27,6 +27,7 @@
 #include "ServerConfigDialog.h"
 #include "SettingsDialog.h"
 #include "ZeroconfService.h"
+#include "ServerBeacon.h"
 #include "FingerprintAcceptDialog.h"
 #include "QUtility.h"
 #include "SslCertificate.h"
@@ -209,7 +210,6 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
     initConnections();
 
     ui_->m_pLabelScreenName->setText(getScreenName());
-    ui_->m_pLabelIpAddresses->setText(getIPAddresses());
 
 #if defined(Q_OS_WIN)
     // ipc must always be enabled, so that we can disable command when switching to desktop mode.
@@ -659,6 +659,17 @@ void MainWindow::start_cmd_app()
     m_ExpectedRunningState = kStarted;
     set_connection_state(AppConnectionState::CONNECTING);
 
+    if (app_role() == AppRole::Server && m_policy.network_allowed()) {
+        if (!m_pBeacon) {
+            m_pBeacon = new ServerBeacon(this);
+        }
+        if (!m_pBeacon->start(getScreenName(), static_cast<quint16>(appConfig().port()))) {
+            appendLogInfo("can't answer devices looking for this computer: the port is in use");
+        }
+    } else if (m_pBeacon) {
+        m_pBeacon->stop();
+    }
+
     QString app;
     QStringList args;
 
@@ -934,6 +945,9 @@ void MainWindow::stop_cmd_app()
     appendLogDebug("stopping process");
 
     m_ExpectedRunningState = kStopped;
+    if (m_pBeacon) {
+        m_pBeacon->stop();
+    }
 
     if (appConfig().processMode() == Service)
     {
@@ -1106,40 +1120,6 @@ void MainWindow::setVisible(bool visible)
     else
         TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
 #endif
-}
-
-QString MainWindow::getIPAddresses()
-{
-    QList<QHostAddress> addresses = QNetworkInterface::allAddresses();
-
-    bool hinted = false;
-    QString result;
-    for (int i = 0; i < addresses.size(); i++) {
-        if (addresses[i].protocol() == QAbstractSocket::IPv4Protocol &&
-            addresses[i] != QHostAddress(QHostAddress::LocalHost)) {
-
-            QString address = addresses[i].toString();
-            QString format = "%1, ";
-
-            // usually 192.168.x.x is a useful ip for the user, so indicate
-            // this by making it bold.
-            if (!hinted && address.startsWith("192.168")) {
-                hinted = true;
-                format = "<b>%1</b>, ";
-            }
-
-            result += format.arg(address);
-        }
-    }
-
-    if (result == "") {
-        return tr("Unknown");
-    }
-
-    // remove trailing comma.
-    result.chop(2);
-
-    return result;
 }
 
 QString MainWindow::getScreenName()

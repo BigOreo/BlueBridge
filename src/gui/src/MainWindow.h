@@ -68,6 +68,7 @@ class LogDialog;
 class QGlideKVMApplication;
 class SetupWizard;
 class ZeroconfService;
+class ServerBeacon;
 class QComboBox;
 class QListWidget;
 class QFrame;
@@ -169,7 +170,6 @@ public slots:
         bool serverArgs(QStringList& args, QString& app);
         void setStatus(const QString& status);
         void updateFromLogLine(const QString& line);
-        QString getIPAddresses();
         void stopService();
         void stopDesktop();
         void changeEvent(QEvent* event) override;
@@ -231,6 +231,8 @@ public slots:
         QMenu* main_menu_;
         QMenu* m_pMenuHelp;
         ZeroconfService* m_pZeroconfService;
+        // answers devices that look for this computer on the network
+        ServerBeacon* m_pBeacon = nullptr;
         QMutex m_UpdateZeroconfMutex;
         bool m_SuppressAutoConfigWarning;
         bool m_SuppressEmptyServerWarning;

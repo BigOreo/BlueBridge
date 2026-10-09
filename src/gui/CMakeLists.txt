@@ -14,6 +14,7 @@ set(GUI_COMMON_SOURCE_FILES
     src/BluetoothAddress.cpp
     src/Hotkey.cpp
     src/KeySequence.cpp
+    src/NetworkAddress.cpp
 )
 
 set(GUI_COMMON_HEADER_FILES
@@ -21,6 +22,7 @@ set(GUI_COMMON_HEADER_FILES
     src/BluetoothAddress.h
     src/Hotkey.h
     src/KeySequence.h
+    src/NetworkAddress.h
 )
 
 set(GUI_SOURCE_FILES
@@ -49,6 +51,7 @@ set(GUI_SOURCE_FILES
     src/QUtility.cpp
     src/Screen.cpp
     src/ScreenSettingsDialog.cpp
+    src/ServerBeacon.cpp
     src/ServerConfig.cpp
     src/ServerConfigDialog.cpp
     src/SettingsDialog.cpp
@@ -87,6 +90,7 @@ set(GUI_HEADER_FILES
     src/Screen.h
     src/ScreenSettingsDialog.h
     src/Theme.h
+    src/ServerBeacon.h
     src/ServerConfigDialog.h
     src/ServerConfig.h
     src/SettingsDialog.h
@@ -253,6 +257,7 @@ if(GLIDEKVM_BUILD_TESTS)
     set(GUI_TEST_SOURCE_FILES
         test/BluetoothAddressTests.cpp
         test/KeySequenceTests.cpp
+        test/NetworkAddressTests.cpp
         test/HotkeyTests.cpp
         test/main.cpp
     )
